@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login | Omni AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed-variant": "#003ea8",
+                    "primary-fixed": "#dbe1ff",
+                    "on-primary-fixed": "#00174b",
+                    "tertiary-container": "#bc4800",
+                    "surface-container": "#ededf9",
+                    "secondary-fixed-dim": "#c0c6db",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "on-error": "#ffffff",
+                    "primary-container": "#2563eb",
+                    "outline-variant": "#c3c6d7",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "on-secondary-fixed-variant": "#404758",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "inverse-on-surface": "#f0f0fb",
+                    "surface": "#faf8ff",
+                    "secondary": "#575e70",
+                    "on-background": "#191b23",
+                    "surface-tint": "#0053db",
+                    "surface-variant": "#e1e2ed",
+                    "surface-container-high": "#e7e7f3",
+                    "background": "#faf8ff",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "outline": "#737686",
+                    "on-tertiary-container": "#ffede6",
+                    "primary": "#004ac6",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#d9d9e5",
+                    "on-surface-variant": "#434655",
+                    "on-tertiary-fixed": "#360f00",
+                    "surface-container-low": "#f3f3fe",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#5c6274",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#ffdbcd",
+                    "secondary-fixed": "#dce2f7",
+                    "inverse-primary": "#b4c5ff",
+                    "inverse-surface": "#2e3039",
+                    "surface-bright": "#faf8ff",
+                    "surface-container-highest": "#e1e2ed",
+                    "on-secondary-fixed": "#141b2b",
+                    "on-surface": "#191b23",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#d9dff5",
+                    "tertiary": "#943700",
+                    "on-primary-container": "#eeefff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "64px",
+                    "container-max": "1280px",
+                    "stack-sm": "8px",
+                    "stack-xs": "4px",
+                    "gutter": "24px",
+                    "stack-lg": "24px",
+                    "margin-mobile": "20px",
+                    "stack-md": "16px",
+                    "stack-xl": "48px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-hero": ["Inter"],
+                    "display-hero-mobile": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "subtitle-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-hero": ["72px", {"lineHeight": "80px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-hero-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "subtitle-lg": ["20px", {"lineHeight": "30px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .magnetic-button {
+            transition: transform 0.2s cubic-bezier(0.33, 1, 0.68, 1), box-shadow 0.2s ease;
+        }
+        .magnetic-button:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 25px -5px rgba(0, 74, 198, 0.2);
+        }
+        .magnetic-button:active {
+            transform: scale(0.98);
+        }
+
+        .connection-lines {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        @keyframes flow {
+            from { stroke-dashoffset: 100; }
+            to { stroke-dashoffset: 0; }
+        }
+
+        .animated-path {
+            stroke-dasharray: 10, 10;
+            animation: flow 5s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen overflow-x-hidden selection:bg-primary-fixed selection:text-on-primary-fixed">
+<main class="flex min-h-screen">
+<!-- Left Side: Immersive AI Visual (Mobile Hidden) -->
+<section class="hidden lg:flex lg:w-1/2 relative bg-inverse-surface items-center justify-center overflow-hidden">
+<!-- Animation Shader Background -->
+<!-- STITCH_THREEJS_START:ANIMATION_4 class="absolute inset-0 w-full h-full opacity-60" -->
+<div class="absolute inset-0 w-full h-full opacity-60" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_4" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_4');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const width = container.clientWidth || window.innerWidth;
+const height = container.clientHeight || window.innerHeight;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+renderer.setSize(width, height);
+container.appendChild(renderer.domElement);
+
+// Create a glowing AI sphere (Floating AI Dashboard core)
+const geometry = new THREE.IcosahedronGeometry(1.5, 4);
+const material = new THREE.MeshPhongMaterial({
+    color: 0x2563EB,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.3
+});
+const sphere = new THREE.Mesh(geometry, material);
+scene.add(sphere);
+
+const innerGeo = new THREE.IcosahedronGeometry(1, 2);
+const innerMat = new THREE.MeshStandardMaterial({
+    color: 0x2563EB,
+    emissive: 0x2563EB,
+    emissiveIntensity: 0.5,
+    metalness: 0.8,
+    roughness: 0.2
+});
+const innerSphere = new THREE.Mesh(innerGeo, innerMat);
+scene.add(innerSphere);
+
+const light = new THREE.PointLight(0xffffff, 1, 100);
+light.position.set(10, 10, 10);
+scene.add(light);
+scene.add(new THREE.AmbientLight(0x404040));
+
+camera.position.z = 5;
+
+function animate() {
+    requestAnimationFrame(animate);
+    sphere.rotation.x += 0.005;
+    sphere.rotation.y += 0.005;
+    innerSphere.rotation.y -= 0.01;
+    
+    const time = Date.now() * 0.001;
+    innerSphere.position.y = Math.sin(time) * 0.2;
+    sphere.position.y = Math.sin(time) * 0.2;
+    
+    renderer.render(scene, camera);
+}
+
+window.addEventListener('resize', () => {
+    const w = container.clientWidth || window.innerWidth;
+    const h = container.clientHeight || window.innerHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+});
+
+animate();
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_4 -->
+<!-- Animated Connection Lines Layer -->
+<div class="connection-lines">
+<svg fill="none" height="100%" viewbox="0 0 800 800" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path class="animated-path" d="M100 200C300 100 500 700 700 600" stroke="url(#gradient1)" stroke-width="0.5"></path>
+<path class="animated-path" d="M150 600C350 400 450 100 650 300" stroke="url(#gradient1)" stroke-width="0.5" style="animation-delay: -2s;"></path>
+<defs>
+<lineargradient id="gradient1" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#b4c5ff"></stop>
+<stop offset="100%" stop-color="#2563eb"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+<!-- Brand Identity Overlay -->
+<div class="relative z-10 px-margin-desktop max-w-xl">
+<div class="mb-stack-xl">
+<span class="font-headline-md text-headline-md font-bold tracking-tight text-white mb-stack-sm block">Omni AI</span>
+<h1 class="font-display-hero text-display-hero text-white leading-tight mb-stack-md">The Intelligence Engine for Modern Enterprises.</h1>
+<p class="font-body-lg text-body-lg text-primary-fixed/80 max-w-md">Experience high-performance luxury in AI workflow management. Secure, scalable, and beautifully engineered.</p>
+</div>
+<div class="grid grid-cols-2 gap-gutter">
+<div class="glass-card p-stack-md rounded-xl bg-white/10 border-white/10">
+<span class="material-symbols-outlined text-primary-fixed-dim text-3xl mb-stack-sm">bolt</span>
+<p class="font-label-md text-label-md text-white">Latency-Optimized</p>
+</div>
+<div class="glass-card p-stack-md rounded-xl bg-white/10 border-white/10">
+<span class="material-symbols-outlined text-primary-fixed-dim text-3xl mb-stack-sm">security</span>
+<p class="font-label-md text-label-md text-white">Enterprise Grade</p>
+</div>
+</div>
+</div>
+<!-- Bottom Decorative Badge -->
+<div class="absolute bottom-12 left-margin-desktop flex items-center gap-stack-sm">
+<div class="w-2 h-2 rounded-full bg-primary-fixed animate-pulse"></div>
+<span class="font-label-sm text-label-sm text-primary-fixed tracking-widest uppercase">System Online • v4.2.0</span>
+</div>
+</section>
+<!-- Right Side: Auth Form -->
+<section class="w-full lg:w-1/2 flex items-center justify-center p-margin-mobile md:p-margin-desktop bg-surface relative">
+<!-- Mobile Navigation Anchor -->
+<div class="absolute top-8 left-margin-mobile lg:hidden">
+<span class="font-headline-md text-headline-md font-bold tracking-tight text-primary">Omni AI</span>
+</div>
+<div class="w-full max-w-md">
+<div class="text-center lg:text-left mb-stack-xl">
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-stack-xs">Welcome back</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Sign in to your enterprise dashboard.</p>
+</div>
+<!-- Auth Card -->
+<div class="glass-card p-stack-xl rounded-xl shadow-sm border-outline-variant/30">
+<!-- SSO Providers -->
+<div class="space-y-stack-md mb-stack-xl">
+<button class="w-full h-14 flex items-center justify-center gap-stack-md bg-white border border-outline-variant rounded-xl hover:bg-surface-container-low transition-all duration-200 magnetic-button">
+<img alt="Google Logo" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCT6wsDQKUnNNSujHziiUARnwkz7-QgD7Y36pDtD8CrIN3II6KundrfDe-8bZQ1U0PWclFBCLqT9n-P-qnvOnWZo08a5zFZ7y8YgMM3NkkhprIclRURNw_t__iGi7RU_0XD1GCeMj8GU5g_xVIliJBq8EwZI-ogeFe40tnOPpLEd7TbVLYZy69AgVnRJvVx4PbXm_XY0r39Cxuyg47WN3XeBvw6h9fn6VXb-82-Sn5cUVj-ejSavpwmbGoL_V4Q9rMTlpuWl3b03Q"/>
+<span class="font-label-md text-label-md text-on-surface">Continue with Google</span>
+</button>
+<button class="w-full h-14 flex items-center justify-center gap-stack-md bg-white border border-outline-variant rounded-xl hover:bg-surface-container-low transition-all duration-200 magnetic-button">
+<img alt="Microsoft Logo" class="w-5 h-5" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB3sQi4OQT5dJpC8fD8vZJCQbEz4Uo8rC0J6V5cNBYrB98cTefRGHI7M8q_djCRaLHLJ4xKAvSxrybRTvE00MJ_Hj0Ehyey6MVKRonvlnUAPsxAhUGSvBMUJokhgSE1ewGDSix1bIwCibZVF2G-RDCy8kjWhJIeUL1ZSCIvqeLFcw0HqP3euTCAhEbP1ImK1ydmg7oe4BKJmQpjLDkrxccisVm-7PUnkwAuXOUq3OVEIyNRaRGdzbp3To_yLjEfMZGScfPraK3llQ"/>
+<span class="font-label-md text-label-md text-on-surface">Continue with Microsoft</span>
+</button>
+</div>
+<div class="relative mb-stack-xl flex items-center">
+<div class="flex-grow border-t border-outline-variant"></div>
+<span class="flex-shrink mx-4 font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Or email</span>
+<div class="flex-grow border-t border-outline-variant"></div>
+</div>
+<!-- Traditional Form -->
+<form class="space-y-stack-lg" id="authForm">
+<div class="space-y-stack-xs">
+<label class="font-label-md text-label-md text-on-surface" for="email">Work Email</label>
+<input class="w-full h-12 px-stack-md rounded-lg border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-body-md" id="email" placeholder="name@company.com" required="" type="email"/>
+</div>
+<div class="space-y-stack-xs">
+<div class="flex justify-between items-center">
+<label class="font-label-md text-label-md text-on-surface" for="password">Password</label>
+<a class="font-label-sm text-label-sm text-primary hover:underline transition-all" href="#">Forgot?</a>
+</div>
+<div class="relative">
+<input class="w-full h-12 px-stack-md rounded-lg border-outline-variant bg-surface-container-lowest focus:ring-2 focus:ring-primary focus:border-transparent transition-all outline-none text-body-md" id="password" placeholder="••••••••" required="" type="password"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<button class="w-full h-14 bg-primary text-on-primary rounded-xl font-label-md text-label-md magnetic-button transition-all flex items-center justify-center gap-stack-sm" type="submit">
+                            Sign In to Omni
+                            <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</form>
+</div>
+<!-- Toggle Link -->
+<div class="mt-stack-xl text-center">
+<p class="font-body-md text-body-md text-on-surface-variant">
+                        Don't have an account? 
+                        <a class="text-primary font-semibold hover:underline transition-all" href="#">Create an workspace</a>
+</p>
+</div>
+</div>
+<!-- Footer for Auth Page -->
+<div class="absolute bottom-8 left-0 w-full px-margin-mobile flex flex-col md:flex-row justify-center items-center gap-stack-md md:gap-stack-xl opacity-60">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Security</a>
+<span class="hidden md:block w-1 h-1 rounded-full bg-outline-variant"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">© 2024 Omni AI</span>
+</div>
+</section>
+</main>
+<script>
+        // Micro-interaction for Magnetic Buttons
+        document.querySelectorAll('.magnetic-button').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                
+                btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px) scale(1.02)`;
+            });
+
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = `translate(0px, 0px) scale(1)`;
+            });
+        });
+
+        // Simple Form Submission Placeholder
+        document.getElementById('authForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalContent = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = `<span class="material-symbols-outlined animate-spin">refresh</span> Signing in...`;
+            
+            setTimeout(() => {
+                btn.innerHTML = `<span class="material-symbols-outlined">check_circle</span> Success`;
+                btn.classList.replace('bg-primary', 'bg-tertiary-container');
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = originalContent;
+                    btn.classList.replace('bg-tertiary-container', 'bg-primary');
+                }, 2000);
+            }, 1500);
+        });
+    </script>
+</body></html>

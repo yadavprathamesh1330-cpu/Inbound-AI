@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Omni AI | Google Workspace Integration</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#c6c6cd",
+                        "background": "#fcf8fa",
+                        "tertiary-container": "#261906",
+                        "surface-variant": "#e5e2e3",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#316bf3",
+                        "inverse-on-surface": "#f3f0f1",
+                        "on-surface-variant": "#45464c",
+                        "on-primary-container": "#7d8497",
+                        "on-secondary-fixed-variant": "#003ea8",
+                        "surface-container-high": "#eae7e9",
+                        "secondary": "#0051d5",
+                        "surface-tint": "#575e70",
+                        "surface-container": "#f0edee",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#141b2b",
+                        "tertiary-fixed-dim": "#dcc2a4",
+                        "on-secondary-fixed": "#00174b",
+                        "on-secondary-container": "#fefcff",
+                        "on-primary-fixed-variant": "#404758",
+                        "on-tertiary-container": "#968065",
+                        "surface": "#fcf8fa",
+                        "surface-container-highest": "#e5e2e3",
+                        "primary-fixed": "#dce2f7",
+                        "primary-container": "#141b2b",
+                        "on-tertiary-fixed": "#261906",
+                        "primary-fixed-dim": "#c0c6db",
+                        "outline": "#76777d",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#dbe1ff",
+                        "inverse-primary": "#c0c6db",
+                        "tertiary": "#000000",
+                        "on-surface": "#1b1b1d",
+                        "tertiary-fixed": "#f9debf",
+                        "surface-dim": "#dcd9db",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#1b1b1d",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "on-tertiary-fixed-variant": "#55442d",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#fcf8fa",
+                        "on-error": "#ffffff",
+                        "surface-container-low": "#f6f3f4",
+                        "primary": "#000000",
+                        "inverse-surface": "#303031"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "btn": "14px",
+                        "card": "18px"
+                    },
+                    "spacing": {
+                        "unit-lg": "24px",
+                        "unit-2xl": "80px",
+                        "container-max": "1280px",
+                        "unit-xl": "48px",
+                        "unit-xs": "4px",
+                        "unit-md": "16px",
+                        "margin-mobile": "16px",
+                        "margin-desktop": "40px",
+                        "gutter": "24px",
+                        "unit-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "display-xl": ["Inter"],
+                        "display-xl-mobile": ["Inter"],
+                        "mono-label": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "body-lg": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #fcf8fa; color: #1b1b1d; -webkit-font-smoothing: antialiased; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(226, 232, 240, 0.8); }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .voice-pulse { position: relative; width: 40px; height: 40px; border-radius: 50%; background: #2563EB; }
+        .voice-pulse::before, .voice-pulse::after { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 50%; border: 2px solid #2563EB; opacity: 0.5; animation: pulse 2s ease-out infinite; }
+        .voice-pulse::after { animation-delay: 1s; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(2.5); opacity: 0; } }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- SideNavBar Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface dark:bg-surface-container-lowest border-r border-outline-variant dark:border-outline shadow-sm flex flex-col h-full py-unit-lg px-unit-md z-50">
+<div class="flex items-center gap-3 mb-10 px-2">
+<div class="voice-pulse scale-75"></div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface dark:text-on-surface-variant">Omni AI</h1>
+<p class="text-[10px] uppercase tracking-widest text-outline">Enterprise Voice</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<!-- AI Agents -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-body-md text-body-md">AI Agents</span>
+</a>
+<!-- Knowledge Base -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-body-md text-body-md">Knowledge Base</span>
+</a>
+<!-- Settings (Active) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-primary dark:text-secondary-fixed-dim font-bold border-r-4 border-primary dark:border-secondary-fixed-dim bg-surface-container-low dark:bg-surface-container-high active:scale-[0.99] transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant/30 pt-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:text-primary transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md text-body-md">Help</span>
+</a>
+<button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined">menu_open</span>
+<span class="font-body-md text-body-md">Collapse</span>
+</button>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-64 min-h-screen relative">
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-surface/80 dark:bg-surface-container-lowest/80 backdrop-blur-xl border-b border-outline-variant/30 dark:border-outline/30 flex justify-between items-center px-margin-desktop z-40 shadow-sm">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 text-outline">
+<span class="material-symbols-outlined text-[20px]">link</span>
+<span class="font-label-sm text-label-sm">Integrations</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">Google Workspace</span>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">notifications</span>
+</div></div></header></main></body></html>

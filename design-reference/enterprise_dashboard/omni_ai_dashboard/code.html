@@ -1,0 +1,610 @@
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Omni AI | Enterprise Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#dcc2a4",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c6c6cd",
+                    "secondary-fixed-dim": "#b4c5ff",
+                    "surface-tint": "#575e70",
+                    "on-secondary-fixed-variant": "#003ea8",
+                    "on-surface-variant": "#45464c",
+                    "tertiary-container": "#261906",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed": "#dbe1ff",
+                    "on-surface": "#1b1b1d",
+                    "on-secondary-fixed": "#00174b",
+                    "surface-dim": "#dcd9db",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#1b1b1d",
+                    "tertiary-fixed": "#f9debf",
+                    "surface-container-high": "#eae7e9",
+                    "on-primary-container": "#7d8497",
+                    "inverse-primary": "#c0c6db",
+                    "surface-container-highest": "#e5e2e3",
+                    "secondary": "#0051d5",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-low": "#f6f3f4",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#fcf8fa",
+                    "on-primary-fixed": "#141b2b",
+                    "primary-container": "#141b2b",
+                    "inverse-surface": "#303031",
+                    "inverse-on-surface": "#f3f0f1",
+                    "surface": "#fcf8fa",
+                    "primary-fixed": "#dce2f7",
+                    "on-secondary-container": "#fefcff",
+                    "on-primary-fixed-variant": "#404758",
+                    "primary-fixed-dim": "#c0c6db",
+                    "primary": "#000000",
+                    "on-tertiary-fixed-variant": "#55442d",
+                    "outline": "#76777d",
+                    "surface-container": "#f0edee",
+                    "tertiary": "#000000",
+                    "on-tertiary-container": "#968065",
+                    "background": "#fcf8fa",
+                    "surface-variant": "#e5e2e3",
+                    "on-tertiary-fixed": "#261906",
+                    "secondary-container": "#316bf3"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "40px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "unit-sm": "8px",
+                    "container-max": "1280px",
+                    "unit-xl": "48px",
+                    "unit-md": "16px",
+                    "unit-xs": "4px",
+                    "unit-2xl": "80px",
+                    "unit-lg": "24px"
+            },
+            "fontFamily": {
+                    "display-xl": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-xl-mobile": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "mono-label": ["jetbrainsMono"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "display-xl": ["60px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-xl-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "mono-label": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 1);
+            box-shadow: 0px 4px 6px -1px rgba(0,0,0,0.05);
+            border-radius: 18px;
+        }
+        .voice-pulse {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .voice-pulse div {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #2563EB;
+            opacity: 0.15;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- Side Navigation Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface border-r border-outline-variant flex flex-col py-unit-lg px-unit-md z-50">
+<div class="flex items-center gap-3 px-4 mb-unit-xl">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded-xl">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface leading-none">Omni AI</h1>
+<p class="text-xs text-on-surface-variant mt-1">Enterprise Voice</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Active Tab: Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 text-primary font-bold border-r-4 border-primary bg-surface-container-low transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-body-md text-body-md">AI Agents</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">call</span>
+<span class="font-body-md text-body-md">Calls</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md text-body-md">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-body-md text-body-md">Knowledge Base</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-body-md text-body-md">Workflows</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-body-md text-body-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-body-md text-body-md">Team</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md text-body-md">Billing</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant/30 pt-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md text-body-md">Help</span>
+</a>
+<button class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-all w-full">
+<span class="material-symbols-outlined">menu_open</span>
+<span class="font-body-md text-body-md">Collapse</span>
+</button>
+</div>
+</aside>
+<!-- Top Navigation Bar Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center gap-unit-md flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-xl pl-10 pr-4 py-2 text-label-sm font-label-sm focus:ring-2 focus:ring-secondary transition-all" placeholder="Search interactions, leads, or agents..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">sensors</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-label-sm font-bold text-on-surface">Admin User</p>
+<p class="text-[10px] text-outline uppercase tracking-wider">Super Admin</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-primary/10 object-cover" data-alt="A professional studio portrait of a modern executive admin, high-resolution and clean lighting, minimalist background with a blue and white aesthetic, business professional attire, confident and friendly expression, enterprise software vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBN0XWP0pqWG8Y8VEXf9pAk4pW_jvXuw_OOfwLKVOoD85UZ2Qzx-xoAFyHXv9asTtaQEZU3xO3rbGMqwkq8j2vNc3U-0eRja_5-cMRDw__-pI0HZsUxQMYNTs3tq3rm7mlDgECbeGe5fjrizEv6K44yirUbhRztz3u9zIvUj4DAWaSrBeQmXrxj97On_vscy-Ls1CKA3KDiEWpyRVUpi2T7VB9gU-mY0hVk8AD-Fx34rVLlU8FMSatEQk5dImqftxaWT-_d_4gpSg">
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 px-margin-desktop pb-unit-2xl">
+<!-- Welcome Header -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-unit-xl gap-4">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Good morning, Admin</h2>
+<p class="text-body-md text-on-surface-variant mt-1">Here's what's happening with your AI agents today.</p>
+</div>
+<div class="flex items-center gap-3 bg-white p-2 rounded-xl border border-outline-variant/50 shadow-sm">
+<span class="material-symbols-outlined text-outline ml-2">calendar_today</span>
+<input class="border-none bg-transparent text-label-sm font-label-sm p-0 pr-4 focus:ring-0 cursor-pointer" type="date" value="2023-10-27">
+<div class="h-6 w-[1px] bg-outline-variant/50"></div>
+<button class="bg-primary text-white px-4 py-1.5 rounded-lg text-label-sm font-medium hover:bg-secondary transition-colors">Apply</button>
+</div>
+</div>
+<!-- Stat Widgets -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-unit-xl">
+<!-- Stat Card 1 -->
+<div class="glass-card p-unit-md flex items-start justify-between">
+<div>
+<p class="text-label-sm font-medium text-on-surface-variant">Calls Today</p>
+<h3 class="text-display-xl-mobile font-bold mt-2">248</h3>
+<span class="inline-flex items-center text-xs font-bold text-emerald-600 mt-2">
+<span class="material-symbols-outlined text-sm mr-1">trending_up</span> +12% vs yesterday
+                    </span>
+</div>
+<div class="p-3 bg-secondary/10 rounded-xl">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">call</span>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="glass-card p-unit-md flex items-start justify-between">
+<div>
+<p class="text-label-sm font-medium text-on-surface-variant">Active AI Calls</p>
+<div class="flex items-baseline gap-2 mt-2">
+<h3 class="text-display-xl-mobile font-bold">12</h3>
+<div class="voice-pulse w-4 h-4 mb-2">
+<div></div>
+<div style="animation-delay: 0.5s;"></div>
+<span class="w-2 h-2 bg-secondary rounded-full relative z-10"></span>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant mt-2 font-medium">Real-time processing</p>
+</div>
+<div class="p-3 bg-secondary/10 rounded-xl">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">graphic_eq</span>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="glass-card p-unit-md flex items-start justify-between">
+<div>
+<p class="text-label-sm font-medium text-on-surface-variant">New Leads</p>
+<h3 class="text-display-xl-mobile font-bold mt-2">45</h3>
+<span class="inline-flex items-center text-xs font-bold text-emerald-600 mt-2">
+<span class="material-symbols-outlined text-sm mr-1">trending_up</span> +5% this week
+                    </span>
+</div>
+<div class="p-3 bg-secondary/10 rounded-xl">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">person_add</span>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="glass-card p-unit-md flex items-start justify-between">
+<div>
+<p class="text-label-sm font-medium text-on-surface-variant">Appointments</p>
+<h3 class="text-display-xl-mobile font-bold mt-2">8</h3>
+<span class="inline-flex items-center text-xs font-bold text-on-surface-variant mt-2">
+                        Ready for review
+                    </span>
+</div>
+<div class="p-3 bg-secondary/10 rounded-xl">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+</div>
+</div>
+</div>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Large Chart Section -->
+
+<!-- Smaller Stat Cards Column -->
+<div class="col-span-12 grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Revenue Card -->
+<div class="glass-card p-unit-md flex-1 flex flex-col justify-between">
+<div>
+<div class="flex justify-between">
+<h5 class="text-label-sm font-bold text-on-surface-variant">Revenue Generated</h5>
+<span class="material-symbols-outlined text-secondary">payments</span>
+</div>
+<h4 class="text-headline-md font-extrabold mt-2">$14,520.00</h4>
+</div>
+<div class="mt-4 bg-surface-container-low rounded-lg h-2 overflow-hidden">
+<div class="bg-secondary h-full w-[72%] rounded-full"></div>
+</div>
+<div class="flex justify-between items-center mt-2">
+<span class="text-[10px] text-outline font-bold">72% OF MONTHLY GOAL</span>
+<span class="text-[10px] text-on-surface-variant font-bold">$20k Target</span>
+</div>
+</div>
+<!-- AI Success Card -->
+<div class="glass-card p-unit-md flex-1">
+<div class="flex justify-between items-start">
+<div>
+<h5 class="text-label-sm font-bold text-on-surface-variant">AI Success Rate</h5>
+<h4 class="text-headline-md font-extrabold mt-2 text-emerald-600">98.5%</h4>
+<p class="text-[10px] text-outline font-medium mt-1">NLU Confidence Index</p>
+</div>
+<div class="relative w-16 h-16">
+<svg class="w-16 h-16 transform -rotate-90" viewBox="0 0 36 36">
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3"></path>
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#10b981" stroke-dasharray="98.5, 100" stroke-width="3"></path>
+</svg>
+<span class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[10px] font-bold">98%</span>
+</div>
+</div>
+</div>
+<!-- Minutes Card -->
+<div class="glass-card p-unit-md flex-1">
+<div class="flex justify-between">
+<div>
+<h5 class="text-label-sm font-bold text-on-surface-variant">Minutes Used</h5>
+<h4 class="text-headline-md font-extrabold mt-2">4,280 <span class="text-sm font-medium text-outline">/ 10k</span></h4>
+</div>
+<span class="material-symbols-outlined text-secondary">timer</span>
+</div>
+<p class="text-xs text-on-surface-variant mt-2 italic">Refreshes in 4 days</p>
+</div>
+</div>
+<!-- Top Performing Agents -->
+<div class="col-span-12 glass-card p-unit-lg">
+<div class="flex items-center justify-between mb-unit-lg">
+<h4 class="font-headline-md text-on-surface">Top Performing AI Agents</h4>
+<button class="text-label-sm font-bold text-secondary hover:underline">View All Agents</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Agent Card 1 -->
+<div class="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-4 hover:shadow-md transition-shadow">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white">
+<img class="w-full h-full object-cover" data-alt="A futuristic AI avatar interface, glowing blue lines on a clean white robotic facial structure, professional and helpful digital assistant design, sleek 3D render with soft depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBC2wLHtL_x9BITDzpP2o1IN8Z-p3kAlAqHqQ8lk_1UJlGihX7KGITcxfSNKBGtmkzZUCcomsIbAJzjdtbuKZcjvgQPvLglvEEhHLi6VgFfOzePD2E_UPkWKhALDG5iLNhYjKUXVLSj76Z-Qs2m6ku0OOqWeSKjkXyFOr0g9DQreafu5xefvNvgRp6ImpXzC2sbSOhfIRqNslg-pvVT3FzB_LtGw2M21-gBeeKMUwEbDrUvckkwDIu4pmAFTf5Ut8QzC8d3uHpq8O4">
+</div>
+<div>
+<h6 class="font-bold text-on-surface">Clara</h6>
+<p class="text-[10px] text-outline uppercase font-bold tracking-widest">Inbound Support</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Success Rate</span>
+<span class="font-bold text-emerald-600">99.2%</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Total Calls</span>
+<span class="font-bold">1,402</span>
+</div>
+</div>
+</div>
+<!-- Agent Card 2 -->
+<div class="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-4 hover:shadow-md transition-shadow">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white">
+<img class="w-full h-full object-cover" data-alt="A modern digital assistant avatar for sales, warm amber and gold light accents, professional and persuasive robotic design, high-end tech aesthetic, 3D character art." src="https://lh3.googleusercontent.com/aida-public/AB6AXuALQcHzD8dLgxNE7WhRapS4xgrnjYDyNQANnZReqYSUurOzmGqra-LQXcztCGZMhk35YVxZS5JWEweU0ortq_RRwEmq-ivylH1gMm0HNKml4Mlg-1KMEszfopRsTL9lH-Np45ou9L-FXPN4gywGuPjd16S5hb8KEDWZ9FyP-jAZ4CgrkOKgGIep5LO2vCrz68c_91wTCj0Pqz33gt9phkp9Q49Y1mgd_JvyOEssL8cDocomqyrDJbUxNIWY-B8CChmDNT1q8KNvYS8">
+</div>
+<div>
+<h6 class="font-bold text-on-surface">Max</h6>
+<p class="text-[10px] text-outline uppercase font-bold tracking-widest">Outbound Sales</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Success Rate</span>
+<span class="font-bold text-emerald-600">97.8%</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Total Calls</span>
+<span class="font-bold">985</span>
+</div>
+</div>
+</div>
+<!-- Agent Card 3 -->
+<div class="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-4 hover:shadow-md transition-shadow">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white">
+<img class="w-full h-full object-cover" data-alt="A calming medical-themed AI avatar, soft teal and white color scheme, clean medical professional digital interface, friendly and trustworthy robotic face design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDrLVI1Bj-3s-URF_bIA0ROWFY5N9bZMJi7G7mX2M2SNMqsZmyT_WD1NvVOeFb45nAgUlK55zIh-dbOCWtFpx4az9_JTekIu5sKWfDeEjqWQoDG9PkA4m8_Rr6AOflMpOnpAWt3K-5Tvsj7Ftl1ndViYUwzusWAf_7r-s8PaiUcLBvYer7W1Y1rOyecBBeIx7B2tQigMMecN_7WclD_e0m2vG548CBF3dukoyd94S8VgI26NYMUwW67h3bMgjznWJx60QDLVY3RK78">
+</div>
+<div>
+<h6 class="font-bold text-on-surface">Luna</h6>
+<p class="text-[10px] text-outline uppercase font-bold tracking-widest">Appointments</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Success Rate</span>
+<span class="font-bold text-emerald-600">98.1%</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Total Calls</span>
+<span class="font-bold">2,110</span>
+</div>
+</div>
+</div>
+<!-- Agent Card 4 -->
+<div class="bg-surface-container-low border border-outline-variant/30 rounded-2xl p-4 hover:shadow-md transition-shadow">
+<div class="flex items-center gap-3 mb-4">
+<div class="w-12 h-12 rounded-full overflow-hidden border-2 border-white">
+<img class="w-full h-full object-cover" data-alt="A sleek corporate AI avatar, deep navy and silver accents, executive assistant digital persona, minimalist robotic features, professional 3D render." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeb4K0j2x5ZER50BhANZx9iie4m_WB1rRFKqJiKmYqvQ77X6h6I2bdIVHJqz-2JuuTz9nZoJm_0JCPB4rDLV4NKf6gaoVV0QxgV1ouEwcYmyZjUcsf05mSsPTknGdt9E7cPijwqqm0mFkIiS7nkY_w-TCCiH37sHu8Wv3s7LIipEqdwFhPFiPnWFM87Oyidz17iKkH0MT4x_vnxkf6IcD1PkBrb_X1VlefKX76FgqLwZ_ZRQ7s3XRJHDSlWQdFbiIirVz7lgrIJss">
+</div>
+<div>
+<h6 class="font-bold text-on-surface">Arthur</h6>
+<p class="text-[10px] text-outline uppercase font-bold tracking-widest">Survey Lead</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Success Rate</span>
+<span class="font-bold text-emerald-600">96.5%</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-on-surface-variant">Total Calls</span>
+<span class="font-bold">756</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Recent Calls Table -->
+<div class="col-span-12 mb-unit-lg"><h4 class="font-headline-md text-on-surface mb-4">Integrations</h4><div class="glass-card p-unit-md flex items-center justify-between bg-white"><div class="flex items-center gap-4"><div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center"><span class="material-symbols-outlined text-emerald-600">description</span></div><div><h5 class="font-bold text-on-surface">Google Forms</h5><p class="text-label-sm text-on-surface-variant">Sync your call summaries and lead data directly to your spreadsheets.</p></div></div><button class="bg-secondary text-white px-6 py-2 rounded-xl font-bold hover:bg-secondary/90 transition-all flex items-center gap-2"><span class="material-symbols-outlined text-sm">link</span> Connect to Google Forms</button></div></div><div class="col-span-12 glass-card overflow-hidden">
+<div class="p-unit-lg border-b border-outline-variant/30 flex justify-between items-center bg-white">
+<h4 class="font-headline-md text-on-surface">Recent Calls</h4>
+<div class="flex gap-2">
+<button class="p-2 text-outline hover:text-primary transition-colors border border-outline-variant/30 rounded-lg"><span class="material-symbols-outlined">filter_list</span></button>
+<button class="p-2 text-outline hover:text-primary transition-colors border border-outline-variant/30 rounded-lg"><span class="material-symbols-outlined">download</span></button>
+</div>
+</div>
+<div class="overflow-x-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-6 py-4 text-[10px] font-extrabold text-outline uppercase tracking-widest">Caller</th>
+<th class="px-6 py-4 text-[10px] font-extrabold text-outline uppercase tracking-widest">Time</th>
+<th class="px-6 py-4 text-[10px] font-extrabold text-outline uppercase tracking-widest">Duration</th>
+<th class="px-6 py-4 text-[10px] font-extrabold text-outline uppercase tracking-widest">Summary</th>
+<th class="px-6 py-4 text-[10px] font-extrabold text-outline uppercase tracking-widest text-center">Score</th>
+<th class="px-6 py-4 text-[10px] font-extrabold text-outline uppercase tracking-widest">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20">
+<!-- Row 1 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-body-md font-bold">Johnathan Smith</span>
+<span class="text-xs text-outline font-mono">+1 (555) 012-3456</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">10:42 AM</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">4m 12s</td>
+<td class="px-6 py-4">
+<p class="text-label-sm text-on-surface-variant max-w-xs truncate">Inquired about Q4 enterprise pricing and volume discounts.</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center">
+<span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded">92</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-full border border-emerald-100">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                                        Completed
+                                    </span>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-body-md font-bold">Sarah Williams</span>
+<span class="text-xs text-outline font-mono">+1 (555) 012-9876</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">10:38 AM</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">1m 45s</td>
+<td class="px-6 py-4">
+<p class="text-label-sm text-on-surface-variant max-w-xs truncate">Requested callback for technical support regarding API keys.</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center">
+<span class="px-2 py-1 bg-surface-container-high text-on-surface-variant text-[10px] font-bold rounded">45</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-blue-50 text-blue-700 text-xs font-bold rounded-full border border-blue-100 animate-pulse">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                                        In-Progress
+                                    </span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-body-md font-bold">Anonymous</span>
+<span class="text-xs text-outline font-mono">+1 (555) 011-2233</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">10:15 AM</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">0m 12s</td>
+<td class="px-6 py-4">
+<p class="text-label-sm text-on-surface-variant max-w-xs truncate">Call dropped before AI could engage. Probable network issue.</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center">
+<span class="px-2 py-1 bg-red-50 text-red-700 text-[10px] font-bold rounded">05</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-red-50 text-red-700 text-xs font-bold rounded-full border border-red-100">
+<span class="w-1.5 h-1.5 rounded-full bg-red-600"></span>
+                                        Failed
+                                    </span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex flex-col">
+<span class="text-body-md font-bold">Tech Global Corp</span>
+<span class="text-xs text-outline font-mono">+1 (555) 444-5555</span>
+</div>
+</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">09:55 AM</td>
+<td class="px-6 py-4 text-body-md text-on-surface-variant">8m 22s</td>
+<td class="px-6 py-4">
+<p class="text-label-sm text-on-surface-variant max-w-xs truncate">High-intent demo scheduled for Monday. Lead score updated.</p>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center">
+<span class="px-2 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded">98</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-full border border-emerald-100">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                                        Completed
+                                    </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-4 bg-surface-container-low/30 flex justify-center">
+<button class="text-label-sm font-bold text-outline hover:text-primary transition-all flex items-center gap-1">
+                        Load More Records <span class="material-symbols-outlined text-sm">keyboard_arrow_down</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button (FAB) - Suppression logic: only for key dashboard screens -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+<script>
+        // Micro-interaction for sidebar collapse simulation
+        document.querySelector('button:has(span:contains("menu_open"))')?.addEventListener('click', () => {
+            console.log("Collapse toggle triggered");
+        });
+
+        // Search bar focus effect
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput?.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-secondary/20');
+        });
+        searchInput?.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-secondary/20');
+        });
+    </script>
+
+
+</body></html>

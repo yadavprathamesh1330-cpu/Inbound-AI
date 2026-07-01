@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Omni AI - Call Logs</title>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Google Fonts: Inter & JetBrains Mono -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#dcc2a4",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c6c6cd",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "surface-tint": "#575e70",
+                        "on-secondary-fixed-variant": "#003ea8",
+                        "on-surface-variant": "#45464c",
+                        "tertiary-container": "#261906",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#dbe1ff",
+                        "on-surface": "#1b1b1d",
+                        "on-secondary-fixed": "#00174b",
+                        "surface-dim": "#dcd9db",
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1b1b1d",
+                        "tertiary-fixed": "#f9debf",
+                        "surface-container-high": "#eae7e9",
+                        "on-primary-container": "#7d8497",
+                        "inverse-primary": "#c0c6db",
+                        "surface-container-highest": "#e5e2e3",
+                        "secondary": "#0051d5",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#f6f3f4",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#fcf8fa",
+                        "on-primary-fixed": "#141b2b",
+                        "primary-container": "#141b2b",
+                        "inverse-surface": "#303031",
+                        "inverse-on-surface": "#f3f0f1",
+                        "surface": "#fcf8fa",
+                        "primary-fixed": "#dce2f7",
+                        "on-secondary-container": "#fefcff",
+                        "on-primary-fixed-variant": "#404758",
+                        "primary-fixed-dim": "#c0c6db",
+                        "primary": "#000000",
+                        "on-tertiary-fixed-variant": "#55442d",
+                        "outline": "#76777d",
+                        "surface-container": "#f0edee",
+                        "tertiary": "#000000",
+                        "on-tertiary-container": "#968065",
+                        "background": "#fcf8fa",
+                        "surface-variant": "#e5e2e3",
+                        "on-tertiary-fixed": "#261906",
+                        "secondary-container": "#316bf3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "unit-sm": "8px",
+                        "container-max": "1280px",
+                        "unit-xl": "48px",
+                        "unit-md": "16px",
+                        "unit-xs": "4px",
+                        "unit-2xl": "80px",
+                        "unit-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "display-xl": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "mono-label": ["JetBrains Mono"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-xl": ["60px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "headline-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "mono-label": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "label-sm": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            background-color: #fcf8fa;
+            color: #1b1b1d;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+            height: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #e2e8f0;
+            border-radius: 10px;
+        }
+        .row-hover:hover {
+            background-color: #f6f3f4;
+        }
+        .active-row {
+            background-color: #f0edee;
+            border-left: 4px solid #000000;
+        }
+    </style>
+</head>
+<body class="flex overflow-hidden">
+<!-- SideNavBar (Predicted from JSON) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface dark:bg-surface-container-lowest border-r border-outline-variant dark:border-outline shadow-sm flex flex-col py-unit-lg px-unit-md z-50">
+<div class="mb-unit-xl flex items-center gap-3 px-2">
+<div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface leading-none">Omni AI</h1>
+<p class="text-[11px] uppercase tracking-widest text-on-surface-variant font-bold opacity-60">Enterprise Voice</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-body-md text-body-md">AI Agents</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-primary dark:text-secondary-fixed-dim font-bold border-r-4 border-primary dark:border-secondary-fixed-dim bg-surface-container-low dark:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">call</span>
+<span class="font-body-md text-body-md">Calls</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md text-body-md">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-body-md text-body-md">Knowledge Base</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-body-md text-body-md">Workflows</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-body-md text-body-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="pt-unit-lg mt-auto border-t border-outline-variant">
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-surface-variant hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md text-body-md">Help</span>
+</a>
+<div class="flex items-center gap-3 px-2 py-4 mt-2">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Professional studio headshot of a senior executive in a dark tailored suit, high-key minimalist lighting, clean white background, reflecting enterprise-grade reliability and intelligence." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIJgB4y5YbSz1hWCol-h2i17DJI1A70Hz-ubuwUx15TB8njkopDU3rqWz8UsrlG4xFyAkl6WWh3Nr5YekNuLYO2cf3iFN8osnOptDPOB56jBjDsAGySGqi4dKnP7xkcQzbddskBRTM-fveWAarLeQXNoeFOpTXihqK1OlgkQ0S0ryaVgVOjPHjeUH1-BcEH2nhuqkh8CSjbN3NIwMjloWLRUPdyOYojR5WeKpRdSxcB_VK0SBQAq79ZzJ9piE48eRvP9W9e5fvpv0"/>
+</div>
+<div class="flex-1 min-w-0">
+<p class="text-sm font-bold truncate">Alex Sterling</p>
+<p class="text-[10px] text-on-surface-variant truncate">Enterprise Plan</p>
+</div>
+<span class="material-symbols-outlined text-outline cursor-pointer">logout</span>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 min-h-screen flex flex-col relative overflow-hidden">
+<!-- TopNavBar (Predicted from JSON) -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-surface/80 dark:bg-surface-container-lowest/80 backdrop-blur-xl flex justify-between items-center px-margin-desktop z-40 border-b border-outline-variant/30 dark:border-outline/30 shadow-sm">
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+<input class="bg-surface-container-low border-none rounded-full pl-10 pr-4 py-1.5 text-sm focus:ring-2 focus:ring-secondary dark:ring-secondary-container transition-all w-64" placeholder="Search call records..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors relative">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="absolute top-2.5 right-2.5 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant">sensors</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant/40 mx-2"></div>
+<div class="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+<div class="text-right">
+<p class="font-label-sm text-label-sm font-bold text-on-surface leading-none">Alex Sterling</p>
+<p class="text-[10px] text-on-surface-variant">Admin Access</p>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Canvas -->
+<div class="mt-16 flex-1 flex flex-col overflow-hidden">
+<!-- Hero Header -->
+<div class="px-margin-desktop pt-unit-lg pb-unit-md flex justify-between items-end bg-gradient-to-b from-surface to-background">
+<div>
+<nav class="flex text-[11px] font-bold text-outline uppercase tracking-widest gap-2 mb-2">
+<span>Workspace</span>
+<span>/</span>
+<span class="text-primary">Communication</span>
+</nav>
+<h2 class="font-display-xl text-headline-lg text-primary tracking-tight">Call Logs</h2>
+</div>
+<div class="flex gap-3">
+<button class="flex items-center gap-2 px-4 py-2 bg-white border border-outline-variant text-primary rounded-xl font-label-sm text-label-sm hover:shadow-md transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-lg">download</span>
+                        Export CSV
+                    </button>
+<button class="flex items-center gap-2 px-6 py-2 bg-primary text-on-primary rounded-xl font-label-sm text-label-sm hover:opacity-90 shadow-lg shadow-primary/10 transition-all active:scale-[0.98]">
+<span class="material-symbols-outlined text-lg">add</span>
+                        New Outbound
+                    </button>
+</div>
+</div>
+<!-- Filter Bar -->
+<div class="px-margin-desktop mb-unit-md">
+<div class="glass-panel rounded-2xl p-4 flex flex-wrap items-center gap-4">
+<div class="flex-1 min-w-[200px]">
+<label class="block text-[10px] font-bold text-outline-variant uppercase mb-1 ml-1">Date Range</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-sm text-outline">calendar_today</span>
+<select class="w-full bg-surface-container-low border-none rounded-xl pl-10 pr-4 py-2 text-label-sm font-medium focus:ring-1 focus:ring-primary">
+<option>Last 7 Days</option>
+<option>Last 30 Days</option>
+<option>This Quarter</option>
+<option>Custom Range</option>
+</select>
+</div>
+</div>
+<div class="flex-1 min-w-[150px]">
+<label class="block text-[10px] font-bold text-outline-variant uppercase mb-1 ml-1">Agent</label>
+<select class="w-full bg-surface-container-low border-none rounded-xl px-4 py-2 text-label-sm font-medium focus:ring-1 focus:ring-primary">
+<option>All Agents</option>
+<option>Inbound Specialist v4</option>
+<option>Sales Closer Pro</option>
+<option>Support Assist AI</option>
+</select>
+</div>
+<div class="flex-1 min-w-[150px]">
+<label class="block text-[10px] font-bold text-outline-variant uppercase mb-1 ml-1">Lead Score</label>
+<select class="w-full bg-surface-container-low border-none rounded-xl px-4 py-2 text-label-sm font-medium focus:ring-1 focus:ring-primary">
+<option>Any Score</option>
+<option>High Priority (80+)</option>
+<option>Mid Tier (50-79)</option>
+<option>Low Tier (&lt;50)</option>
+</select>
+</div>
+<div class="flex-1 min-w-[150px]">
+<label class="block text-[10px] font-bold text-outline-variant uppercase mb-1 ml-1">Outcome</label>
+<select class="w-full bg-surface-container-low border-none rounded-xl px-4 py-2 text-label-sm font-medium focus:ring-1 focus:ring-primary">
+<option>All Outcomes</option>
+<option>Meeting Booked</option>
+<option>Follow-up Required</option>
+<option>No Interest</option>
+<option>Wrong Number</option>
+</select>
+</div>
+<div class="flex items-end h-full">
+<button class="p-2 bg-surface-container-highest text-on-surface-variant rounded-xl hover:text-primary transition-colors">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Main Data & Preview Layout -->
+<div class="flex flex-1 overflow-hidden px-margin-desktop pb-6 gap-6">
+<!-- Table Container -->
+<div class="flex-1 glass-panel rounded-2xl overflow-hidden flex flex-col">
+<div class="overflow-x-auto custom-scrollbar flex-1">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-white/95 backdrop-blur z-10">
+<tr class="border-b border-outline-variant/30">
+<th class="px-6 py-4 font-label-sm text-label-sm text-outline uppercase tracking-wider">Contact</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-outline uppercase tracking-wider">AI Agent</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-outline uppercase tracking-wider">Duration</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-outline uppercase tracking-wider">Cost</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-outline uppercase tracking-wider">Summary</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-outline uppercase tracking-wider text-center">Score</th>
+<th class="px-6 py-4 font-label-sm text-label-sm text-outline uppercase tracking-wider">Outcome</th>
+<th class="px-6 py-4"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/20">
+<!-- Row 1 -->
+<tr class="row-hover cursor-pointer active-row group" onclick="selectRow(this, 'row1')">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-secondary/10 flex items-center justify-center text-secondary font-bold text-xs">SM</div>
+<div>
+<p class="font-bold text-sm">Sarah Miller</p>
+<p class="text-[11px] text-outline">+1 (555) 012-3456</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-primary">smart_toy</span>
+<span class="text-sm font-medium">Sales Closer v4</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm font-mono-label">04:12</td>
+<td class="px-6 py-5 text-sm font-mono-label">$0.84</td>
+<td class="px-6 py-5">
+<p class="text-sm text-on-surface-variant line-clamp-1 max-w-[200px]">Interested in enterprise tier, requested demo for team of 50.</p>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-full text-[11px] font-bold border border-emerald-100">92</span>
+</td>
+<td class="px-6 py-5">
+<span class="px-2.5 py-1 bg-secondary/10 text-secondary rounded-full text-[10px] font-bold uppercase tracking-wider">Meeting Booked</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:bg-primary hover:text-white rounded-lg transition-colors">
+<span class="material-symbols-outlined text-sm">play_arrow</span>
+</button>
+<button class="p-1.5 hover:bg-primary hover:text-white rounded-lg transition-colors">
+<span class="material-symbols-outlined text-sm">description</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="row-hover cursor-pointer group" onclick="selectRow(this, 'row2')">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-amber-500/10 flex items-center justify-center text-amber-600 font-bold text-xs">RK</div>
+<div>
+<p class="font-bold text-sm">Robert King</p>
+<p class="text-[11px] text-outline">+44 20 7946 0958</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-primary">smart_toy</span>
+<span class="text-sm font-medium">Inbound Spec.</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm font-mono-label">01:45</td>
+<td class="px-6 py-5 text-sm font-mono-label">$0.35</td>
+<td class="px-6 py-5">
+<p class="text-sm text-on-surface-variant line-clamp-1 max-w-[200px]">Asked about pricing models and API limits. Will review docs.</p>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="px-2.5 py-1 bg-amber-50 text-amber-700 rounded-full text-[11px] font-bold border border-amber-100">65</span>
+</td>
+<td class="px-6 py-5">
+<span class="px-2.5 py-1 bg-surface-container-highest text-on-surface-variant rounded-full text-[10px] font-bold uppercase tracking-wider">Follow-up</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:bg-primary hover:text-white rounded-lg transition-colors">
+<span class="material-symbols-outlined text-sm">play_arrow</span>
+</button>
+<button class="p-1.5 hover:bg-primary hover:text-white rounded-lg transition-colors">
+<span class="material-symbols-outlined text-sm">description</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="row-hover cursor-pointer group" onclick="selectRow(this, 'row3')">
+<td class="px-6 py-5">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center text-slate-600 font-bold text-xs">JD</div>
+<div>
+<p class="font-bold text-sm">James Dong</p>
+<p class="text-[11px] text-outline">+1 (555) 998-1122</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-5">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-sm text-primary">smart_toy</span>
+<span class="text-sm font-medium">Sales Closer v4</span>
+</div>
+</td>
+<td class="px-6 py-5 text-sm font-mono-label">00:32</td>
+<td class="px-6 py-5 text-sm font-mono-label">$0.10</td>
+<td class="px-6 py-5">
+<p class="text-sm text-on-surface-variant line-clamp-1 max-w-[200px]">Call disconnected during transfer. No re-engagement.</p>
+</td>
+<td class="px-6 py-5 text-center">
+<span class="px-2.5 py-1 bg-error-container text-on-error-container rounded-full text-[11px] font-bold border border-error/10">12</span>
+</td>
+<td class="px-6 py-5">
+<span class="px-2.5 py-1 bg-error/10 text-error rounded-full text-[10px] font-bold uppercase tracking-wider">Dropped</span>
+</td>
+<td class="px-6 py-5 text-right">
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 hover:bg-primary hover:text-white rounded-lg transition-colors">
+<span class="material-symbols-outlined text-sm">play_arrow</span>
+</button>
+<button class="p-1.5 hover:bg-primary hover:text-white rounded-lg transition-colors">
+<span class="material-symbols-outlined text-sm">description</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="p-4 border-t border-outline-variant/30 flex justify-between items-center bg-white">
+<p class="text-xs text-outline font-medium">Showing 1-25 of 1,248 calls</p>
+<div class="flex gap-2">
+<button class="p-1.5 rounded-lg border border-outline-variant/30 hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-lg">chevron_left</span>
+</button>
+<button class="p-1.5 rounded-lg border border-outline-variant/30 hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-lg">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Call Intelligence Side Panel -->
+<aside class="w-80 glass-panel rounded-2xl flex flex-col p-6 overflow-y-auto custom-scrollbar transition-all duration-300 transform translate-x-0" id="intelligence-panel">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">insights</span>
+                            Call Intelligence
+                        </h3>
+<span class="material-symbols-outlined text-outline text-sm cursor-pointer hover:text-primary">more_vert</span>
+</div>
+<div class="space-y-8" id="panel-content">
+<!-- Sentiment Section -->
+<section>
+<div class="flex justify-between items-end mb-3">
+<span class="text-[10px] font-bold text-outline uppercase">Sentiment Analysis</span>
+<span class="text-sm font-bold text-emerald-600">Positive</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden flex">
+<div class="h-full bg-emerald-500" style="width: 75%"></div>
+<div class="h-full bg-amber-400" style="width: 20%"></div>
+<div class="h-full bg-error" style="width: 5%"></div>
+</div>
+<div class="flex justify-between mt-2 text-[10px] text-outline font-medium">
+<span>75% Joy/Interest</span>
+<span>5% Friction</span>
+</div>
+</section>
+<!-- Key Topics Section -->
+<section>
+<span class="text-[10px] font-bold text-outline uppercase block mb-3">Key Topics Discussed</span>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-primary text-on-primary rounded-lg text-xs font-medium">Enterprise Tier</span>
+<span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-lg text-xs font-medium">SSO Support</span>
+<span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-lg text-xs font-medium">Multi-Region API</span>
+<span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-lg text-xs font-medium">Retention Policy</span>
+</div>
+</section>
+<!-- AI Suggested Next Steps -->
+<section>
+<span class="text-[10px] font-bold text-outline uppercase block mb-3">AI Suggested Next Steps</span>
+<ul class="space-y-4">
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-secondary text-lg mt-0.5">task_alt</span>
+<div>
+<p class="text-sm font-bold text-primary leading-tight">Send Enterprise One-Pager</p>
+<p class="text-[11px] text-outline mt-1">Focus on security protocols discussed at 02:15 mark.</p>
+</div>
+</li>
+<li class="flex gap-3">
+<span class="material-symbols-outlined text-secondary text-lg mt-0.5">calendar_add_on</span>
+<div>
+<p class="text-sm font-bold text-primary leading-tight">Invite to Tech Deep Dive</p>
+<p class="text-[11px] text-outline mt-1">Sarah mentioned her CTO wants to review API documentation.</p>
+</div>
+</li>
+</ul>
+</section>
+<!-- Quick Play -->
+<div class="pt-6 border-t border-outline-variant/30">
+<div class="bg-surface-container-low rounded-xl p-4">
+<div class="flex items-center gap-3 mb-3">
+<button class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center">
+<span class="material-symbols-outlined text-lg">play_arrow</span>
+</button>
+<div class="flex-1">
+<div class="h-1 w-full bg-outline-variant/30 rounded-full relative">
+<div class="absolute left-0 top-0 h-full bg-primary rounded-full" style="width: 35%"></div>
+</div>
+</div>
+<span class="text-[10px] font-mono-label">01:24</span>
+</div>
+<p class="text-[11px] italic text-on-surface-variant text-center opacity-70">"I'm specifically looking for a solution that handles high-concurrency..."</p>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</div>
+<!-- Floating Action Component (Voice Pulse Predicted from Style Guidance) -->
+<div class="fixed bottom-8 right-8 flex flex-col items-end pointer-events-none">
+<div class="pointer-events-auto bg-primary text-on-primary w-14 h-14 rounded-full flex items-center justify-center shadow-2xl relative z-20 group cursor-pointer hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-2xl">mic</span>
+<!-- Animated Voice Pulse Rings -->
+<div class="absolute inset-0 rounded-full border-2 border-primary/40 animate-ping opacity-0 group-hover:opacity-100"></div>
+<div class="absolute inset-[-8px] rounded-full border border-primary/20 animate-pulse"></div>
+</div>
+<div class="mt-3 bg-white px-4 py-2 rounded-xl shadow-lg border border-outline-variant/30 pointer-events-auto opacity-0 group-hover:opacity-100 transition-opacity">
+<p class="text-xs font-bold text-primary">Ask Omni AI about logs</p>
+</div>
+</div>
+</main>
+<script>
+        function selectRow(row, id) {
+            // Remove active class from all rows
+            document.querySelectorAll('tr').forEach(r => r.classList.remove('active-row'));
+            // Add active class to clicked row
+            row.classList.add('active-row');
+            
+            // Update panel based on ID (simulated)
+            const panelContent = document.getElementById('panel-content');
+            
+            if(id === 'row1') {
+                panelContent.innerHTML = `
+                    <section>
+                        <div class="flex justify-between items-end mb-3">
+                            <span class="text-[10px] font-bold text-outline uppercase">Sentiment Analysis</span>
+                            <span class="text-sm font-bold text-emerald-600">Positive</span>
+                        </div>
+                        <div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden flex">
+                            <div class="h-full bg-emerald-500" style="width: 75%"></div>
+                            <div class="h-full bg-amber-400" style="width: 20%"></div>
+                            <div class="h-full bg-error" style="width: 5%"></div>
+                        </div>
+                        <div class="flex justify-between mt-2 text-[10px] text-outline font-medium">
+                            <span>75% Joy/Interest</span>
+                            <span>5% Friction</span>
+                        </div>
+                    </section>
+                    <section>
+                        <span class="text-[10px] font-bold text-outline uppercase block mb-3">Key Topics Discussed</span>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-primary text-on-primary rounded-lg text-xs font-medium">Enterprise Tier</span>
+                            <span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-lg text-xs font-medium">SSO Support</span>
+                        </div>
+                    </section>
+                    <section>
+                        <span class="text-[10px] font-bold text-outline uppercase block mb-3">AI Suggested Next Steps</span>
+                        <ul class="space-y-4">
+                            <li class="flex gap-3">
+                                <span class="material-symbols-outlined text-secondary text-lg mt-0.5">task_alt</span>
+                                <div>
+                                    <p class="text-sm font-bold text-primary leading-tight">Send Enterprise One-Pager</p>
+                                    <p class="text-[11px] text-outline mt-1">Focus on security protocols.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+                `;
+            } else if(id === 'row2') {
+                panelContent.innerHTML = `
+                    <section>
+                        <div class="flex justify-between items-end mb-3">
+                            <span class="text-[10px] font-bold text-outline uppercase">Sentiment Analysis</span>
+                            <span class="text-sm font-bold text-amber-600">Neutral</span>
+                        </div>
+                        <div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden flex">
+                            <div class="h-full bg-emerald-500" style="width: 30%"></div>
+                            <div class="h-full bg-amber-400" style="width: 60%"></div>
+                            <div class="h-full bg-error" style="width: 10%"></div>
+                        </div>
+                        <div class="flex justify-between mt-2 text-[10px] text-outline font-medium">
+                            <span>60% Information Seeking</span>
+                            <span>10% Scepticism</span>
+                        </div>
+                    </section>
+                    <section>
+                        <span class="text-[10px] font-bold text-outline uppercase block mb-3">Key Topics Discussed</span>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-lg text-xs font-medium">API Limits</span>
+                            <span class="px-3 py-1 bg-surface-container-highest text-on-surface-variant rounded-lg text-xs font-medium">Monthly Pricing</span>
+                        </div>
+                    </section>
+                    <section>
+                        <span class="text-[10px] font-bold text-outline uppercase block mb-3">AI Suggested Next Steps</span>
+                        <ul class="space-y-4">
+                            <li class="flex gap-3">
+                                <span class="material-symbols-outlined text-secondary text-lg mt-0.5">mail</span>
+                                <div>
+                                    <p class="text-sm font-bold text-primary leading-tight">Follow-up Email</p>
+                                    <p class="text-[11px] text-outline mt-1">Send updated API rate limit guide.</p>
+                                </div>
+                            </li>
+                        </ul>
+                    </section>
+                `;
+            }
+        }
+    </script>
+</body></html>

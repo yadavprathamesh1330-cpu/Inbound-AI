@@ -1,26 +1,442 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
+
+/*
+  Omni AI Design System
+  Ported 1:1 from the Stitch "enterprise dashboard" export, which is the
+  single source of truth for color/typography/spacing across the whole app
+  (marketing pages included). See design_reference/ for the original HTML.
+*/
 
 @theme inline {
+  /* ---- Material-You style palette (raw tokens, used directly as bg-surface, text-on-surface, etc.) ---- */
+  --color-surface: var(--surface);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-bright: var(--surface-bright);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-inverse-surface: var(--inverse-surface);
+  --color-inverse-on-surface: var(--inverse-on-surface);
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
+  --color-surface-tint: var(--surface-tint);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary-container: var(--on-primary-container);
+  --color-inverse-primary: var(--inverse-primary);
+  --color-on-secondary: var(--on-secondary);
+  --color-secondary-container: var(--secondary-container);
+  --color-on-secondary-container: var(--on-secondary-container);
+  --color-tertiary: var(--tertiary);
+  --color-on-tertiary: var(--on-tertiary);
+  --color-tertiary-container: var(--tertiary-container);
+  --color-on-tertiary-container: var(--on-tertiary-container);
+  --color-error-container: var(--error-container);
+  --color-on-error-container: var(--on-error-container);
+  --color-primary-fixed: var(--primary-fixed);
+  --color-primary-fixed-dim: var(--primary-fixed-dim);
+  --color-on-primary-fixed: var(--on-primary-fixed);
+  --color-on-primary-fixed-variant: var(--on-primary-fixed-variant);
+  --color-secondary-fixed: var(--secondary-fixed);
+  --color-secondary-fixed-dim: var(--secondary-fixed-dim);
+  --color-on-secondary-fixed: var(--on-secondary-fixed);
+  --color-on-secondary-fixed-variant: var(--on-secondary-fixed-variant);
+  --color-tertiary-fixed: var(--tertiary-fixed);
+  --color-tertiary-fixed-dim: var(--tertiary-fixed-dim);
+  --color-on-tertiary-fixed: var(--on-tertiary-fixed);
+  --color-on-tertiary-fixed-variant: var(--on-tertiary-fixed-variant);
+  --color-on-background: var(--on-background);
+  --color-surface-variant: var(--surface-variant);
+
+  /* ---- shadcn semantic tokens, remapped onto the Omni AI palette ---- */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-error: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* ---- fonts ---- */
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-heading: var(--font-inter);
+
+  /* ---- radii (already match Tailwind's stock scale, kept for clarity) ---- */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.25rem;
+  --radius-3xl: 1.5rem;
+
+  /* ---- typography scale (Inter, from omni_ai_design_system/DESIGN.md) ---- */
+  --text-display-hero: 4.5rem;
+  --text-display-hero--line-height: 5rem;
+  --text-display-hero--letter-spacing: -0.02em;
+  --text-display-hero--font-weight: 700;
+
+  --text-display-xl: 3.75rem;
+  --text-display-xl--line-height: 4.5rem;
+  --text-display-xl--letter-spacing: -0.02em;
+  --text-display-xl--font-weight: 800;
+
+  --text-display-xl-mobile: 2.5rem;
+  --text-display-xl-mobile--line-height: 3rem;
+  --text-display-xl-mobile--letter-spacing: -0.02em;
+  --text-display-xl-mobile--font-weight: 800;
+
+  --text-headline-lg: 2.25rem;
+  --text-headline-lg--line-height: 2.75rem;
+  --text-headline-lg--letter-spacing: -0.02em;
+  --text-headline-lg--font-weight: 700;
+
+  --text-headline-md: 1.5rem;
+  --text-headline-md--line-height: 2rem;
+  --text-headline-md--letter-spacing: -0.01em;
+  --text-headline-md--font-weight: 600;
+
+  --text-subtitle-lg: 1.25rem;
+  --text-subtitle-lg--line-height: 1.875rem;
+  --text-subtitle-lg--font-weight: 500;
+
+  --text-body-lg: 1.125rem;
+  --text-body-lg--line-height: 1.75rem;
+  --text-body-lg--font-weight: 400;
+
+  --text-body-md: 1rem;
+  --text-body-md--line-height: 1.5rem;
+  --text-body-md--font-weight: 400;
+
+  --text-label-md: 0.875rem;
+  --text-label-md--line-height: 1.25rem;
+  --text-label-md--letter-spacing: 0.01em;
+  --text-label-md--font-weight: 500;
+
+  --text-label-sm: 0.875rem;
+  --text-label-sm--line-height: 1.25rem;
+  --text-label-sm--letter-spacing: 0.01em;
+  --text-label-sm--font-weight: 500;
+
+  --text-mono-label: 0.75rem;
+  --text-mono-label--line-height: 1rem;
+  --text-mono-label--letter-spacing: 0.05em;
+  --text-mono-label--font-weight: 500;
+
+  /* ---- spacing scale additions (base-8 rhythm) ---- */
+  --spacing-container-max: 1280px;
+  --spacing-gutter: 24px;
+  --spacing-margin-desktop: 40px;
+  --spacing-margin-mobile: 16px;
+  --spacing-unit-xs: 4px;
+  --spacing-unit-sm: 8px;
+  --spacing-unit-md: 16px;
+  --spacing-unit-lg: 24px;
+  --spacing-unit-xl: 48px;
+  --spacing-unit-2xl: 80px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  /* Material-You style raw palette (light) */
+  --surface: #fcf8fa;
+  --surface-dim: #dcd9db;
+  --surface-bright: #fcf8fa;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f6f3f4;
+  --surface-container: #f0edee;
+  --surface-container-high: #eae7e9;
+  --surface-container-highest: #e5e2e3;
+  --on-surface: #1b1b1d;
+  --on-surface-variant: #45464c;
+  --inverse-surface: #303031;
+  --inverse-on-surface: #f3f0f1;
+  --outline: #76777d;
+  --outline-variant: #c6c6cd;
+  --surface-tint: #575e70;
+  --primary-container: #141b2b;
+  --on-primary-container: #7d8497;
+  --inverse-primary: #c0c6db;
+  --on-secondary: #ffffff;
+  --secondary-container: #316bf3;
+  --on-secondary-container: #fefcff;
+  --tertiary: #000000;
+  --on-tertiary: #ffffff;
+  --tertiary-container: #261906;
+  --on-tertiary-container: #968065;
+  --error-container: #ffdad6;
+  --on-error-container: #93000a;
+  --primary-fixed: #dce2f7;
+  --primary-fixed-dim: #c0c6db;
+  --on-primary-fixed: #141b2b;
+  --on-primary-fixed-variant: #404758;
+  --secondary-fixed: #dbe1ff;
+  --secondary-fixed-dim: #b4c5ff;
+  --on-secondary-fixed: #00174b;
+  --on-secondary-fixed-variant: #003ea8;
+  --tertiary-fixed: #f9debf;
+  --tertiary-fixed-dim: #dcc2a4;
+  --on-tertiary-fixed: #261906;
+  --on-tertiary-fixed-variant: #55442d;
+  --on-background: #1b1b1d;
+  --surface-variant: #e5e2e3;
+
+  /* shadcn semantic tokens mapped onto the palette above */
+  --background: #fcf8fa;
+  --foreground: #1b1b1d;
+  --card: #ffffff;
+  --card-foreground: #1b1b1d;
+  --popover: #ffffff;
+  --popover-foreground: #1b1b1d;
+  --primary: #000000;
+  --primary-foreground: #ffffff;
+  --secondary: #0051d5;
+  --secondary-foreground: #ffffff;
+  --muted: #f6f3f4;
+  --muted-foreground: #45464c;
+  --accent: #f0edee;
+  --accent-foreground: #1b1b1d;
+  --destructive: #ba1a1a;
+  --border: #e5e2e3;
+  --input: #e5e2e3;
+  --ring: #0051d5;
+  --chart-1: #0051d5;
+  --chart-2: #10b981;
+  --chart-3: #f59e0b;
+  --chart-4: #ba1a1a;
+  --chart-5: #76777d;
+  --radius: 0.75rem;
+  --sidebar: #fcf8fa;
+  --sidebar-foreground: #1b1b1d;
+  --sidebar-primary: #000000;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f0edee;
+  --sidebar-accent-foreground: #1b1b1d;
+  --sidebar-border: #e5e2e3;
+  --sidebar-ring: #0051d5;
+}
+
+.dark {
+  --surface: #131316;
+  --surface-dim: #131316;
+  --surface-bright: #39393c;
+  --surface-container-lowest: #0e0e10;
+  --surface-container-low: #1b1b1d;
+  --surface-container: #1f1f22;
+  --surface-container-high: #2a2a2d;
+  --surface-container-highest: #353538;
+  --on-surface: #e5e2e3;
+  --on-surface-variant: #c6c6cd;
+  --inverse-surface: #e5e2e3;
+  --inverse-on-surface: #1b1b1d;
+  --outline: #90909a;
+  --outline-variant: #45464c;
+  --surface-tint: #c0c6db;
+  --primary-container: #dce2f7;
+  --on-primary-container: #404758;
+  --inverse-primary: #000000;
+  --on-secondary: #00174b;
+  --secondary-container: #003ea8;
+  --on-secondary-container: #dbe1ff;
+  --tertiary: #ffffff;
+  --on-tertiary: #000000;
+  --tertiary-container: #55442d;
+  --on-tertiary-container: #f9debf;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+  --on-background: #e5e2e3;
+  --surface-variant: #45464c;
+
+  --background: #0e0e10;
+  --foreground: #e5e2e3;
+  --card: #18181b;
+  --card-foreground: #e5e2e3;
+  --popover: #18181b;
+  --popover-foreground: #e5e2e3;
+  --primary: #ffffff;
+  --primary-foreground: #000000;
+  --secondary: #316bf3;
+  --secondary-foreground: #ffffff;
+  --muted: #1f1f22;
+  --muted-foreground: #c6c6cd;
+  --accent: #2a2a2d;
+  --accent-foreground: #e5e2e3;
+  --destructive: #ffb4ab;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.12);
+  --ring: #316bf3;
+  --chart-1: #316bf3;
+  --chart-2: #34d399;
+  --chart-3: #fbbf24;
+  --chart-4: #ffb4ab;
+  --chart-5: #90909a;
+  --sidebar: #131316;
+  --sidebar-foreground: #e5e2e3;
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: #000000;
+  --sidebar-accent: #1f1f22;
+  --sidebar-accent-foreground: #e5e2e3;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #316bf3;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* Level-2 glass surface used for persistent nav, dropdowns and dashboard cards */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(226, 232, 240, 1);
+    box-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border-radius: 18px;
+  }
+  .dark .glass-card {
+    background: rgba(24, 24, 27, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-nav {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  .dark .glass-nav {
+    background: rgba(14, 14, 16, 0.7);
+  }
+
+  /* Voice Pulse - concentric breathing rings for "AI is listening/speaking" states */
+  .voice-pulse {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .voice-pulse div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 9999px;
+    background: var(--secondary);
+    opacity: 0.15;
+    animation: omni-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  @keyframes omni-pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.3;
+    }
+    100% {
+      transform: scale(2);
+      opacity: 0;
+    }
+  }
+
+  /* Glowing gradient border for "AI-active" states */
+  .glow-border {
+    position: relative;
+    border-radius: var(--radius-xl);
+  }
+  .glow-border::before {
+    content: "";
+    position: absolute;
+    inset: -1.5px;
+    border-radius: inherit;
+    padding: 1.5px;
+    background: linear-gradient(135deg, var(--secondary), #10b981);
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    filter: blur(0.5px);
+  }
+
+  /* Shimmer skeleton wave */
+  .skeleton-shimmer {
+    position: relative;
+    overflow: hidden;
+    background: #f1f5f9;
+  }
+  .skeleton-shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(226, 232, 240, 0.7),
+      transparent
+    );
+    animation: omni-shimmer 1.6s infinite;
+  }
+  @keyframes omni-shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: var(--outline-variant);
+    border-radius: 10px;
+  }
+
+  /* Mesh gradient atmosphere for hero/auth screens */
+  .mesh-gradient {
+    background-image:
+      radial-gradient(at 20% 20%, rgba(0, 81, 213, 0.18) 0px, transparent 50%),
+      radial-gradient(at 80% 0%, rgba(16, 185, 129, 0.12) 0px, transparent 50%),
+      radial-gradient(at 0% 80%, rgba(0, 0, 0, 0.06) 0px, transparent 50%),
+      radial-gradient(at 80% 80%, rgba(0, 81, 213, 0.1) 0px, transparent 50%);
+  }
 }

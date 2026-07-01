@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Omni AI | Team Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .voice-pulse {
+            position: relative;
+        }
+        .voice-pulse::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid #2563EB;
+            opacity: 0;
+            animation: pulse 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #E2E8F0; border-radius: 10px; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "on-primary-fixed-variant": "#404758",
+                "on-secondary-fixed": "#00174b",
+                "secondary-fixed": "#dbe1ff",
+                "tertiary-fixed": "#f9debf",
+                "on-primary": "#ffffff",
+                "surface-variant": "#e5e2e3",
+                "on-secondary-container": "#fefcff",
+                "on-primary-fixed": "#141b2b",
+                "surface-container-high": "#eae7e9",
+                "inverse-surface": "#303031",
+                "primary": "#000000",
+                "surface-bright": "#fcf8fa",
+                "on-tertiary-container": "#968065",
+                "on-tertiary-fixed": "#261906",
+                "on-surface": "#1b1b1d",
+                "inverse-primary": "#c0c6db",
+                "tertiary-container": "#261906",
+                "surface-container": "#f0edee",
+                "secondary-fixed-dim": "#b4c5ff",
+                "outline-variant": "#c6c6cd",
+                "on-tertiary": "#ffffff",
+                "on-error": "#ffffff",
+                "secondary-container": "#316bf3",
+                "inverse-on-surface": "#f3f0f1",
+                "secondary": "#0051d5",
+                "on-error-container": "#93000a",
+                "surface-dim": "#dcd9db",
+                "primary-fixed": "#dce2f7",
+                "primary-container": "#141b2b",
+                "surface-container-lowest": "#ffffff",
+                "tertiary": "#000000",
+                "surface-tint": "#575e70",
+                "background": "#fcf8fa",
+                "error-container": "#ffdad6",
+                "tertiary-fixed-dim": "#dcc2a4",
+                "surface-container-low": "#f6f3f4",
+                "on-primary-container": "#7d8497",
+                "on-background": "#1b1b1d",
+                "surface": "#fcf8fa",
+                "on-tertiary-fixed-variant": "#55442d",
+                "on-secondary": "#ffffff",
+                "primary-fixed-dim": "#c0c6db",
+                "on-surface-variant": "#45464c",
+                "surface-container-highest": "#e5e2e3",
+                "outline": "#76777d",
+                "on-secondary-fixed-variant": "#003ea8",
+                "error": "#ba1a1a"
+              },
+              "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+              },
+              "spacing": {
+                "unit-sm": "8px",
+                "unit-2xl": "80px",
+                "unit-lg": "24px",
+                "unit-xl": "48px",
+                "margin-mobile": "16px",
+                "gutter": "24px",
+                "unit-xs": "4px",
+                "margin-desktop": "40px",
+                "container-max": "1280px",
+                "unit-md": "16px"
+              },
+              "fontFamily": {
+                "mono-label": ["JetBrains Mono"],
+                "display-xl": ["Inter"],
+                "label-sm": ["Inter"],
+                "headline-lg": ["Inter"],
+                "body-lg": ["Inter"],
+                "headline-md": ["Inter"],
+                "display-xl-mobile": ["Inter"],
+                "body-md": ["Inter"]
+              },
+              "fontSize": {
+                "mono-label": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                "display-xl": ["60px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                "label-sm": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                "headline-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                "display-xl-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- Side Navigation Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface border-r border-outline-variant shadow-sm flex flex-col py-unit-lg px-unit-md z-50" id="sidebar">
+<div class="flex items-center gap-unit-sm mb-unit-xl px-unit-sm">
+<div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center voice-pulse">
+<span class="material-symbols-outlined text-on-primary" style="font-variation-settings: 'FILL' 1;">graphic_eq</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface">Omni AI</h1>
+<p class="text-[10px] font-mono-label uppercase tracking-widest text-outline">Enterprise Voice</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Nav Item: Dashboard -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-on-surface-variant hover:bg-surface-container group" href="#">
+<span class="material-symbols-outlined text-outline group-hover:text-primary">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<!-- Nav Item: AI Agents -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-on-surface-variant hover:bg-surface-container group" href="#">
+<span class="material-symbols-outlined text-outline group-hover:text-primary">smart_toy</span>
+<span class="font-body-md text-body-md">AI Agents</span>
+</a>
+<!-- Nav Item: Team (ACTIVE) -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-primary font-bold border-r-4 border-primary bg-surface-container-low" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">groups</span>
+<span class="font-body-md text-body-md">Team</span>
+</a>
+<!-- Nav Item: Knowledge Base -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-on-surface-variant hover:bg-surface-container group" href="#">
+<span class="material-symbols-outlined text-outline group-hover:text-primary">database</span>
+<span class="font-body-md text-body-md">Knowledge Base</span>
+</a>
+<!-- Nav Item: Analytics -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-on-surface-variant hover:bg-surface-container group" href="#">
+<span class="material-symbols-outlined text-outline group-hover:text-primary">bar_chart</span>
+<span class="font-body-md text-body-md">Analytics</span>
+</a>
+<!-- Nav Item: Billing -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-on-surface-variant hover:bg-surface-container group" href="#">
+<span class="material-symbols-outlined text-outline group-hover:text-primary">payments</span>
+<span class="font-body-md text-body-md">Billing</span>
+</a>
+<!-- Nav Item: Settings -->
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-on-surface-variant hover:bg-surface-container group" href="#">
+<span class="material-symbols-outlined text-outline group-hover:text-primary">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="pt-unit-lg border-t border-outline-variant space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-on-surface-variant hover:bg-surface-container group" href="#">
+<span class="material-symbols-outlined text-outline group-hover:text-primary">help</span>
+<span class="font-body-md text-body-md">Help</span>
+</a>
+<button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 text-on-surface-variant hover:bg-surface-container group">
+<span class="material-symbols-outlined text-outline group-hover:text-primary">menu_open</span>
+<span class="font-body-md text-body-md">Collapse</span>
+</button>
+</div>
+</aside>
+<!-- Top App Bar Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-surface/80 backdrop-blur-xl z-40 flex justify-between items-center px-margin-desktop border-b border-outline-variant/30">
+<div class="flex items-center gap-unit-md flex-1">
+<div class="relative w-full max-w-md group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-xl py-2 pl-10 pr-4 focus:ring-2 focus:ring-secondary/20 transition-all font-body-md text-body-md" placeholder="Search team members..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-unit-lg ml-unit-lg">
+<button class="relative p-2 text-on-surface-variant hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<div class="flex items-center gap-3 cursor-pointer group">
+<div class="text-right">
+                    &lt;</div></div></div></header></body></html>

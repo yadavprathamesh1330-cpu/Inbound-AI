@@ -1,0 +1,21 @@
+# Omni AI - Premium Enterprise AI Voice Agent Platform
+
+## 1. Overview
+Omni AI is a high-fidelity AI Voice Agent platform for businesses. The design must reflect a "billion-dollar AI startup" aesthetic—clean, fast, and incredibly polished.
+
+## 2. Information Architecture & Page List
+1. **Landing Page**: High-conversion hero, live product demo (scrolling sequence), feature grid, voice gallery, industry use-cases, pricing, and FAQ.
+2. **Authentication**: Split-screen login/signup with immersive AI visuals.
+3. **Onboarding (Welcome & Wizard)**: A multi-step flow to configure the first AI agent.
+4. **Dashboard**: The central hub showing real-time call analytics, active agents, and lead generation.
+
+## 3. Design Requirements
+- **Layout**: 12-column grid, responsive, desktop-first.
+- **Atmosphere**: Animated mesh gradients, cursor spotlights, and floating glass elements.
+- **Interactions**: Smooth 60fps transitions, parallax scrolling, magnetic buttons, and animated connection lines.
+
+## 4. Key Sections to Build
+- **Hero**: Headline "Deploy an AI Employee That Never Misses a Call."
+- **Demo**: A word-by-word transcript animation with connected service icons.
+- **Wizard**: 6-step creation process (Business Info -> Review).
+- **Dashboard**: Widget-based layout with skeleton loading states.

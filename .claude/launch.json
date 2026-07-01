@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "omni-ai-dev",
+      "runtimeExecutable": "/Users/prathameshyadav/.local/node-v24.18.0-darwin-arm64/bin/npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
+    }
+  ]
+}

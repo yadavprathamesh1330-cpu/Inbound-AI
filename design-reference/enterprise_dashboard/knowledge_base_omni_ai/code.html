@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Knowledge Base | Omni AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(252, 248, 250, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .voice-pulse {
+            position: relative;
+        }
+        .voice-pulse::before, .voice-pulse::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            border: 2px solid #2563EB;
+            border-radius: 50%;
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            opacity: 0;
+        }
+        .voice-pulse::after {
+            animation-delay: 1.5s;
+        }
+        @keyframes pulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.3; }
+            100% { transform: translate(-50%, -50%) scale(1.5); opacity: 0; }
+        }
+        .source-card:hover .sync-icon {
+            transform: rotate(180deg);
+        }
+        .sync-icon {
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+<!-- Insert Tailwind Config -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed-variant": "#404758",
+                    "on-secondary-fixed": "#00174b",
+                    "secondary-fixed": "#dbe1ff",
+                    "tertiary-fixed": "#f9debf",
+                    "on-primary": "#ffffff",
+                    "surface-variant": "#e5e2e3",
+                    "on-secondary-container": "#fefcff",
+                    "on-primary-fixed": "#141b2b",
+                    "surface-container-high": "#eae7e9",
+                    "inverse-surface": "#303031",
+                    "primary": "#000000",
+                    "surface-bright": "#fcf8fa",
+                    "on-tertiary-container": "#968065",
+                    "on-tertiary-fixed": "#261906",
+                    "on-surface": "#1b1b1d",
+                    "inverse-primary": "#c0c6db",
+                    "tertiary-container": "#261906",
+                    "surface-container": "#f0edee",
+                    "secondary-fixed-dim": "#b4c5ff",
+                    "outline-variant": "#c6c6cd",
+                    "on-tertiary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "secondary-container": "#316bf3",
+                    "inverse-on-surface": "#f3f0f1",
+                    "secondary": "#0051d5",
+                    "on-error-container": "#93000a",
+                    "surface-dim": "#dcd9db",
+                    "primary-fixed": "#dce2f7",
+                    "primary-container": "#141b2b",
+                    "surface-container-lowest": "#ffffff",
+                    "tertiary": "#000000",
+                    "surface-tint": "#575e70",
+                    "background": "#fcf8fa",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#dcc2a4",
+                    "surface-container-low": "#f6f3f4",
+                    "on-primary-container": "#7d8497",
+                    "on-background": "#1b1b1d",
+                    "surface": "#fcf8fa",
+                    "on-tertiary-fixed-variant": "#55442d",
+                    "on-secondary": "#ffffff",
+                    "primary-fixed-dim": "#c0c6db",
+                    "on-surface-variant": "#45464c",
+                    "surface-container-highest": "#e5e2e3",
+                    "outline": "#76777d",
+                    "on-secondary-fixed-variant": "#003ea8",
+                    "error": "#ba1a1a"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "unit-sm": "8px",
+                    "unit-2xl": "80px",
+                    "unit-lg": "24px",
+                    "unit-xl": "48px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "unit-xs": "4px",
+                    "margin-desktop": "40px",
+                    "container-max": "1280px",
+                    "unit-md": "16px"
+            },
+            "fontFamily": {
+                    "mono-label": ["jetbrainsMono"],
+                    "display-xl": ["Inter"],
+                    "label-sm": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "display-xl-mobile": ["Inter"],
+                    "body-md": ["Inter"]
+            },
+            "fontSize": {
+                    "mono-label": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "display-xl": ["60px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "label-sm": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "headline-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "display-xl-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md text-body-md overflow-x-hidden">
+<!-- SideNavBar Shell -->
+<aside class="bg-surface dark:bg-surface-container-lowest text-primary dark:text-primary-fixed h-screen w-64 fixed left-0 top-0 border-r border-outline-variant dark:border-outline shadow-sm flex flex-col h-full py-unit-lg px-unit-md z-50">
+<div class="flex items-center gap-3 mb-unit-xl">
+<div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface dark:text-on-surface-variant leading-tight">Omni AI</h1>
+<p class="text-label-sm font-label-sm text-on-surface-variant opacity-70">Enterprise Voice</p>
+</div>
+</div>
+<nav class="flex-grow space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span>AI Agents</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-primary dark:text-secondary-fixed-dim font-bold border-r-4 border-primary dark:border-secondary-fixed-dim bg-surface-container-low dark:bg-surface-container-high transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">database</span>
+<span>Knowledge Base</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span>Workflows</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span>Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span>Team</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Billing</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-surface-variant dark:text-outline hover:text-primary dark:hover:text-primary-fixed hover:bg-surface-container dark:hover:bg-surface-container-highest transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-1 pt-unit-lg border-t border-outline-variant/30">
+<a class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>Help</span>
+</a>
+<button class="flex items-center gap-3 px-3 py-2 rounded-xl text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all w-full text-left">
+<span class="material-symbols-outlined">menu_open</span>
+<span>Collapse</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-surface/80 dark:bg-surface-container-lowest/80 backdrop-blur-xl border-b border-outline-variant/30 dark:border-outline/30 flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center gap-unit-md flex-1">
+<div class="relative w-full max-w-md group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-xl pl-10 pr-4 py-2 font-label-sm text-label-sm focus:ring-2 focus:ring-secondary transition-all" placeholder="Search knowledge base..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-unit-md">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined">sensors</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant mx-2"></div>
+<div class="flex items-center gap-3 cursor-pointer group">
+<div class="w-8 h-8 rounded-lg overflow-hidden border border-outline-variant">
+<img class="w-full h-full object-cover" data-alt="A professional headshot of a corporate technology executive, clean lighting, minimalist background, high-end photography style consistent with the premium enterprise software aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAd9uaXotw-s4Ijiz8DSLp_hKHlDjKa5b5jbHQR1DkstwEuLF_D1FAYc_PGEJgDcxxWM5SuJ2eliAoIXRjtiCq7oE1-SX2Rgx23taVslchij5XmWx32stOBpYpK1y8RtSjLf7z_AECVOupsS0o5GMt9fezYe1NIPSCgAiRjbq6_7B0WvKegj5I33b70osE670Wwlu218oja0pVXjewERvPV4LIAOIcqhzkXWmsGjOTbaA-uz-nZgoZdVQW9OI8VwbONKAY9epjAl3k"/>
+</div>
+<span class="font-label-sm text-label-sm font-bold text-on-surface group-hover:text-primary transition-colors">Alex Rivera</span>
+</div>
+</div>
+</header>
+<!-- Main Page Area -->
+<div class="mt-16 p-margin-desktop max-w-container-max mx-auto">
+<!-- Header Section -->
+<div class="mb-unit-xl flex justify-between items-end">
+<div class="max-w-2xl">
+<h2 class="font-headline-lg text-headline-lg text-primary mb-2">Knowledge Base</h2>
+<p class="text-on-surface-variant font-body-lg text-body-lg">
+                        Train your AI agents with custom data. Upload documents, sync live URLs, or connect enterprise databases to expand your agent's expertise.
+                    </p>
+</div>
+<div class="flex gap-unit-sm">
+<button class="flex items-center gap-2 px-unit-md py-3 bg-primary text-on-primary rounded-[14px] font-label-sm text-label-sm font-bold hover:opacity-90 transition-opacity active:scale-[0.98]">
+<span class="material-symbols-outlined">add</span>
+                        Upload New Source
+                    </button>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Drag & Drop Area (Bento Left) -->
+<div class="col-span-12 lg:col-span-4 h-full">
+<div class="glass-panel rounded-[18px] p-unit-lg h-full flex flex-col justify-center items-center text-center border-dashed border-2 border-outline-variant hover:border-secondary transition-colors cursor-pointer group">
+<div class="voice-pulse w-24 h-24 rounded-full bg-secondary-container/10 flex items-center justify-center mb-unit-lg">
+<span class="material-symbols-outlined text-secondary text-4xl group-hover:scale-110 transition-transform">cloud_upload</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-primary mb-2">Drop files here</h3>
+<p class="text-on-surface-variant text-label-sm mb-unit-lg px-4">Support for PDF, TXT, DOCX, and direct URL imports up to 50MB.</p>
+<button class="px-unit-lg py-2 rounded-xl border border-outline-variant font-label-sm text-label-sm hover:bg-surface-container transition-colors">Browse Files</button>
+</div>
+</div>
+<!-- Stats/Status Cards (Bento Right Top) -->
+<div class="col-span-12 lg:col-span-8 space-y-gutter">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="glass-panel p-unit-md rounded-[18px] flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">description</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant font-medium">Total Sources</p>
+<p class="text-headline-md font-bold">24</p>
+</div>
+</div>
+<div class="glass-panel p-unit-md rounded-[18px] flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-secondary-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">memory</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant font-medium">Tokens Learned</p>
+<p class="text-headline-md font-bold">1.2M</p>
+</div>
+</div>
+<div class="glass-panel p-unit-md rounded-[18px] flex items-center gap-4">
+<div class="w-12 h-12 rounded-xl bg-error-container/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-error">sync_problem</span>
+</div>
+<div>
+<p class="text-label-sm text-on-surface-variant font-medium">Sync Errors</p>
+<p class="text-headline-md font-bold">0</p>
+</div>
+</div>
+</div>
+<!-- Source List Area -->
+<div class="glass-panel rounded-[18px] overflow-hidden">
+<div class="p-unit-md border-b border-outline-variant/30 flex justify-between items-center bg-surface-container-low/50">
+<span class="font-label-sm text-label-sm font-bold text-on-surface-variant uppercase tracking-wider">Existing Knowledge Sources</span>
+<div class="flex gap-4">
+<button class="text-label-sm text-secondary font-bold flex items-center gap-1 hover:underline">
+<span class="material-symbols-outlined text-sm">sync</span> Sync All
+                                </button>
+</div>
+</div>
+<div class="divide-y divide-outline-variant/30">
+<!-- Source Item 1 -->
+<div class="source-card p-unit-md flex items-center justify-between hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-red-600">picture_as_pdf</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Company_Handbook_2024.pdf</h4>
+<p class="text-label-sm text-on-surface-variant">PDF Document • 4.2 MB • Added 2 days ago</p>
+</div>
+</div>
+<div class="flex items-center gap-unit-lg">
+<div class="flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">
+<span class="material-symbols-outlined text-xs sync-icon" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                        Synced
+                                    </div>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Source Item 2 -->
+<div class="source-card p-unit-md flex items-center justify-between hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-blue-600">language</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">https://docs.omni-ai.com/api-reference</h4>
+<p class="text-label-sm text-on-surface-variant">Live URL • Auto-syncing • Last update 1h ago</p>
+</div>
+</div>
+<div class="flex items-center gap-unit-lg">
+<div class="flex items-center gap-2 px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-bold">
+<span class="material-symbols-outlined text-xs animate-spin" style="font-variation-settings: 'FILL' 0;">sync</span>
+                                        Updating...
+                                    </div>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Source Item 3 -->
+<div class="source-card p-unit-md flex items-center justify-between hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+<span class="material-symbols-outlined text-gray-600">article</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">Product_Specifications_v2.txt</h4>
+<p class="text-label-sm text-on-surface-variant">Text Document • 12 KB • Added 1 week ago</p>
+</div>
+</div>
+<div class="flex items-center gap-unit-lg">
+<div class="flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                        Synced
+                                    </div>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Source Item 4 -->
+<div class="source-card p-unit-md flex items-center justify-between hover:bg-surface-container-low transition-colors group">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
+<span class="material-symbols-outlined text-amber-600">database</span>
+</div>
+<div>
+<h4 class="font-bold text-on-surface">PostgreSQL: omni_main_customer_logs</h4>
+<p class="text-label-sm text-on-surface-variant">Database Connection • 45k rows • Syncing Daily</p>
+</div>
+</div>
+<div class="flex items-center gap-unit-lg">
+<div class="flex items-center gap-2 px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-bold">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                                        Synced
+                                    </div>
+<button class="w-8 h-8 rounded-full flex items-center justify-center text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Knowledge Preview / Visualization Section -->
+<div class="mt-unit-xl grid grid-cols-12 gap-gutter">
+<div class="col-span-12 glass-panel rounded-[18px] p-unit-lg overflow-hidden relative min-h-[400px] flex items-center justify-center">
+<!-- Background visualization pattern -->
+<div class="absolute inset-0 opacity-10 pointer-events-none">
+
+</div>
+<div class="relative z-10 text-center max-w-xl bg-surface/40 p-unit-xl rounded-3xl backdrop-blur-md border border-white/20 shadow-2xl">
+<span class="material-symbols-outlined text-6xl text-primary mb-unit-md" style="font-variation-settings: 'FILL' 1;">hub</span>
+<h3 class="font-headline-lg text-headline-lg mb-unit-sm">Semantic Map</h3>
+<p class="text-body-lg text-on-surface-variant mb-unit-lg">Visualize how your AI agent connects information across different knowledge sources. Explore the semantic relationships in your data cluster.</p>
+<button class="bg-primary text-on-primary px-unit-xl py-3 rounded-[14px] font-bold hover:scale-105 transition-transform">Launch Visualizer</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Contextual FAB (Hidden on KB Detail as per instructions, but kept for main screen functionality) -->
+<div class="fixed bottom-margin-desktop right-margin-desktop z-50">
+<button class="w-14 h-14 rounded-full bg-primary text-on-primary shadow-2xl flex items-center justify-center hover:scale-110 transition-transform active:scale-95 group">
+<span class="material-symbols-outlined text-3xl group-hover:rotate-12 transition-transform">chat_bubble</span>
+</button>
+</div>
+<script>
+        // Micro-interactions for knowledge base search
+        const searchInput = document.querySelector('input[type="text"]');
+        const sourceCards = document.querySelectorAll('.source-card');
+
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            sourceCards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if(text.includes(term)) {
+                    card.style.display = 'flex';
+                    card.style.opacity = '1';
+                } else {
+                    card.style.opacity = '0';
+                    setTimeout(() => {
+                        if(card.style.opacity === '0') card.style.display = 'none';
+                    }, 200);
+                }
+            });
+        });
+
+        // Simple drag & drop highlight
+        const dropZone = document.querySelector('.border-dashed');
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.add('bg-secondary/5', 'border-secondary');
+            });
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('bg-secondary/5', 'border-secondary');
+            });
+        });
+    </script>
+</body></html>

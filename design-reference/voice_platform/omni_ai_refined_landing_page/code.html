@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Omni AI | Deploy an AI Employee That Never Misses a Call</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-primary-fixed-variant": "#003ea8",
+                    "primary-fixed": "#dbe1ff",
+                    "on-primary-fixed": "#00174b",
+                    "tertiary-container": "#bc4800",
+                    "surface-container": "#ededf9",
+                    "secondary-fixed-dim": "#c0c6db",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "on-error": "#ffffff",
+                    "primary-container": "#2563eb",
+                    "outline-variant": "#c3c6d7",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "on-secondary-fixed-variant": "#404758",
+                    "on-primary": "#ffffff",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "inverse-on-surface": "#f0f0fb",
+                    "surface": "#faf8ff",
+                    "secondary": "#575e70",
+                    "on-background": "#191b23",
+                    "surface-tint": "#0053db",
+                    "surface-variant": "#e1e2ed",
+                    "surface-container-high": "#e7e7f3",
+                    "background": "#faf8ff",
+                    "on-secondary": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "outline": "#737686",
+                    "on-tertiary-container": "#ffede6",
+                    "primary": "#004ac6",
+                    "error-container": "#ffdad6",
+                    "surface-dim": "#d9d9e5",
+                    "on-surface-variant": "#434655",
+                    "on-tertiary-fixed": "#360f00",
+                    "surface-container-low": "#f3f3fe",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary-container": "#5c6274",
+                    "error": "#ba1a1a",
+                    "tertiary-fixed": "#ffdbcd",
+                    "secondary-fixed": "#dce2f7",
+                    "inverse-primary": "#b4c5ff",
+                    "inverse-surface": "#2e3039",
+                    "surface-bright": "#faf8ff",
+                    "surface-container-highest": "#e1e2ed",
+                    "on-secondary-fixed": "#141b2b",
+                    "on-surface": "#191b23",
+                    "surface-container-lowest": "#ffffff",
+                    "secondary-container": "#d9dff5",
+                    "tertiary": "#943700",
+                    "on-primary-container": "#eeefff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "64px",
+                    "container-max": "1280px",
+                    "stack-sm": "8px",
+                    "stack-xs": "4px",
+                    "gutter": "24px",
+                    "stack-lg": "24px",
+                    "margin-mobile": "20px",
+                    "stack-md": "16px",
+                    "stack-xl": "48px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "display-hero": ["Inter"],
+                    "display-hero-mobile": ["Inter"],
+                    "label-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "subtitle-lg": ["Inter"],
+                    "headline-md": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "display-hero": ["72px", {"lineHeight": "80px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-hero-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "subtitle-lg": ["20px", {"lineHeight": "30px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        
+        .magnetic-btn {
+            transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 1);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: transparent;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), linear-gradient(to bottom right, #004ac6, #10b981);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+        }
+
+        .transcript-line {
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeInWord 0.5s forwards;
+        }
+
+        @keyframes fadeInWord {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .waveform-bar {
+            animation: pulseHeight 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulseHeight {
+            0%, 100% { height: 4px; }
+            50% { height: 24px; }
+        }
+
+        .hero-glow {
+            filter: blur(100px);
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
+        }
+    </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Global Background Shader -->
+<!-- STITCH_SHADER_START:ANIMATION_3 class="fixed inset-0 w-full h-full -z-50 pointer-events-none opacity-40" -->
+<div class="fixed inset-0 w-full h-full -z-50 pointer-events-none opacity-40" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_3" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_3');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+varying vec2 v_texCoord;
+uniform float u_time;
+uniform vec2 u_resolution;
+
+void main() {
+    vec2 uv = v_texCoord;
+    
+    // Slow moving mesh gradient
+    vec3 color1 = vec3(0.145, 0.388, 0.922); // #2563EB - Primary Blue
+    vec3 color2 = vec3(0.067, 0.094, 0.153); // #111827 - Dark Navy
+    vec3 color3 = vec3(0.639, 0.286, 0.953); // Purple accent
+    vec3 color4 = vec3(0.0, 0.9, 0.9);        // Cyan accent
+    
+    float noise1 = sin(uv.x * 3.0 + u_time * 0.2) * cos(uv.y * 2.0 + u_time * 0.3);
+    float noise2 = sin(uv.y * 4.0 - u_time * 0.1) * cos(uv.x * 3.0 + u_time * 0.2);
+    
+    vec3 color = mix(color1, color2, uv.y + noise1 * 0.5);
+    color = mix(color, color3, noise2 * 0.5 + 0.5);
+    color = mix(color, color4, sin(u_time * 0.1) * 0.2 + 0.2);
+    
+    gl_FragColor = vec4(color * 0.15 + 0.95, 1.0); // Keep it light and subtle for SaaS background
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_3 -->
+<!-- TopNavBar (Shared Component JSON) -->
+<nav class="fixed top-0 w-full z-50 bg-white/70 backdrop-blur-md dark:bg-on-background/70 shadow-[0_4px_30px_rgba(0,0,0,0.05)]">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-desktop h-20">
+<div class="font-headline-md text-headline-md font-bold tracking-tight text-on-surface dark:text-on-primary-fixed">Omni AI</div>
+<div class="hidden md:flex gap-stack-xl">
+<a class="font-body-md text-body-md text-primary dark:text-primary-fixed font-semibold border-b-2 border-primary transition-all duration-150" href="#">Platform</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary transition-all duration-150" href="#">Solutions</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary transition-all duration-150" href="#">Developers</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary transition-all duration-150" href="#">Pricing</a>
+</div>
+<div class="flex items-center gap-stack-md">
+<button class="font-body-md text-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary magnetic-btn">Log In</button>
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-md text-label-md font-semibold hover:scale-105 transition-transform duration-200 magnetic-btn">Start Free</button>
+</div>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="relative min-h-[921px] flex items-center overflow-hidden px-margin-mobile md:px-margin-desktop py-stack-xl">
+<div class="hero-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full -z-10"></div>
+<div class="max-w-container-max mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-stack-xl items-center">
+<div class="lg:col-span-7 space-y-stack-lg">
+<div class="inline-flex items-center gap-2 px-3 py-1 bg-primary-container/10 border border-primary/20 rounded-full text-primary font-label-sm">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+                        Voice Agents v4.2 Now Live
+                    </div>
+<h1 class="font-display-hero text-display-hero-mobile md:text-display-hero text-on-background leading-tight">
+                        Deploy an AI Employee That <span class="text-primary">Never Misses a Call.</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+                        The world’s most human-like AI voice assistant. Handle support, book appointments, and sync data instantly to your CRM—all in real-time.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-stack-md pt-stack-sm">
+<button class="bg-primary text-on-primary px-8 py-4 rounded-xl font-headline-md text-headline-md font-bold magnetic-btn shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] px-12 py-5 animate-pulse">
+                            Start Free
+                        </button>
+<button class="glass-card px-8 py-4 rounded-xl font-headline-md text-headline-md font-bold flex items-center gap-2 hover:bg-surface-container-high transition-colors magnetic-btn shadow-sm">
+<span class="material-symbols-outlined">play_circle</span>
+                            Watch Live Demo
+                        </button>
+</div>
+<div class="flex items-center gap-stack-md pt-stack-lg">
+<div class="flex -space-x-4">
+<div class="w-10 h-10 rounded-full border-2 border-surface bg-slate-200" data-alt="Close-up professional headshot of a diverse woman smiling in a bright office setting, high-end corporate photography style." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBYGmvBCdRrZF-Vl8lLAnHs5ANpSOCyzW-u5Qs9u5orLNovHBlhU0nq3KdOWtFgwWBcJLFIP0fpBhavX2FVGYluhBQxIOXVsGnqTdvXiYPRTa9xO6xhUyUV8SNig2BklWjyh5Pwonqs3Fx5uFY4VprLHfrIjgnV6QCiEYSF7R7Nuse6hFaUy23lW1ZjWc2zlufvjjZwUf60x9njJ4cVhiN1Y3yihr7kFHgoghRH6RHyp2zGw8TqO1LIH97oEylbFr0t4cu5dNVChg')"></div>
+<div class="w-10 h-10 rounded-full border-2 border-surface bg-slate-200" data-alt="Professional headshot of a middle-aged man with glasses, soft studio lighting, minimalist executive portrait." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBmVVIxK70u5kgZ6y4HAAupZYH1XrbHV9tw7gckSVa-COWPYdZElLRUUQTw0__i3_iI1c6Q1oLx7FzNmIVmUFVwi4JJ1fsXvDeKjHcPbiIsqQ7I7ge1YIQpiPaBvaVnJVYFVysL_aYnLSyW_kC3F1xyQAKe7mvB8qdwGY7wyBwwtGhfGe-QsjJlOqjn18BYMHK9ub5LnRpmwoUf5KdP8p_2AsTDvdnqY6R9BhRM76THGh8yRqognm2-zUsTRLy-VerKxaIIbBT-lg')"></div>
+<div class="w-10 h-10 rounded-full border-2 border-surface bg-slate-200" data-alt="Portrait of a young creative professional with a modern hairstyle, vibrant office background, clean and sharp lighting." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCaxBIoNml2--dyIAf2pCyX8gfq_FRX0VNVPRvWCk3cVf9xmcZoSKMUNtFm99rEb9HoubmdDgFou8VMNY2g67_VRtQdQzcSUPRnxbW3hqhDsp4kB_9VOsJRA41vxJq11bqrgqCKr55yuBOHPwDo6I6unkTE_EqT9R0K5Ld_YO5Ly5XsjRSrUuQNj_8GVmP1Tc9F-zJRieyp2gTINgOpIjxrtpeZUacvq8DFubCCHm366K-JtGPPH7sRNMRogiQ7lsRq7lcxkCgy7w')"></div>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant">Trusted by 5,000+ scaling companies</p>
+</div>
+</div>
+<div class="lg:col-span-5 relative h-[500px]">
+<!-- STITCH_THREEJS_START:ANIMATION_4 class="w-full h-full scale-110 lg:scale-125 drop-shadow-2xl" -->
+<div class="w-full h-full scale-110 lg:scale-125 drop-shadow-2xl" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_4" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_4');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const width = container.clientWidth || window.innerWidth;
+const height = container.clientHeight || window.innerHeight;
+
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+renderer.setSize(width, height);
+container.appendChild(renderer.domElement);
+
+// Create a glowing AI sphere (Floating AI Dashboard core)
+const geometry = new THREE.IcosahedronGeometry(1.5, 4);
+const material = new THREE.MeshPhongMaterial({
+    color: 0x2563EB,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.3
+});
+const sphere = new THREE.Mesh(geometry, material);
+scene.add(sphere);
+
+const innerGeo = new THREE.IcosahedronGeometry(1, 2);
+const innerMat = new THREE.MeshStandardMaterial({
+    color: 0x2563EB,
+    emissive: 0x2563EB,
+    emissiveIntensity: 0.5,
+    metalness: 0.8,
+    roughness: 0.2
+});
+const innerSphere = new THREE.Mesh(innerGeo, innerMat);
+scene.add(innerSphere);
+
+const light = new THREE.PointLight(0xffffff, 1, 100);
+light.position.set(10, 10, 10);
+scene.add(light);
+scene.add(new THREE.AmbientLight(0x404040));
+
+camera.position.z = 5;
+
+function animate() {
+    requestAnimationFrame(animate);
+    sphere.rotation.x += 0.005;
+    sphere.rotation.y += 0.005;
+    innerSphere.rotation.y -= 0.01;
+    
+    const time = Date.now() * 0.001;
+    innerSphere.position.y = Math.sin(time) * 0.2;
+    sphere.position.y = Math.sin(time) * 0.2;
+    
+    renderer.render(scene, camera);
+}
+
+window.addEventListener('resize', () => {
+    const w = container.clientWidth || window.innerWidth;
+    const h = container.clientHeight || window.innerHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+});
+
+animate();
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_4 -->
+</div>
+</div>
+</section>
+<!-- Live Demo Section -->
+<section class="py-stack-xl px-margin-mobile md:px-margin-desktop bg-surface-container-low/50 py-20">
+<div class="max-w-container-max mx-auto">
+<div class="text-center mb-stack-xl">
+<h2 class="font-headline-lg text-headline-lg mb-stack-sm">The Real-Time Edge</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Watch Omni book a meeting while syncing with a live CRM.</p>
+</div>
+<div class="grid lg:grid-cols-2 gap-stack-lg items-center">
+<div class="glass-card p-stack-lg rounded-2xl min-h-[400px] flex flex-col justify-end overflow-hidden relative shadow-sm">
+<div class="absolute top-0 left-0 w-full p-stack-md border-b border-outline-variant bg-surface-container-high/50 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-error"></div>
+<div class="w-3 h-3 rounded-full bg-amber-400"></div>
+<div class="w-3 h-3 rounded-full bg-success-green bg-green-500"></div>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-widest">Incoming Call...</span>
+</div>
+<div class="space-y-stack-md py-stack-md h-[300px] overflow-y-auto" id="transcript-container">
+<!-- Animated by JS -->
+</div>
+</div>
+<div class="space-y-stack-lg">
+<div class="glass-card p-stack-md rounded-xl border-l-4 border-l-primary flex items-center gap-stack-md animate-pulse shadow-sm">
+<span class="material-symbols-outlined text-primary scale-125">calendar_today</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Syncing with Google Calendar</p>
+<p class="font-headline-md text-headline-md font-bold">New Event: Q3 Strategy Sync</p>
+</div>
+</div>
+<div class="glass-card p-stack-md rounded-xl border-l-4 border-l-green-500 flex items-center gap-stack-md shadow-sm">
+<span class="material-symbols-outlined text-green-500 scale-125">database</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Salesforce Record Updated</p>
+<p class="font-headline-md text-headline-md font-bold">Lead Status: Qualified</p>
+</div>
+</div>
+<div class="glass-card p-stack-md rounded-xl border-l-4 border-l-amber-500 flex items-center gap-stack-md shadow-sm">
+<span class="material-symbols-outlined text-amber-500 scale-125">notifications_active</span>
+<div>
+<p class="font-label-md text-label-md text-on-surface-variant">Slack Notification Sent</p>
+<p class="font-headline-md text-headline-md font-bold">Channel: #sales-alerts</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Grid -->
+<section class="py-stack-xl px-margin-mobile md:px-margin-desktop py-20">
+<div class="max-w-container-max mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end gap-stack-md mb-stack-xl">
+<div class="max-w-2xl">
+<h2 class="font-headline-lg text-headline-lg mb-stack-sm">Engineered for Reliability</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Omni AI isn't just a chatbot. It's an enterprise-grade voice interface designed to replace entire support flows.</p>
+</div>
+<button class="text-primary font-label-md flex items-center gap-2 group">
+                        Explore all features 
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Feature 1 -->
+<div class="glass-card p-stack-lg rounded-2xl shadow-sm">
+<span class="material-symbols-outlined text-primary text-4xl mb-stack-md" data-weight="fill">support_agent</span>
+<h3 class="font-headline-md text-headline-md mb-2">AI Receptionist</h3>
+<p class="text-on-surface-variant font-body-md">24/7 zero-latency voice handling.</p>
+</div>
+<!-- Feature 2 -->
+<div class="glass-card p-stack-lg rounded-2xl shadow-sm">
+<span class="material-symbols-outlined text-primary text-4xl mb-stack-md" data-weight="fill">sync</span>
+<h3 class="font-headline-md text-headline-md mb-2">CRM Sync</h3>
+<p class="text-on-surface-variant font-body-md">Instant sync with Salesforce &amp; Hubspot.</p>
+</div>
+<!-- Feature 3 -->
+<div class="glass-card p-stack-lg rounded-2xl shadow-sm">
+<span class="material-symbols-outlined text-primary text-4xl mb-stack-md" data-weight="fill">language</span>
+<h3 class="font-headline-md text-headline-md mb-2">Multi-Lingual</h3>
+<p class="text-on-surface-variant font-body-md">Native fluency in 45+ languages.</p>
+</div>
+<!-- Feature 4 -->
+<div class="glass-card p-stack-lg rounded-2xl shadow-sm">
+<span class="material-symbols-outlined text-primary text-4xl mb-stack-md" data-weight="fill">security</span>
+<h3 class="font-headline-md text-headline-md mb-2">HIPAA Secure</h3>
+<p class="text-on-surface-variant font-body-md">Enterprise-grade data encryption.</p>
+</div>
+<!-- Feature 5 -->
+<div class="glass-card p-stack-lg rounded-2xl shadow-sm">
+<span class="material-symbols-outlined text-primary text-4xl mb-stack-md" data-weight="fill">call_merge</span>
+<h3 class="font-headline-md text-headline-md mb-2">Warm Transfers</h3>
+<p class="text-on-surface-variant font-body-md">Instantly hand off complex calls to human agents with context.</p>
+</div>
+<!-- Feature 6 -->
+<div class="glass-card p-stack-lg rounded-2xl shadow-sm">
+<span class="material-symbols-outlined text-primary text-4xl mb-stack-md" data-weight="fill">analytics</span>
+<h3 class="font-headline-md text-headline-md mb-2">Sentiment Analysis</h3>
+<p class="text-on-surface-variant font-body-md">Real-time tone detection to adapt conversation flow.</p>
+</div>
+<!-- Feature 7 -->
+<div class="glass-card p-stack-lg rounded-2xl shadow-sm">
+<span class="material-symbols-outlined text-primary text-4xl mb-stack-md" data-weight="fill">bolt</span>
+<h3 class="font-headline-md text-headline-md mb-2">Ultra-Low Latency</h3>
+<p class="text-on-surface-variant font-body-md">Sub-200ms response time for true conversational feel.</p>
+</div>
+<!-- Feature 8 -->
+<div class="glass-card p-stack-lg rounded-2xl shadow-sm">
+<span class="material-symbols-outlined text-primary text-4xl mb-stack-md" data-weight="fill">api</span>
+<h3 class="font-headline-md text-headline-md mb-2">Developer First</h3>
+<p class="text-on-surface-variant font-body-md">Robust API and SDKs for custom voice application builds.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Voice Gallery -->
+<section class="py-stack-xl px-margin-mobile md:px-margin-desktop bg-on-background text-surface">
+<div class="max-w-container-max mx-auto">
+<div class="mb-stack-xl">
+<h2 class="font-headline-lg text-headline-lg">Human-Grade Voices</h2>
+<p class="font-body-md text-body-md text-outline-variant">Listen to our ultra-realistic neural voice engines.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-stack-lg">
+<!-- Voice 1 -->
+<div class="bg-surface/5 border border-outline-variant/20 p-stack-lg rounded-2xl group hover:bg-surface/10 transition-all">
+<div class="flex justify-between items-start mb-stack-lg">
+<div>
+<h4 class="font-headline-md text-headline-md">"Aria"</h4>
+<p class="text-label-md opacity-70">Female • American English • Professional</p>
+</div>
+<button class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">play_arrow</span>
+</button>
+</div>
+<div class="flex items-center gap-1 h-8">
+<div class="waveform-bar w-full bg-primary/40 rounded-full" style="animation-delay: 0.1s;"></div>
+<div class="waveform-bar w-full bg-primary/60 rounded-full" style="animation-delay: 0.2s;"></div>
+<div class="waveform-bar w-full bg-primary rounded-full" style="animation-delay: 0.3s;"></div>
+<div class="waveform-bar w-full bg-primary/60 rounded-full" style="animation-delay: 0.4s;"></div>
+<div class="waveform-bar w-full bg-primary/40 rounded-full" style="animation-delay: 0.5s;"></div>
+</div>
+</div>
+<!-- Voice 2 -->
+<div class="bg-surface/5 border border-outline-variant/20 p-stack-lg rounded-2xl group hover:bg-surface/10 transition-all">
+<div class="flex justify-between items-start mb-stack-lg">
+<div>
+<h4 class="font-headline-md text-headline-md">"Julian"</h4>
+<p class="text-label-md opacity-70">Male • British English • Authoritative</p>
+</div>
+<button class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">play_arrow</span>
+</button>
+</div>
+<div class="flex items-center gap-1 h-8">
+<div class="waveform-bar w-full bg-primary/40 rounded-full" style="animation-delay: 0.2s;"></div>
+<div class="waveform-bar w-full bg-primary/60 rounded-full" style="animation-delay: 0.4s;"></div>
+<div class="waveform-bar w-full bg-primary rounded-full" style="animation-delay: 0.1s;"></div>
+<div class="waveform-bar w-full bg-primary/60 rounded-full" style="animation-delay: 0.3s;"></div>
+<div class="waveform-bar w-full bg-primary/40 rounded-full" style="animation-delay: 0.5s;"></div>
+</div>
+</div>
+<!-- Voice 3 -->
+<div class="bg-surface/5 border border-outline-variant/20 p-stack-lg rounded-2xl group hover:bg-surface/10 transition-all">
+<div class="flex justify-between items-start mb-stack-lg">
+<div>
+<h4 class="font-headline-md text-headline-md">"Elena"</h4>
+<p class="text-label-md opacity-70">Female • Castilian Spanish • Friendly</p>
+</div>
+<button class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">play_arrow</span>
+</button>
+</div>
+<div class="flex items-center gap-1 h-8">
+<div class="waveform-bar w-full bg-primary/40 rounded-full" style="animation-delay: 0.5s;"></div>
+<div class="waveform-bar w-full bg-primary/60 rounded-full" style="animation-delay: 0.2s;"></div>
+<div class="waveform-bar w-full bg-primary rounded-full" style="animation-delay: 0.4s;"></div>
+<div class="waveform-bar w-full bg-primary/60 rounded-full" style="animation-delay: 0.1s;"></div>
+<div class="waveform-bar w-full bg-primary/40 rounded-full" style="animation-delay: 0.3s;"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Pricing Section -->
+<section class="py-stack-xl px-margin-mobile md:px-margin-desktop py-20"><div class="hero-glow absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full -z-10 opacity-60"></div>
+<div class="max-w-container-max mx-auto">
+<div class="text-center mb-stack-xl">
+<h2 class="font-headline-lg text-headline-lg mb-stack-sm">Plans for Every Scale</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Simple consumption-based pricing with no hidden fees.</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-stack-lg">
+<!-- Card 1 -->
+<div class="glass-card p-stack-xl rounded-3xl flex flex-col shadow-sm">
+<div class="mb-stack-lg">
+<h3 class="font-headline-md text-headline-md mb-2">Professional</h3>
+<div class="flex items-baseline gap-1">
+<span class="text-4xl font-bold">$99</span>
+<span class="text-on-surface-variant">/mo</span>
+</div>
+</div>
+<ul class="space-y-stack-md mb-stack-xl flex-grow">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-sm">check_circle</span> 500 Call Minutes</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-sm">check_circle</span> 2 AI Agents</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-sm">check_circle</span> Webhook Integrations</li>
+<li class="flex items-center gap-2 opacity-40"><span class="material-symbols-outlined text-sm">remove_circle</span> White-label Dashboard</li>
+</ul>
+<button class="w-full py-4 rounded-xl border border-primary text-primary font-bold hover:bg-primary/5 transition-colors magnetic-btn">Get Started</button>
+</div>
+<!-- Card 2 (Growth - Featured) -->
+<div class="glass-card p-stack-xl rounded-3xl flex flex-col border-primary border-2 relative scale-105 shadow-2xl z-10 shadow-sm">
+<div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-primary text-on-primary px-4 py-1 rounded-full font-label-sm uppercase tracking-widest">Most Popular</div>
+<div class="mb-stack-lg">
+<h3 class="font-headline-md text-headline-md mb-2">Growth</h3>
+<div class="flex items-baseline gap-1">
+<span class="text-4xl font-bold">$499</span>
+<span class="text-on-surface-variant">/mo</span>
+</div>
+</div>
+<ul class="space-y-stack-md mb-stack-xl flex-grow">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span> 3,000 Call Minutes</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span> Unlimited AI Agents</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span> Advanced CRM Syncing</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-sm" style="font-variation-settings: 'FILL' 1;">check_circle</span> Priority Support</li>
+</ul>
+<button class="w-full py-4 rounded-xl bg-primary text-on-primary font-bold hover:scale-[1.02] active:scale-[0.98] transition-all magnetic-btn">Start 14-Day Free Trial</button>
+</div>
+<!-- Card 3 -->
+<div class="glass-card p-stack-xl rounded-3xl flex flex-col shadow-sm">
+<div class="mb-stack-lg">
+<h3 class="font-headline-md text-headline-md mb-2">Enterprise</h3>
+<div class="flex items-baseline gap-1">
+<span class="text-4xl font-bold">Custom</span>
+</div>
+</div>
+<ul class="space-y-stack-md mb-stack-xl flex-grow">
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-sm">check_circle</span> Unlimited Everything</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-sm">check_circle</span> On-Premise Hosting Opt.</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-sm">check_circle</span> Dedicated Account Manager</li>
+<li class="flex items-center gap-2"><span class="material-symbols-outlined text-green-500 text-sm">check_circle</span> Custom LLM Fine-tuning</li>
+</ul>
+<button class="w-full py-4 rounded-xl border border-on-background text-on-background font-bold hover:bg-on-background/5 transition-colors magnetic-btn">Contact Sales</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-stack-xl px-margin-mobile md:px-margin-desktop text-center">
+<div class="max-w-3xl mx-auto glass-card p-stack-xl rounded-3xl bg-gradient-to-br from-primary/10 to-transparent shadow-sm">
+<h2 class="font-display-hero-mobile md:font-display-hero text-on-background mb-stack-md">Ready to scale your voice operations?</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-stack-lg">Join 500+ enterprises who have automated their reception with Omni AI.</p>
+<div class="flex flex-col sm:flex-row justify-center gap-stack-md">
+<button class="bg-primary text-on-primary px-12 py-5 rounded-xl font-headline-md text-headline-md font-bold magnetic-btn">Get Started Free</button>
+<button class="bg-on-background text-surface px-12 py-5 rounded-xl font-headline-md text-headline-md font-bold magnetic-btn">Schedule Demo</button>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer (Shared Component JSON) -->
+<footer class="w-full relative bottom-0 border-t border-outline-variant bg-gradient-to-b from-transparent to-primary-fixed/5">
+<div class="max-w-container-max mx-auto px-margin-desktop py-stack-xl flex flex-col md:flex-row justify-between items-center">
+<div class="font-headline-md text-headline-md text-on-surface font-bold mb-stack-md md:mb-0">Omni AI</div>
+<div class="flex flex-wrap justify-center gap-stack-lg mb-stack-md md:mb-0">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Security</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Status</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant opacity-60">
+                © 2024 Omni AI Platform. Engineered for Performance.
+            </div>
+</div>
+</footer>
+<script>
+        // Magnetic Button Effect
+        document.querySelectorAll('.magnetic-btn').forEach(btn => {
+            btn.addEventListener('mousemove', e => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px) scale(1.02)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0px, 0px) scale(1)';
+            });
+        });
+
+        // Demo Transcript Animation
+        const transcriptLines = [
+            { speaker: "Customer", text: "Hi, I'd like to book an appointment for next Tuesday afternoon." },
+            { speaker: "Omni AI", text: "Certainly! I have openings at 2:00 PM and 4:30 PM on Tuesday, Oct 12th. Which works best for you?" },
+            { speaker: "Customer", text: "Let's do 4:30 PM. Does that work for Sarah?" },
+            { speaker: "Omni AI", text: "Checking Sarah's calendar... Yes, she is available! I've booked you in for 4:30 PM. You'll receive a confirmation email shortly." }
+        ];
+
+        const container = document.getElementById('transcript-container');
+        let lineIdx = 0;
+
+        function addLine() {
+            if (lineIdx >= transcriptLines.length) {
+                setTimeout(() => {
+                    container.innerHTML = '';
+                    lineIdx = 0;
+                    addLine();
+                }, 3000);
+                return;
+            }
+
+            const line = transcriptLines[lineIdx];
+            const div = document.createElement('div');
+            div.className = `transcript-line p-stack-md rounded-xl ${line.speaker === 'Omni AI' ? 'bg-primary/10 border border-primary/20 ml-8' : 'bg-surface-container-high mr-8'}`;
+            div.innerHTML = `
+                <p class="font-label-sm text-label-sm ${line.speaker === 'Omni AI' ? 'text-primary' : 'text-on-surface-variant'} mb-1">${line.speaker}</p>
+                <p class="font-body-md text-body-md">${line.text}</p>
+            `;
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+            lineIdx++;
+            
+            setTimeout(addLine, 2000);
+        }
+
+        setTimeout(addLine, 1000);
+    </script>
+</body></html>

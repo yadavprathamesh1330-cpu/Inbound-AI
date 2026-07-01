@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Developers | Omni AI Platform</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Shared Tailwind Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-tertiary": "#ffffff",
+                "surface-container": "#ededf9",
+                "surface-bright": "#faf8ff",
+                "on-tertiary-container": "#ffede6",
+                "error-container": "#ffdad6",
+                "primary-container": "#2563eb",
+                "secondary": "#575e70",
+                "on-secondary-container": "#5c6274",
+                "tertiary-container": "#bc4800",
+                "surface-container-low": "#f3f3fe",
+                "surface-container-high": "#e7e7f3",
+                "on-primary-container": "#eeefff",
+                "on-secondary-fixed-variant": "#404758",
+                "error": "#ba1a1a",
+                "inverse-surface": "#2e3039",
+                "surface-tint": "#0053db",
+                "outline-variant": "#c3c6d7",
+                "tertiary": "#943700",
+                "on-error": "#ffffff",
+                "surface-variant": "#e1e2ed",
+                "surface-container-highest": "#e1e2ed",
+                "on-tertiary-fixed-variant": "#7d2d00",
+                "secondary-fixed-dim": "#c0c6db",
+                "on-background": "#191b23",
+                "on-primary-fixed-variant": "#003ea8",
+                "surface-dim": "#d9d9e5",
+                "secondary-fixed": "#dce2f7",
+                "inverse-on-surface": "#f0f0fb",
+                "tertiary-fixed-dim": "#ffb596",
+                "primary-fixed": "#dbe1ff",
+                "on-surface": "#191b23",
+                "on-secondary": "#ffffff",
+                "surface-container-lowest": "#ffffff",
+                "on-surface-variant": "#434655",
+                "surface": "#faf8ff",
+                "on-tertiary-fixed": "#360f00",
+                "primary": "#004ac6",
+                "tertiary-fixed": "#ffdbcd",
+                "on-primary": "#ffffff",
+                "on-secondary-fixed": "#141b2b",
+                "outline": "#737686",
+                "on-primary-fixed": "#00174b",
+                "inverse-primary": "#b4c5ff",
+                "background": "#faf8ff",
+                "on-error-container": "#93000a",
+                "secondary-container": "#d9dff5",
+                "primary-fixed-dim": "#b4c5ff"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "container-max": "1280px",
+                "stack-md": "16px",
+                "stack-lg": "24px",
+                "margin-desktop": "64px",
+                "stack-xl": "48px",
+                "margin-mobile": "20px",
+                "gutter": "24px",
+                "stack-xs": "4px",
+                "stack-sm": "8px"
+            },
+            "fontFamily": {
+                "body-lg": ["Inter"],
+                "display-hero": ["Inter"],
+                "subtitle-lg": ["Inter"],
+                "display-hero-mobile": ["Inter"],
+                "body-md": ["Inter"],
+                "headline-lg": ["Inter"],
+                "label-md": ["Inter"],
+                "label-sm": ["Inter"],
+                "headline-md": ["Inter"]
+            },
+            "fontSize": {
+                "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                "display-hero": ["72px", {"lineHeight": "80px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "subtitle-lg": ["20px", {"lineHeight": "30px", "fontWeight": "500"}],
+                "display-hero-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .magnetic-button {
+            transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        .magnetic-button:hover {
+            transform: scale(1.02);
+        }
+        .magnetic-button:active {
+            transform: scale(0.98);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid #E2E8F0;
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: #2563eb;
+            box-shadow: 0 10px 30px -10px rgba(37, 99, 235, 0.15);
+        }
+        .code-gradient {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+        }
+        .ai-glow {
+            filter: drop-shadow(0 0 15px rgba(37, 99, 235, 0.4));
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/70 backdrop-blur-xl dark:bg-background/70 shadow-[0_4px_30px_rgba(0,0,0,0.05)] h-20">
+<div class="flex justify-between items-center max-w-container-max mx-auto px-margin-desktop h-full">
+<div class="font-headline-md text-headline-md font-bold tracking-tight text-on-surface dark:text-on-primary-fixed">Omni AI</div>
+<div class="hidden md:flex items-center space-x-stack-lg">
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary transition-colors" href="#">Platform</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary transition-colors" href="#">Solutions</a>
+<a class="font-body-md text-body-md text-primary dark:text-primary-fixed font-semibold border-b-2 border-primary" href="#">Developers</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-secondary-fixed-variant hover:text-primary transition-colors" href="#">Pricing</a>
+</div>
+<div class="flex items-center space-x-stack-md">
+<button class="font-body-md text-body-md text-on-surface-variant px-stack-md hover:text-primary transition-colors">Log In</button>
+<button class="bg-primary-container text-on-primary-container px-stack-lg py-2.5 rounded-xl font-semibold shadow-lg magnetic-button">Start Free</button>
+</div>
+</div>
+</nav>
+<!-- Hero Section -->
+<header class="relative pt-40 pb-20 overflow-hidden min-h-screen flex items-center">
+<!-- Animated Mesh Background -->
+
+<div class="max-w-container-max mx-auto px-margin-desktop relative z-10 grid lg:grid-cols-2 gap-gutter items-center">
+<div class="space-y-stack-lg">
+<div class="inline-flex items-center px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary font-label-sm uppercase tracking-wider">
+                    Developer Portal Now Live
+                </div>
+<h1 class="font-display-hero text-display-hero leading-tight text-on-background">
+                    Build the Future <br/>
+<span class="text-primary">of Voice.</span>
+</h1>
+<p class="font-subtitle-lg text-subtitle-lg text-on-surface-variant max-w-xl">
+                    Powerful APIs, flexible SDKs, and real-time Webhooks to integrate human-like AI voice agents into any application.
+                </p>
+<div class="flex flex-wrap gap-stack-md pt-stack-md">
+<button class="bg-primary-container text-on-primary-container px-8 py-4 rounded-xl font-bold text-lg shadow-xl hover:shadow-primary/20 transition-all magnetic-button">
+                        Get API Key
+                    </button>
+<button class="bg-surface text-on-surface border border-outline-variant px-8 py-4 rounded-xl font-bold text-lg hover:bg-surface-container-low transition-all magnetic-button flex items-center gap-2">
+                        Read Docs <span class="material-symbols-outlined">description</span>
+</button>
+</div>
+</div>
+<!-- Code Preview Visual -->
+<div class="relative group">
+<div class="absolute -inset-4 bg-gradient-to-r from-primary/30 to-tertiary/20 blur-3xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
+<div class="relative glass-card rounded-2xl overflow-hidden shadow-2xl border-white/20">
+<div class="bg-on-background/90 px-stack-md py-stack-sm flex items-center justify-between border-b border-white/10">
+<div class="flex gap-1.5">
+<div class="w-3 h-3 rounded-full bg-red-500/50"></div>
+<div class="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+<div class="w-3 h-3 rounded-full bg-green-500/50"></div>
+</div>
+<span class="text-[10px] text-white/40 font-mono tracking-widest uppercase">agent_init.js</span>
+</div>
+<div class="p-8 code-gradient font-mono text-sm leading-relaxed overflow-x-auto">
+<div class="flex gap-4">
+<div class="text-white/20 select-none">1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</div>
+<pre class="text-blue-100"><span class="text-purple-400">import</span> { OmniAgent } <span class="text-purple-400">from</span> <span class="text-green-400">'@omni-ai/sdk'</span>;
+
+<span class="text-gray-400">// Initialize real-time voice agent</span>
+<span class="text-purple-400">const</span> agent = <span class="text-purple-400">await</span> OmniAgent.create({
+  voice: <span class="text-green-400">'nova-premium'</span>,
+  prompt: <span class="text-green-400">'You are a helpful banking assistant.'</span>,
+  latency: <span class="text-orange-400">'ultra-low'</span>,
+  webhooks: [<span class="text-green-400">'https://api.myapp.com/events'</span>]
+});</pre>
+</div>
+</div>
+<div class="absolute bottom-6 right-6 flex items-center justify-center p-4 rounded-full bg-primary/10 border border-primary/30 ai-glow">
+<span class="material-symbols-outlined text-primary text-4xl" data-weight="fill">settings_voice</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Core API Capabilities -->
+<section class="py-stack-xl bg-surface">
+<div class="max-w-container-max mx-auto px-margin-desktop">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg text-headline-lg text-on-background mb-4">Enterprise-Grade Performance</h2>
+<p class="text-on-surface-variant max-w-2xl mx-auto">Built by developers, for developers. Our infrastructure is optimized for scale, security, and the lowest possible latency.</p>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<div class="glass-card p-stack-lg rounded-2xl flex flex-col items-start gap-4">
+<div class="p-3 rounded-xl bg-primary/5 text-primary">
+<span class="material-symbols-outlined text-3xl">stream</span>
+</div>
+<h3 class="font-headline-md text-[20px] font-bold">Real-time Streaming</h3>
+<p class="text-on-surface-variant text-sm">Bi-directional audio streaming with WebSocket support for fluid, natural conversations.</p>
+</div>
+<div class="glass-card p-stack-lg rounded-2xl flex flex-col items-start gap-4">
+<div class="p-3 rounded-xl bg-primary/5 text-primary">
+<span class="material-symbols-outlined text-3xl">bolt</span>
+</div>
+<h3 class="font-headline-md text-[20px] font-bold">Sub-200ms Latency</h3>
+<p class="text-on-surface-variant text-sm">Proprietary inference engine ensures response times that feel truly human.</p>
+</div>
+<div class="glass-card p-stack-lg rounded-2xl flex flex-col items-start gap-4">
+<div class="p-3 rounded-xl bg-primary/5 text-primary">
+<span class="material-symbols-outlined text-3xl">hub</span>
+</div>
+<h3 class="font-headline-md text-[20px] font-bold">Multi-channel</h3>
+<p class="text-on-surface-variant text-sm">Direct integration with SIP for telephony or WebRTC for web and mobile apps.</p>
+</div>
+<div class="glass-card p-stack-lg rounded-2xl flex flex-col items-start gap-4">
+<div class="p-3 rounded-xl bg-primary/5 text-primary">
+<span class="material-symbols-outlined text-3xl">webhook</span>
+</div>
+<h3 class="font-headline-md text-[20px] font-bold">Sentiment Webhooks</h3>
+<p class="text-on-surface-variant text-sm">Get real-time structured data and sentiment analysis delivered via webhooks.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Interactive Code Playground -->
+<section class="py-stack-xl relative overflow-hidden">
+<div class="max-w-container-max mx-auto px-margin-desktop">
+<div class="bg-on-background rounded-3xl overflow-hidden shadow-2xl flex flex-col lg:flex-row min-h-[600px]">
+<!-- Editor Pane -->
+<div class="flex-1 flex flex-col border-r border-white/10">
+<div class="bg-on-background/50 px-6 py-4 flex items-center justify-between border-b border-white/10">
+<div class="flex items-center gap-stack-md">
+<span class="material-symbols-outlined text-white/40 text-lg">terminal</span>
+<span class="text-label-md text-white/80">Playground: Deploy Agent</span>
+</div>
+<div class="flex gap-2">
+<button class="bg-primary px-4 py-1.5 rounded-lg text-white text-xs font-bold hover:bg-primary-container transition-colors">Run Script</button>
+</div>
+</div>
+<div class="flex-1 p-8 font-mono text-sm overflow-auto">
+<div class="space-y-1">
+<p class="text-white/40"><span class="text-purple-400">const</span> omni = <span class="text-purple-400">require</span>(<span class="text-green-400">'omni-ai'</span>);</p>
+<p class="text-white/40"> </p>
+<p class="text-white/40"><span class="text-gray-500">// Configure your first voice agent</span></p>
+<p class="text-white/40"><span class="text-purple-400">async function</span> <span class="text-blue-300">deploy</span>() {</p>
+<p class="text-white/40">  <span class="text-purple-400">const</span> response = <span class="text-purple-400">await</span> omni.agents.deploy({</p>
+<p class="text-white/40">    model: <span class="text-green-400">'omni-voice-v2'</span>,</p>
+<p class="text-white/40">    capabilities: [<span class="text-green-400">'telephony'</span>, <span class="text-green-400">'scheduling'</span>],</p>
+<p class="text-white/40">    memory_enabled: <span class="text-orange-400">true</span></p>
+<p class="text-white/40">  });</p>
+<p class="text-white/40">  console.log(<span class="text-green-400">`Agent Live: <span class="text-blue-300">${response.id}</span>`</span>);</p>
+<p class="text-white/40">}</p>
+<p class="text-white/40"> </p>
+<p class="text-white/40"><span class="text-blue-300">deploy</span>();</p>
+</div>
+</div>
+</div>
+<!-- Console Pane -->
+<div class="w-full lg:w-80 bg-black/40 flex flex-col">
+<div class="bg-black/20 px-6 py-4 border-b border-white/10">
+<span class="text-label-md text-white/60">Test Output</span>
+</div>
+<div class="flex-1 p-6 font-mono text-xs text-green-400/80 space-y-3">
+<div class="flex gap-2">
+<span class="text-white/20">&gt;</span>
+<span>Installing dependencies...</span>
+</div>
+<div class="flex gap-2">
+<span class="text-white/20">&gt;</span>
+<span>Authenticating with API Key...</span>
+</div>
+<div class="flex gap-2">
+<span class="text-white/20">&gt;</span>
+<span class="text-white">Agent Live: <span class="text-blue-400">agnt_982x_kj2</span></span>
+</div>
+<div class="mt-8 p-4 rounded-xl border border-green-500/20 bg-green-500/5 animate-pulse">
+<div class="flex items-center gap-2 mb-2">
+<div class="w-2 h-2 rounded-full bg-green-500"></div>
+<span class="text-[10px] text-green-500 uppercase font-bold">Inbound Call Simulated</span>
+</div>
+<p class="text-white/60 italic">"Hello! How can I help you today?"</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SDK & Integration Ecosystem -->
+<section class="py-stack-xl bg-surface-container-low/50">
+<div class="max-w-container-max mx-auto px-margin-desktop">
+<h2 class="font-headline-md text-center mb-12">Integrate with your stack</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-gutter">
+<div class="glass-card p-stack-lg rounded-2xl flex flex-col items-center gap-4 group cursor-pointer">
+<div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md border border-outline-variant group-hover:-translate-y-2 transition-transform">
+<span class="material-symbols-outlined text-4xl text-primary" data-weight="fill">code</span>
+</div>
+<div class="text-center">
+<h4 class="font-bold">Python</h4>
+<code class="text-[10px] text-on-surface-variant bg-surface-variant/30 px-2 py-1 rounded">pip install omni-ai</code>
+</div>
+</div>
+<div class="glass-card p-stack-lg rounded-2xl flex flex-col items-center gap-4 group cursor-pointer">
+<div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md border border-outline-variant group-hover:-translate-y-2 transition-transform">
+<span class="material-symbols-outlined text-4xl text-primary" data-weight="fill">javascript</span>
+</div>
+<div class="text-center">
+<h4 class="font-bold">Node.js</h4>
+<code class="text-[10px] text-on-surface-variant bg-surface-variant/30 px-2 py-1 rounded">npm i @omni/sdk</code>
+</div>
+</div>
+<div class="glass-card p-stack-lg rounded-2xl flex flex-col items-center gap-4 group cursor-pointer">
+<div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md border border-outline-variant group-hover:-translate-y-2 transition-transform">
+<span class="material-symbols-outlined text-4xl text-primary" data-weight="fill">data_object</span>
+</div>
+<div class="text-center">
+<h4 class="font-bold">Go</h4>
+<code class="text-[10px] text-on-surface-variant bg-surface-variant/30 px-2 py-1 rounded">go get omni/v2</code>
+</div>
+</div>
+<div class="glass-card p-stack-lg rounded-2xl flex flex-col items-center gap-4 group cursor-pointer">
+<div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md border border-outline-variant group-hover:-translate-y-2 transition-transform">
+<span class="material-symbols-outlined text-4xl text-primary" data-weight="fill">east</span>
+</div>
+<div class="text-center">
+<h4 class="font-bold">React</h4>
+<code class="text-[10px] text-on-surface-variant bg-surface-variant/30 px-2 py-1 rounded">npx omni-init</code>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Developer Resources -->
+<section class="py-stack-xl">
+<div class="max-w-container-max mx-auto px-margin-desktop grid md:grid-cols-2 lg:grid-cols-4 gap-stack-lg">
+<a class="group" href="#">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">library_books</span>
+<h5 class="font-bold">Documentation</h5>
+</div>
+<p class="text-sm text-on-surface-variant">Step-by-step guides for every feature.</p>
+</a>
+<a class="group" href="#">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">api</span>
+<h5 class="font-bold">API Reference</h5>
+</div>
+<p class="text-sm text-on-surface-variant">Complete endpoints specification.</p>
+</a>
+<a class="group" href="#">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">forum</span>
+<h5 class="font-bold">Community Forum</h5>
+</div>
+<p class="text-sm text-on-surface-variant">Discuss with thousands of developers.</p>
+</a>
+<a class="group" href="#">
+<div class="flex items-center gap-3 mb-2">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">terminal</span>
+<h5 class="font-bold">GitHub Repo</h5>
+</div>
+<p class="text-sm text-on-surface-variant">Star our open-source client libraries.</p>
+</a>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-stack-xl">
+<div class="max-w-container-max mx-auto px-margin-desktop">
+<div class="bg-primary rounded-3xl p-stack-xl text-center relative overflow-hidden">
+<!-- Background visual noise -->
+<div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-transparent to-transparent"></div>
+<div class="relative z-10 space-y-stack-lg">
+<h2 class="font-display-hero-mobile text-display-hero-mobile text-white font-bold">Ready to build?</h2>
+<p class="text-white/80 font-subtitle-lg max-w-xl mx-auto">Join the 10,000+ developers already creating the next generation of conversational AI.</p>
+<div class="flex flex-wrap justify-center gap-stack-md pt-stack-md">
+<button class="bg-white text-primary px-10 py-4 rounded-xl font-bold text-lg shadow-xl hover:shadow-white/20 transition-all magnetic-button">
+                            Get API Key Now
+                        </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest dark:bg-background w-full relative bottom-0 border-t border-outline-variant bg-gradient-to-b from-transparent to-primary-fixed/5">
+<div class="max-w-container-max mx-auto px-margin-desktop py-stack-xl flex flex-col md:flex-row justify-between items-center">
+<div class="font-headline-md text-headline-md text-on-surface mb-stack-md md:mb-0">Omni AI</div>
+<div class="flex flex-wrap justify-center gap-stack-lg mb-stack-md md:mb-0">
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Security</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Status</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Contact</a>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant">
+                © 2024 Omni AI Platform. Engineered for Performance.
+            </div>
+</div>
+</footer>
+<script>
+        // Simple Micro-interactions for buttons
+        document.querySelectorAll('.magnetic-button').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `scale(1.02) translate(${x * 0.15}px, ${y * 0.15}px)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = `scale(1) translate(0, 0)`;
+            });
+        });
+    </script>
+</body></html>

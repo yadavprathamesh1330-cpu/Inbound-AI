@@ -1,0 +1,526 @@
+<html class="light" lang="en"><head></head><body class="bg-background text-on-background min-h-screen">```html
+
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Omni AI | Enterprise Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#dcc2a4",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "surface-container-lowest": "#ffffff",
+                    "outline-variant": "#c6c6cd",
+                    "secondary-fixed-dim": "#b4c5ff",
+                    "surface-tint": "#575e70",
+                    "on-secondary-fixed-variant": "#003ea8",
+                    "on-surface-variant": "#45464c",
+                    "tertiary-container": "#261906",
+                    "on-error-container": "#93000a",
+                    "secondary-fixed": "#dbe1ff",
+                    "on-surface": "#1b1b1d",
+                    "on-secondary-fixed": "#00174b",
+                    "surface-dim": "#dcd9db",
+                    "on-primary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "on-background": "#1b1b1d",
+                    "tertiary-fixed": "#f9debf",
+                    "surface-container-high": "#eae7e9",
+                    "on-primary-container": "#7d8497",
+                    "inverse-primary": "#c0c6db",
+                    "surface-container-highest": "#e5e2e3",
+                    "secondary": "#0051d5",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-low": "#f6f3f4",
+                    "error": "#ba1a1a",
+                    "surface-bright": "#fcf8fa",
+                    "on-primary-fixed": "#141b2b",
+                    "primary-container": "#141b2b",
+                    "inverse-surface": "#303031",
+                    "inverse-on-surface": "#f3f0f1",
+                    "surface": "#fcf8fa",
+                    "primary-fixed": "#dce2f7",
+                    "on-secondary-container": "#fefcff",
+                    "on-primary-fixed-variant": "#404758",
+                    "primary-fixed-dim": "#c0c6db",
+                    "primary": "#000000",
+                    "on-tertiary-fixed-variant": "#55442d",
+                    "outline": "#76777d",
+                    "surface-container": "#f0edee",
+                    "tertiary": "#000000",
+                    "on-tertiary-container": "#968065",
+                    "background": "#fcf8fa",
+                    "surface-variant": "#e5e2e3",
+                    "on-tertiary-fixed": "#261906",
+                    "secondary-container": "#316bf3"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-desktop": "40px",
+                    "margin-mobile": "16px",
+                    "gutter": "24px",
+                    "unit-sm": "8px",
+                    "container-max": "1280px",
+                    "unit-xl": "48px",
+                    "unit-md": "16px",
+                    "unit-xs": "4px",
+                    "unit-2xl": "80px",
+                    "unit-lg": "24px"
+            },
+            "fontFamily": {
+                    "display-xl": ["Inter"],
+                    "headline-lg": ["Inter"],
+                    "display-xl-mobile": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "mono-label": ["jetbrainsMono"],
+                    "headline-md": ["Inter"],
+                    "body-md": ["Inter"],
+                    "label-sm": ["Inter"]
+            },
+            "fontSize": {
+                    "display-xl": ["60px", {"lineHeight": "72px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "headline-lg": ["36px", {"lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "display-xl-mobile": ["40px", {"lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "mono-label": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "label-sm": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.5);
+            box-shadow: 0px 4px 6px -1px rgba(0,0,0,0.05);
+            border-radius: 18px;
+        }
+        .voice-pulse {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .voice-pulse div {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #2563EB;
+            opacity: 0.15;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            100% { transform: scale(2); opacity: 0; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+    </style>
+<!-- STITCH_SHADER_START:ANIMATION_14 class="fixed inset-0 w-full h-full -z-10" -->
+<div class="fixed inset-0 w-full h-full -z-10" style="display:block;">
+<canvas id="shader-canvas-ANIMATION_14" style="display:block;width:100%;height:100%"></canvas>
+<script>
+(function() {
+  const canvas = document.getElementById('shader-canvas-ANIMATION_14');
+
+  // Sync the WebGL drawing-buffer size with the CSS-driven layout size.
+  // This fires on initial layout and whenever the element is resized.
+  function syncSize() {
+    const w = canvas.clientWidth  || 1280;
+    const h = canvas.clientHeight || 720;
+    if (canvas.width !== w || canvas.height !== h) {
+      canvas.width  = w;
+      canvas.height = h;
+    }
+  }
+  if (typeof ResizeObserver !== 'undefined') {
+    new ResizeObserver(syncSize).observe(canvas);
+  }
+  syncSize();
+
+  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  if (!gl) return;
+  const vs = `attribute vec2 a_position;
+varying vec2 v_texCoord;
+void main() {
+  v_texCoord = a_position * 0.5 + 0.5;
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}`;
+  const fs = `precision highp float;
+uniform float u_time;
+uniform vec2 u_resolution;
+varying vec2 v_texCoord;
+
+void main() {
+    vec2 uv = v_texCoord;
+    
+    // Create a slow-moving, elegant wave pattern using noise-like sine waves
+    float wave1 = sin(uv.x * 2.0 + u_time * 0.2) * 0.5 + 0.5;
+    float wave2 = sin(uv.y * 3.0 - u_time * 0.3) * 0.5 + 0.5;
+    float wave3 = sin((uv.x + uv.y) * 1.5 + u_time * 0.1) * 0.5 + 0.5;
+    
+    float intensity = (wave1 * 0.4 + wave2 * 0.3 + wave3 * 0.3);
+    
+    // Palette inspired by Omni AI's Slate (#111827) and Royal Blue (#2563EB)
+    vec3 slate = vec3(0.067, 0.094, 0.153); // #111827
+    vec3 royalBlue = vec3(0.145, 0.388, 0.922); // #2563EB
+    vec3 background = vec3(0.973, 0.98, 0.988); // #F8FAFC
+    
+    // Mix colors based on wave intensity
+    vec3 finalColor = mix(background, mix(slate, royalBlue, intensity * 0.5), intensity * 0.08);
+    
+    gl_FragColor = vec4(finalColor, 1.0);
+}`;
+  function cs(type, src) {
+    const s = gl.createShader(type);
+    gl.shaderSource(s, src);
+    gl.compileShader(s);
+    return s;
+  }
+  const prog = gl.createProgram();
+  gl.attachShader(prog, cs(gl.VERTEX_SHADER, vs));
+  gl.attachShader(prog, cs(gl.FRAGMENT_SHADER, fs));
+  gl.linkProgram(prog);
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const pos = gl.getAttribLocation(prog, 'a_position');
+  gl.enableVertexAttribArray(pos);
+  gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
+  const uTime = gl.getUniformLocation(prog, 'u_time');
+  const uRes = gl.getUniformLocation(prog, 'u_resolution');
+  const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+
+  // u_mouse is in pixel coordinates matching u_resolution (ShaderToy convention).
+  // Shaders that need normalized coords should use: u_mouse / u_resolution.
+  let mouse = { x: canvas.width / 2, y: canvas.height / 2 };
+  window.addEventListener('mousemove', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width && rect.height) {
+      const nx = (event.clientX - rect.left) / rect.width;
+      const ny = 1.0 - (event.clientY - rect.top) / rect.height;
+      mouse.x = nx * canvas.width;
+      mouse.y = ny * canvas.height;
+    }
+  });
+
+  function render(t) {
+    if (typeof ResizeObserver === 'undefined') syncSize();
+    gl.viewport(0, 0, canvas.width, canvas.height);
+    if (uTime) gl.uniform1f(uTime, t * 0.001);
+    if (uRes) gl.uniform2f(uRes, canvas.width, canvas.height);
+    if (uMouse) gl.uniform2f(uMouse, mouse.x, mouse.y);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    requestAnimationFrame(render);
+  }
+  render(0);
+})();
+</script>
+</div>
+<!-- STITCH_SHADER_END:ANIMATION_14 -->
+<!-- Side Navigation Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface/90 backdrop-blur-md border-r border-outline-variant flex flex-col py-unit-lg px-unit-md z-50">
+<div class="flex items-center gap-3 px-4 mb-unit-xl">
+<div class="w-10 h-10 bg-primary flex items-center justify-center rounded-xl">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface leading-none">Omni AI</h1>
+<p class="text-xs text-on-surface-variant mt-1">Enterprise Voice</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Active Tab: Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 text-primary font-bold border-r-4 border-primary bg-surface-container-low transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-body-md text-body-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">smart_toy</span>
+<span class="font-body-md text-body-md">AI Agents</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">call</span>
+<span class="font-body-md text-body-md">Calls</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-body-md text-body-md">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-body-md text-body-md">Knowledge Base</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-body-md text-body-md">Workflows</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-body-md text-body-md">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span class="font-body-md text-body-md">Team</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-body-md text-body-md">Billing</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container hover:text-primary transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-body-md text-body-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant/30 pt-4 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-body-md text-body-md">Help</span>
+</a>
+<button class="flex items-center gap-3 px-4 py-3 text-on-surface-variant hover:bg-surface-container transition-all w-full">
+<span class="material-symbols-outlined">menu_open</span>
+<span class="font-body-md text-body-md">Collapse</span>
+</button>
+</div>
+</aside>
+<!-- Top Navigation Bar Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-surface/60 backdrop-blur-xl border-b border-outline-variant/30 flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center gap-unit-md flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-lg">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-xl pl-10 pr-4 py-2 text-label-sm font-label-sm focus:ring-2 focus:ring-secondary transition-all" placeholder="Search interactions, leads, or agents..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">sensors</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-label-sm font-bold text-on-surface">Admin User</p>
+<p class="text-[10px] text-outline uppercase tracking-wider">Super Admin</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-primary/10 object-cover" data-alt="A professional studio portrait of a modern executive admin, high-resolution and clean lighting, minimalist background with a blue and white aesthetic, business professional attire, confident and friendly expression, enterprise software vibe." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCBN0XWP0pqWG8Y8VEXf9pAk4pW_jvXuw_OOfwLKVOoD85UZ2Qzx-xoAFyHXv9asTtaQEZU3xO3rbGMqwkq8j2vNc3U-0eRja_5-cMRDw__-pI0HZsUxQMYNTs3tq3rm7mlDgECbeGe5fjrizEv6K44yirUbhRztz3u9zIvUj4DAWaSrBeQmXrxj97On_vscy-Ls1CKA3KDiEWpyRVUpi2T7VB9gU-mY0hVk8AD-Fx34rVLlU8FMSatEQk5dImqftxaWT-_d_4gpSg"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 px-margin-desktop pb-unit-2xl">
+<!-- Welcome Hero Section -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter mb-unit-xl items-center animate-fade-in-up">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Good morning, Admin</h2>
+<p class="text-body-lg text-on-surface-variant mt-1">Here's what's happening with your AI agents today.</p>
+<div class="flex items-center gap-3 bg-white/50 backdrop-blur-sm p-2 rounded-xl border border-outline-variant/50 shadow-sm mt-6 w-fit">
+<span class="material-symbols-outlined text-outline ml-2">calendar_today</span>
+<input class="border-none bg-transparent text-label-sm font-label-sm p-0 pr-4 focus:ring-0 cursor-pointer" type="date" value="2023-10-27"/>
+<div class="h-6 w-[1px] bg-outline-variant/50"></div>
+<button class="bg-primary text-white px-4 py-1.5 rounded-lg text-label-sm font-medium hover:bg-secondary transition-colors">Apply</button>
+</div>
+</div>
+<div class="relative flex justify-center items-center h-[300px] lg:h-[400px]">
+<!-- STITCH_THREEJS_START:ANIMATION_15 class="w-full h-full bg-transparent" -->
+<div class="w-full h-full bg-transparent" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_15" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_15');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  const scene = new THREE.Scene();
+const containerWidth = container.clientWidth || window.innerWidth;
+const containerHeight = container.clientHeight || window.innerHeight;
+
+const camera = new THREE.PerspectiveCamera(75, containerWidth / containerHeight, 0.1, 1000);
+camera.position.z = 5;
+
+const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+renderer.setSize(containerWidth, containerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+container.appendChild(renderer.domElement);
+
+// Create a premium "AI Core" geometry - a nested wireframe sphere
+const outerGeo = new THREE.IcosahedronGeometry(2, 2);
+const outerMat = new THREE.MeshPhongMaterial({
+    color: 0x2563EB,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.3
+});
+const outerSphere = new THREE.Mesh(outerGeo, outerMat);
+scene.add(outerSphere);
+
+const innerGeo = new THREE.IcosahedronGeometry(1.2, 1);
+const innerMat = new THREE.MeshPhongMaterial({
+    color: 0x111827,
+    emissive: 0x2563EB,
+    emissiveIntensity: 0.5,
+    wireframe: true
+});
+const innerSphere = new THREE.Mesh(innerGeo, innerMat);
+scene.add(innerSphere);
+
+const light = new THREE.PointLight(0xffffff, 1, 100);
+light.position.set(10, 10, 10);
+scene.add(light);
+scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+
+function animate() {
+    requestAnimationFrame(animate);
+    
+    outerSphere.rotation.y += 0.002;
+    outerSphere.rotation.x += 0.001;
+    
+    innerSphere.rotation.y -= 0.004;
+    innerSphere.rotation.z += 0.002;
+    
+    // Subtle float
+    const time = Date.now() * 0.001;
+    outerSphere.position.y = Math.sin(time) * 0.1;
+    innerSphere.position.y = Math.sin(time + 1) * 0.05;
+    
+    renderer.render(scene, camera);
+}
+
+window.addEventListener('resize', () => {
+    const w = container.clientWidth || window.innerWidth;
+    const h = container.clientHeight || window.innerHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+});
+
+animate();
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_15 -->
+</div>
+</div>
+<!-- Stat Widgets -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter mb-unit-xl">
+<!-- Stat Card 1 -->
+<div class="glass-card p-unit-md flex items-start justify-between animate-fade-in-up [animation-delay:100ms] hover:scale-[1.02] transition-all duration-300 backdrop-blur-md bg-white/70">
+<div>
+<p class="text-label-sm font-medium text-on-surface-variant">Calls Today</p>
+<h3 class="text-display-xl-mobile font-bold mt-2">248</h3>
+<span class="inline-flex items-center text-xs font-bold text-emerald-600 mt-2">
+<span class="material-symbols-outlined text-sm mr-1">trending_up</span> +12% vs yesterday
+                    </span>
+</div>
+<div class="p-3 bg-secondary/10 rounded-xl">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">call</span>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="glass-card p-unit-md flex items-start justify-between animate-fade-in-up [animation-delay:200ms] hover:scale-[1.02] transition-all duration-300 backdrop-blur-md bg-white/70">
+<div>
+<p class="text-label-sm font-medium text-on-surface-variant">Active AI Calls</p>
+<div class="flex items-baseline gap-2 mt-2">
+<h3 class="text-display-xl-mobile font-bold">12</h3>
+<div class="voice-pulse w-4 h-4 mb-2">
+<div></div>
+<div style="animation-delay: 0.5s;"></div>
+<span class="w-2 h-2 bg-secondary rounded-full relative z-10"></span>
+</div>
+</div>
+<p class="text-xs text-on-surface-variant mt-2 font-medium">Real-time processing</p>
+</div>
+<div class="p-3 bg-secondary/10 rounded-xl">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">graphic_eq</span>
+</div>
+</div>
+<!-- Stat Card 3 -->
+<div class="glass-card p-unit-md flex items-start justify-between animate-fade-in-up [animation-delay:300ms] hover:scale-[1.02] transition-all duration-300 backdrop-blur-md bg-white/70">
+<div>
+<p class="text-label-sm font-medium text-on-surface-variant">New Leads</p>
+<h3 class="text-display-xl-mobile font-bold mt-2">45</h3>
+<span class="inline-flex items-center text-xs font-bold text-emerald-600 mt-2">
+<span class="material-symbols-outlined text-sm mr-1">trending_up</span> +5% this week
+                    </span>
+</div>
+<div class="p-3 bg-secondary/10 rounded-xl">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">person_add</span>
+</div>
+</div>
+<!-- Stat Card 4 -->
+<div class="glass-card p-unit-md flex items-start justify-between animate-fade-in-up [animation-delay:400ms] hover:scale-[1.02] transition-all duration-300 backdrop-blur-md bg-white/70">
+<div>
+<p class="text-label-sm font-medium text-on-surface-variant">Appointments</p>
+<h3 class="text-display-xl-mobile font-bold mt-2">8</h3>
+<span class="inline-flex items-center text-xs font-bold text-on-surface-variant mt-2">
+                        Ready for review
+                    </span>
+</div>
+<div class="p-3 bg-secondary/10 rounded-xl">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+</div>
+</div>
+</div>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Smaller Stat Cards Column -->
+<div class="col-span-12 grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Revenue Card -->
+<div class="glass-card p-unit-md flex-1 flex flex-col justify-between animate-fade-in-up [animation-delay:500ms] hover:scale-[1.02] transition-all duration-300 backdrop-blur-md bg-white/70">
+<div>
+<div class="flex justify-between">
+<h5 class="text-label-sm font-bold text-on-surface-variant">Revenue Generated</h5>
+<span class="material-symbols-outlined text-secondary">payments</span>
+</div>
+<h4 class="text-headline-md font-extrabold mt-2">$14,520.00</h4>
+</div>
+<div class="mt-4 bg-surface-container-low rounded-lg h-2 overflow-hidden">
+<div class="bg-secondary h-full w-[72%] rounded-full"></div>
+</div>
+<div class="flex justify-between items-center mt-2">
+<span class="text-[10px] text-outline font-bold">72% OF MONTHLY GOAL</span>
+<span class="text-[10px] text-on-surface-variant font-bold">$20k Target</span>
+</div>
+</div>
+<!-- AI Success Card -->
+<div class="glass-card p-unit-md flex-1 animate-fade-in-up [animation-delay:600ms] hover:scale-[1.02] transition-all duration-300 backdrop-blur-md bg-white/70">
+<div class="flex justify-between items-start">
+<div>
+<h5 class="text-label-sm font-bold text-on-surface-variant">AI Success Rate</h5>
+<h4 class="text-headline-md font-extrabold mt-2 text-emerald-600">98.5%</h4>
+<p class="text-[10px] text-outline font-medium mt-1">NLU Confidence Index</p>
+</div>
+<div class="relative w-16 h-16">
+<svg class="w-16 h-16 transform -rotate-90" viewbox="0 0 36 36">
+<path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#e2e8f0" stroke-width="3"></path>
+</svg></div></div></div></div></div></main></body></html>

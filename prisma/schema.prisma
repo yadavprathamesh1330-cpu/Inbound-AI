@@ -1,0 +1,485 @@
+// Omni AI data model
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Tenancy & auth
+// ---------------------------------------------------------------------------
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  website   String?
+  timezone  String   @default("America/New_York")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users         User[]
+  agents        Agent[]
+  calls         Call[]
+  leads         Lead[]
+  phoneNumbers  PhoneNumber[]
+  knowledgeDocs KnowledgeDocument[]
+  integrations  Integration[]
+  appointments  Appointment[]
+  apiKeys       ApiKey[]
+  notifications Notification[]
+  subscription  Subscription?
+  invoices      Invoice[]
+
+  @@map("organizations")
+}
+
+enum UserRole {
+  OWNER
+  ADMIN
+  MEMBER
+}
+
+model User {
+  id        String   @id @default(cuid())
+  /// Supabase auth.users.id
+  authId    String   @unique
+  email     String   @unique
+  name      String
+  avatarUrl String?
+  role      UserRole @default(MEMBER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@map("users")
+}
+
+// ---------------------------------------------------------------------------
+// AI Agents
+// ---------------------------------------------------------------------------
+
+enum AgentStatus {
+  DRAFT
+  PUBLISHED
+  PAUSED
+}
+
+enum VoiceGender {
+  MALE
+  FEMALE
+}
+
+enum VoiceAccent {
+  INDIAN
+  AMERICAN
+  BRITISH
+}
+
+enum AgentObjective {
+  LEAD_COLLECTION
+  APPOINTMENT_BOOKING
+  ANSWER_FAQS
+  TRANSFER_CALLS
+  TAKE_MESSAGES
+  CUSTOMER_SUPPORT
+  SALES
+}
+
+model Agent {
+  id     String      @id @default(cuid())
+  name   String
+  status AgentStatus @default(DRAFT)
+
+  // Step 1: Business information
+  businessName        String
+  industry            String?
+  businessDescription String?
+  businessHours       Json?
+  website             String?
+  timezone            String   @default("America/New_York")
+  languages           String[] @default(["en"])
+
+  // Step 3: Voice
+  voiceGender   VoiceGender @default(FEMALE)
+  voiceAccent   VoiceAccent @default(AMERICAN)
+  speakingSpeed Float       @default(1.0)
+  voiceStyle    String?
+
+  // Step 4: Prompt
+  systemPrompt       String? @db.Text
+  greeting           String? @db.Text
+  fallbackResponses  String? @db.Text
+  transferRules      String? @db.Text
+  businessRules      String? @db.Text
+  customInstructions String? @db.Text
+
+  // Step 5: Objectives
+  objectives AgentObjective[] @default([])
+
+  // Metrics (denormalized for fast dashboard reads; source of truth is Call[])
+  totalCalls  Int   @default(0)
+  successRate Float @default(0)
+
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  phoneNumbers  PhoneNumber[]
+  calls         Call[]
+  leads         Lead[]
+  knowledgeDocs KnowledgeDocument[]
+  integrations  AgentIntegration[]
+
+  @@index([organizationId])
+  @@map("agents")
+}
+
+model PhoneNumber {
+  id               String   @id @default(cuid())
+  e164             String   @unique
+  twilioSid        String?  @unique
+  label            String?
+  workingHours     Json?
+  voicemailEnabled Boolean  @default(true)
+  routingRules     Json?
+  createdAt        DateTime @default(now())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  agentId String?
+  agent   Agent?  @relation(fields: [agentId], references: [id], onDelete: SetNull)
+
+  calls Call[]
+
+  @@index([organizationId])
+  @@map("phone_numbers")
+}
+
+// ---------------------------------------------------------------------------
+// Knowledge base
+// ---------------------------------------------------------------------------
+
+enum KnowledgeSourceType {
+  PDF
+  DOCX
+  TXT
+  WEBSITE
+  FAQ
+}
+
+enum KnowledgeStatus {
+  PENDING
+  INDEXING
+  READY
+  FAILED
+}
+
+model KnowledgeDocument {
+  id         String              @id @default(cuid())
+  title      String
+  sourceType KnowledgeSourceType
+  sourceUrl  String?
+  fileUrl    String?
+  status     KnowledgeStatus     @default(PENDING)
+  sizeBytes  Int?
+  chunkCount Int                 @default(0)
+  createdAt  DateTime            @default(now())
+  updatedAt  DateTime            @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  agentId String?
+  agent   Agent?  @relation(fields: [agentId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@map("knowledge_documents")
+}
+
+// ---------------------------------------------------------------------------
+// Calls
+// ---------------------------------------------------------------------------
+
+enum CallStatus {
+  COMPLETED
+  IN_PROGRESS
+  FAILED
+  MISSED
+  VOICEMAIL
+}
+
+enum Sentiment {
+  POSITIVE
+  NEUTRAL
+  NEGATIVE
+}
+
+model Call {
+  id            String     @id @default(cuid())
+  twilioCallSid String?    @unique
+  status        CallStatus @default(IN_PROGRESS)
+  direction     String     @default("inbound")
+
+  callerName  String?
+  callerPhone String
+
+  startedAt       DateTime  @default(now())
+  endedAt         DateTime?
+  durationSeconds Int?
+
+  transcript   Json?
+  summary      String?    @db.Text
+  sentiment    Sentiment?
+  leadScore    Int?
+  recordingUrl String?
+
+  extractedName              String?
+  extractedEmail             String?
+  extractedBudget            String?
+  extractedInterestedService String?
+  nextAction                 String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  agentId String
+  agent   Agent  @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  phoneNumberId String?
+  phoneNumber   PhoneNumber? @relation(fields: [phoneNumberId], references: [id], onDelete: SetNull)
+
+  lead        Lead?
+  appointment Appointment?
+
+  @@index([organizationId])
+  @@index([agentId])
+  @@map("calls")
+}
+
+// ---------------------------------------------------------------------------
+// Leads
+// ---------------------------------------------------------------------------
+
+enum LeadStage {
+  NEW
+  QUALIFIED
+  APPOINTMENT
+  WON
+  LOST
+}
+
+model Lead {
+  id    String    @id @default(cuid())
+  name  String?
+  email String?
+  phone String?
+  stage LeadStage @default(NEW)
+
+  budget            String?
+  interestedService String?
+  score             Int?
+  notes             String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  agentId String?
+  agent   Agent?  @relation(fields: [agentId], references: [id], onDelete: SetNull)
+
+  callId String? @unique
+  call   Call?   @relation(fields: [callId], references: [id], onDelete: SetNull)
+
+  appointment Appointment?
+
+  @@index([organizationId])
+  @@index([stage])
+  @@map("leads")
+}
+
+model Appointment {
+  id       String   @id @default(cuid())
+  title    String
+  startsAt DateTime
+  endsAt   DateTime
+  location String?
+  notes    String?  @db.Text
+
+  googleEventId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  callId String? @unique
+  call   Call?   @relation(fields: [callId], references: [id], onDelete: SetNull)
+
+  leadId String? @unique
+  lead   Lead?   @relation(fields: [leadId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@map("appointments")
+}
+
+// ---------------------------------------------------------------------------
+// Integrations
+// ---------------------------------------------------------------------------
+
+enum IntegrationProvider {
+  GOOGLE_SHEETS
+  GOOGLE_CALENDAR
+  SLACK
+  WEBHOOK
+  HUBSPOT
+  SALESFORCE
+  ZOHO
+}
+
+enum IntegrationStatus {
+  DISCONNECTED
+  CONNECTED
+  ERROR
+}
+
+model Integration {
+  id       String              @id @default(cuid())
+  provider IntegrationProvider
+  status   IntegrationStatus   @default(DISCONNECTED)
+
+  /// OAuth tokens / webhook URL / provider-specific config. Never store
+  /// plaintext client secrets here - only per-connection access/refresh
+  /// tokens and config the org explicitly supplied.
+  config Json?
+
+  connectedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  agentLinks AgentIntegration[]
+
+  @@unique([organizationId, provider])
+  @@map("integrations")
+}
+
+model AgentIntegration {
+  id String @id @default(cuid())
+
+  agentId String
+  agent   Agent  @relation(fields: [agentId], references: [id], onDelete: Cascade)
+
+  integrationId String
+  integration   Integration @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@unique([agentId, integrationId])
+  @@map("agent_integrations")
+}
+
+// ---------------------------------------------------------------------------
+// Billing
+// ---------------------------------------------------------------------------
+
+enum SubscriptionPlan {
+  STARTER
+  GROWTH
+  ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+}
+
+model Subscription {
+  id     String             @id @default(cuid())
+  plan   SubscriptionPlan   @default(STARTER)
+  status SubscriptionStatus @default(TRIALING)
+
+  minutesIncluded Int @default(1000)
+  minutesUsed     Int @default(0)
+
+  currentPeriodStart DateTime @default(now())
+  currentPeriodEnd   DateTime
+
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizationId String       @unique
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
+model Invoice {
+  id          String   @id @default(cuid())
+  amountCents Int
+  currency    String   @default("usd")
+  status      String
+  issuedAt    DateTime @default(now())
+  pdfUrl      String?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@map("invoices")
+}
+
+model ApiKey {
+  id         String    @id @default(cuid())
+  name       String
+  keyPrefix  String
+  keyHash    String
+  lastUsedAt DateTime?
+  createdAt  DateTime  @default(now())
+  revokedAt  DateTime?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@map("api_keys")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  title     String
+  body      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@map("notifications")
+}

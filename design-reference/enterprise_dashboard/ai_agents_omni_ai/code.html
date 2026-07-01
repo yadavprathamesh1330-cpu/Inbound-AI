@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Agents | Omni AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-effect {
+            backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(255, 255, 255, 1);
+        }
+        .voice-pulse {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .voice-pulse::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #2563EB;
+            border-radius: 50%;
+            opacity: 0.2;
+            animation: pulse 2s infinite ease-in-out;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.4; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+        .agent-card:hover .agent-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .agent-actions {
+            opacity: 0;
+            transform: translateY(4px);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-fixed-dim": "#dcc2a4",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "surface-container-lowest": "#ffffff",
+                        "outline-variant": "#c6c6cd",
+                        "secondary-fixed-dim": "#b4c5ff",
+                        "surface-tint": "#575e70",
+                        "on-secondary-fixed-variant": "#003ea8",
+                        "on-surface-variant": "#45464c",
+                        "tertiary-container": "#261906",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#dbe1ff",
+                        "on-surface": "#1b1b1d",
+                        "on-secondary-fixed": "#00174b",
+                        "surface-dim": "#dcd9db",
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1b1b1d",
+                        "tertiary-fixed": "#f9debf",
+                        "surface-container-high": "#eae7e9",
+                        "on-primary-container": "#7d8497",
+                        "inverse-primary": "#c0c6db",
+                        "surface-container-highest": "#e5e2e3",
+                        "secondary": "#0051d5",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#f6f3f4",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#fcf8fa",
+                        "on-primary-fixed": "#141b2b",
+                        "primary-container": "#141b2b",
+                        "inverse-surface": "#303031",
+                        "inverse-on-surface": "#f3f0f1",
+                        "surface": "#fcf8fa",
+                        "primary-fixed": "#dce2f7",
+                        "on-secondary-container": "#fefcff",
+                        "on-primary-fixed-variant": "#404758",
+                        "primary-fixed-dim": "#c0c6db",
+                        "primary": "#000000",
+                        "on-tertiary-fixed-variant": "#55442d",
+                        "outline": "#76777d",
+                        "surface-container": "#f0edee",
+                        "tertiary": "#000000",
+                        "on-tertiary-container": "#968065",
+                        "background": "#fcf8fa",
+                        "surface-variant": "#e5e2e3",
+                        "on-tertiary-fixed": "#261906",
+                        "secondary-container": "#316bf3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-desktop": "40px",
+                        "margin-mobile": "16px",
+                        "gutter": "24px",
+                        "unit-sm": "8px",
+                        "container-max": "1280px",
+                        "unit-xl": "48px",
+                        "unit-md": "16px",
+                        "unit-xs": "4px",
+                        "unit-2xl": "80px",
+                        "unit-lg": "24px"
+                    },
+                    "fontFamily": {
+                        "display-xl": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "mono-label": ["jetbrainsMono"],
+                        "headline-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "label-sm": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen">
+<!-- SideNavBar Shell -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-surface border-r border-outline-variant flex flex-col py-unit-lg px-unit-md shadow-sm z-50">
+<div class="flex items-center gap-3 mb-unit-2xl px-2">
+<div class="voice-pulse w-8 h-8 rounded-full bg-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-[18px]" style="font-variation-settings: 'FILL' 1;">graphic_eq</span>
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-on-surface leading-none">Omni AI</h1>
+<p class="text-[10px] uppercase tracking-widest text-outline mt-1 font-bold">Enterprise Voice</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-primary font-bold border-r-4 border-primary bg-surface-container-low transition-all duration-200" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">smart_toy</span>
+<span class="font-label-sm">AI Agents</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined">call</span>
+<span class="font-label-sm">Calls</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="font-label-sm">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="font-label-sm">Knowledge Base</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="font-label-sm">Workflows</span>
+</a>
+<div class="pt-4 pb-2 px-3">
+<span class="text-[10px] font-bold text-outline uppercase tracking-wider">System</span>
+</div>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined">bar_chart</span>
+<span class="font-label-sm">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="font-label-sm">Help</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">menu_open</span>
+<span class="font-label-sm">Collapse</span>
+</a>
+</div>
+</aside>
+<!-- TopNavBar Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/30 flex justify-between items-center px-margin-desktop z-40">
+<div class="flex items-center bg-surface-container-low px-4 py-1.5 rounded-full border border-outline-variant/20 w-96 group focus-within:ring-2 ring-secondary/20 transition-all">
+<span class="material-symbols-outlined text-outline text-[20px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-label-sm w-full placeholder:text-outline" placeholder="Search agents, tasks, or metrics..." type="text"/>
+<span class="text-[10px] font-mono text-outline border border-outline-variant/40 px-1.5 py-0.5 rounded ml-2">⌘K</span>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="relative p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<button class="p-2 text-on-surface-variant hover:text-primary transition-colors">
+<span class="material-symbols-outlined">sensors</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="font-label-sm font-bold text-on-surface">Alex Rivers</p>
+<p class="text-[11px] text-outline leading-none">Admin</p>
+</div>
+<div class="w-10 h-10 rounded-full border-2 border-primary-container overflow-hidden bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="A professional studio portrait of a modern executive in a sleek dark blazer, set against a minimalist architectural background with soft blue atmospheric lighting. The style is premium and high-fidelity, reflecting a luxury enterprise tech aesthetic with crystal clear focus and soft skin textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBcJN2o-qt7jXZIDyKivnOqc_I8ht-PmtzVFGpJeagwLZOcEfizGUOMvD6tIeFUbNGLRtzbX-5DIA9X4H0U2s8b2Q1OI3GCiYGu9fZFQpOTITnRMMxrpcBVAh6jMV-TK8PZlThrz5qNZLroSH87oB3aUQm6SsiiPBXdXpE5Yd6e29loO1KUDU0qGfnrtSV0M_h1iOZu9WZkqeqm47xEV1srsfod2laf053eqH8ws1KYPKpZSBL8aRrplraj_YfJonHP5eEgiQXXhxI"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 pt-16 min-h-screen">
+<div class="max-w-[1400px] mx-auto px-margin-desktop py-unit-xl">
+<!-- Page Header -->
+<div class="flex justify-between items-end mb-unit-2xl">
+<div>
+<nav class="flex items-center gap-2 text-outline font-label-sm mb-2">
+<span>Organization</span>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="text-on-surface font-medium">AI Agents</span>
+</nav>
+<h2 class="font-headline-lg text-headline-lg font-extrabold tracking-tight">AI Agents</h2>
+</div>
+<button class="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-[14px] font-bold hover:scale-[0.98] transition-transform shadow-lg shadow-primary/10">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>Create New Agent</span>
+</button>
+</div>
+<div class="grid grid-cols-12 gap-gutter">
+<!-- Left Column: Filters & Grid -->
+<div class="col-span-12 lg:col-span-9 space-y-unit-lg">
+<!-- Filter Bar -->
+<div class="bg-surface border border-outline-variant/30 p-4 rounded-xl flex flex-wrap items-center justify-between gap-4 shadow-sm">
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container text-on-surface font-label-sm border border-outline-variant/50">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+                                Status: All
+                            </button>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant font-label-sm transition-colors">
+                                Task: Any
+                            </button>
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-surface-container-low text-on-surface-variant font-label-sm transition-colors">
+                                Team: Sales
+                            </button>
+</div>
+<div class="text-label-sm text-outline">
+                            Showing <span class="font-bold text-on-surface">12</span> agents
+                        </div>
+</div>
+<!-- Agents Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Agent Card 1 -->
+<div class="agent-card bg-surface border border-outline-variant/40 rounded-[18px] p-6 hover:shadow-xl transition-all duration-300 relative overflow-hidden group">
+<div class="absolute top-0 right-0 p-4">
+<div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 text-[10px] font-bold uppercase tracking-wider">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                                    Online
+                                </div>
+</div>
+<div class="flex flex-col items-center text-center mt-2">
+<div class="relative mb-4">
+<div class="w-20 h-20 rounded-[24px] bg-gradient-to-br from-secondary/10 to-primary/5 p-1">
+<div class="w-full h-full rounded-[20px] overflow-hidden bg-white border border-outline-variant/20">
+<img class="w-full h-full object-cover" data-alt="A futuristic AI avatar portrait of a friendly female professional named Clara, with glowing blue holographic details on her tech-focused attire. The style is clean, hyper-realistic, with a bright white studio background and high-performance enterprise aesthetics." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCpBKZYz_ofWJeM9FyP2ODme42lG0E63keudMd-KEiZBxceMRw-HAy5KtBCSUCd2q7VC2N5KURP-jviMCEFyLpTVGwQhJVtZnX8wZ4QQnRaS1XAO5K-xKXr-jsimaLOh1IBXLCpzW5-IYWx3AADpZpBxFNirbtgHOzdrOPEvsUIAb_CkqKpVVp2WXus8yRHG92mClWgM-O17ryFuYWIYD3vilpmE8L-dfFhnNkdN_M74E_bsqF7VRCFaJ4OEakXVOY3mQD5IEbsTB8"/>
+</div>
+</div>
+<div class="absolute -bottom-1 -right-1 w-7 h-7 bg-white rounded-full flex items-center justify-center shadow-sm border border-outline-variant/20">
+<span class="material-symbols-outlined text-[16px] text-primary">support_agent</span>
+</div>
+</div>
+<h3 class="font-headline-md text-[18px] font-bold text-on-surface">Clara</h3>
+<p class="text-outline text-label-sm">Inbound Support</p>
+</div>
+<div class="mt-6 space-y-4">
+<div class="p-3 bg-surface-container-low rounded-xl">
+<div class="flex justify-between items-center mb-1">
+<span class="text-[11px] font-bold text-outline uppercase">Success Rate</span>
+<span class="font-mono-label text-primary">98.2%</span>
+</div>
+<div class="w-full h-1.5 bg-outline-variant/20 rounded-full overflow-hidden">
+<div class="h-full bg-secondary w-[98%]"></div>
+</div>
+</div>
+<div class="flex items-center justify-between px-1">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-200"></div>
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-300"></div></div></div></div></div></div></div></div></div></main></body></html>
