@@ -1,14 +1,14 @@
 import { Icon } from "@/components/ui-custom/icon";
 
 const features = [
-  { icon: "support_agent", title: "AI Receptionist", desc: "24/7 call handling with zero latency and natural prosody." },
-  { icon: "sync", title: "CRM Sync", desc: "Bi-directional integration with HubSpot, Salesforce, Zoho, and more." },
-  { icon: "language", title: "Multi-Lingual", desc: "Native fluency in 45+ languages with dialect detection." },
-  { icon: "security", title: "Enterprise Secure", desc: "Enterprise-grade encryption for sensitive customer data." },
-  { icon: "call_merge", title: "Warm Transfers", desc: "Instantly hand off complex calls to human agents with context." },
-  { icon: "analytics", title: "Sentiment Analysis", desc: "Real-time tone detection to adapt conversation flow." },
-  { icon: "bolt", title: "Ultra-Low Latency", desc: "Sub-200ms response time for true conversational feel." },
-  { icon: "api", title: "Developer First", desc: "Robust API and SDKs for custom voice application builds." },
+  { icon: "local_shipping", title: "24/7 Dispatch Line", desc: "Every load call answered — rates, lanes, and equipment logged straight to your dispatch board." },
+  { icon: "storefront", title: "Parts Counter AI", desc: "Takes truck-parts orders by make, model, and VIN — quotes, availability, and will-call pickup." },
+  { icon: "build", title: "Breakdown Triage", desc: "Roadside and shop calls prioritized instantly — location captured, nearest tech dispatched." },
+  { icon: "calendar_today", title: "Service Booking", desc: "PM services, DOT inspections, and bay appointments booked directly onto your calendar." },
+  { icon: "sync", title: "TMS & CRM Sync", desc: "Loads, leads, and orders flow into Google Sheets, your TMS, HubSpot, Salesforce, and Zoho." },
+  { icon: "language", title: "Multi-Lingual", desc: "English, Spanish, Hindi, and Punjabi — talk to drivers and brokers in their language." },
+  { icon: "call_merge", title: "Warm Transfers", desc: "Complex negotiations hand off to your dispatcher with full call context." },
+  { icon: "security", title: "Enterprise Secure", desc: "Rate cons, customer data, and recordings encrypted with per-company isolation." },
 ];
 
 export function FeaturesSection() {
@@ -18,11 +18,12 @@ export function FeaturesSection() {
         <div className="mb-unit-xl flex flex-col items-end justify-between gap-unit-md md:flex-row">
           <div className="max-w-2xl">
             <h2 className="text-headline-lg text-headline-lg mb-unit-sm">
-              Engineered for Reliability
+              Built for the Way Trucking Works
             </h2>
             <p className="text-body-md text-body-md text-on-surface-variant">
-              Omni AI isn&rsquo;t just a chatbot. It&rsquo;s an enterprise-grade
-              voice interface designed to replace entire support flows.
+              Omni AI isn&rsquo;t a generic chatbot. It&rsquo;s a voice
+              platform trained on dispatch, parts, and service workflows
+              &mdash; so no call, load, or order slips through.
             </p>
           </div>
         </div>

@@ -7,24 +7,32 @@ import {
 
 const faqs = [
   {
-    q: "How quickly can I deploy an AI voice agent?",
-    a: "Most teams go live in under 15 minutes using the guided setup wizard — configure your business info, voice, and objectives, then connect or buy a phone number.",
+    q: "How quickly can my trucking company go live?",
+    a: "Most companies go live in under 15 minutes using the guided setup wizard — describe your operation (dispatch, parts, service), pick a voice, and connect or buy a phone number.",
   },
   {
-    q: "Does Omni AI integrate with my existing CRM?",
-    a: "Yes. Omni AI syncs call summaries, transcripts, and lead data to Google Sheets, Google Calendar, Slack, webhooks, HubSpot, Salesforce, and Zoho.",
+    q: "Can it really handle dispatch and load calls?",
+    a: "Yes. Omni captures lane, equipment, weight, rate, and pickup details from brokers and shippers, logs everything to your dispatch sheet or TMS, and warm-transfers negotiations to your dispatcher when needed.",
   },
   {
-    q: "What happens when the AI can't answer a question?",
-    a: "Each agent has configurable fallback responses and transfer rules, so calls can be warm-transferred to a human teammate with full context.",
+    q: "What about truck parts orders?",
+    a: "Omni takes parts orders by make, model, and part number, checks them against your catalog in the knowledge base, and creates the order with pickup or delivery details for your counter team.",
   },
   {
-    q: "Is my customer data secure?",
-    a: "All call recordings, transcripts, and lead data are encrypted at rest and in transit, with per-organization data isolation.",
+    q: "What happens after hours or when all dispatchers are busy?",
+    a: "Omni answers 24/7 — nights, weekends, and overflow. Urgent breakdown calls are triaged and escalated to your on-call contact immediately; everything else is booked, logged, and waiting in the morning.",
   },
   {
-    q: "Can I try Omni AI before committing?",
-    a: "Yes — the Growth plan includes a 14-day free trial, no credit card required to start exploring the platform.",
+    q: "Does it integrate with my TMS or CRM?",
+    a: "Call summaries, loads, leads, and orders sync to Google Sheets, Google Calendar, Slack, webhooks, HubSpot, Salesforce, and Zoho — and custom TMS integrations are available on Enterprise.",
+  },
+  {
+    q: "Is my rate and customer data secure?",
+    a: "All call recordings, transcripts, rate information, and customer data are encrypted at rest and in transit, with per-company data isolation.",
+  },
+  {
+    q: "Can I try it before committing?",
+    a: "Yes — the Fleet plan includes a 14-day free trial, no credit card required to start.",
   },
 ];
 

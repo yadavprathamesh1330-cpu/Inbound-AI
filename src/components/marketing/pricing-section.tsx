@@ -4,25 +4,25 @@ import { cn } from "@/lib/utils";
 
 const plans = [
   {
-    name: "Professional",
+    name: "Owner-Operator",
     price: "$99",
     featured: false,
     features: [
       { label: "500 Call Minutes", included: true },
-      { label: "2 AI Agents", included: true },
-      { label: "Webhook Integrations", included: true },
-      { label: "White-label Dashboard", included: false },
+      { label: "1 Dispatch Line + 1 Agent", included: true },
+      { label: "After-Hours Coverage", included: true },
+      { label: "TMS Integrations", included: false },
     ],
     cta: "Get Started",
   },
   {
-    name: "Growth",
+    name: "Fleet",
     price: "$499",
     featured: true,
     features: [
       { label: "3,000 Call Minutes", included: true },
-      { label: "Unlimited AI Agents", included: true },
-      { label: "Advanced CRM Syncing", included: true },
+      { label: "Unlimited AI Agents & Lines", included: true },
+      { label: "TMS, Sheets & CRM Syncing", included: true },
       { label: "Priority Support", included: true },
     ],
     cta: "Start 14-Day Free Trial",
@@ -33,9 +33,9 @@ const plans = [
     featured: false,
     features: [
       { label: "Unlimited Everything", included: true },
-      { label: "On-Premise Hosting Opt.", included: true },
+      { label: "Multi-Terminal Routing", included: true },
       { label: "Dedicated Account Manager", included: true },
-      { label: "Custom LLM Fine-tuning", included: true },
+      { label: "Custom Workflows & Fine-tuning", included: true },
     ],
     cta: "Contact Sales",
   },
@@ -47,10 +47,11 @@ export function PricingSection() {
       <div className="mx-auto max-w-container-max">
         <div className="mb-unit-xl text-center">
           <h2 className="text-headline-lg text-headline-lg mb-unit-sm">
-            Plans for Every Scale
+            From One Truck to a National Fleet
           </h2>
           <p className="text-body-md text-body-md text-on-surface-variant">
-            Simple consumption-based pricing with no hidden fees.
+            Simple consumption-based pricing with no hidden fees &mdash; far
+            less than a missed load costs.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-unit-lg lg:grid-cols-3">

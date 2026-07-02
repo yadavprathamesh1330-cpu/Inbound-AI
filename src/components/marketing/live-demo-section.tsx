@@ -2,24 +2,24 @@ import { Icon } from "@/components/ui-custom/icon";
 
 const syncCards = [
   {
-    icon: "calendar_today",
+    icon: "local_shipping",
     color: "text-secondary",
-    label: "Syncing with Google Calendar",
-    detail: "New Event: Q3 Strategy Sync",
+    label: "Load Booked — Synced to Dispatch Sheet",
+    detail: "Dallas → Atlanta • $2,850 • Fri 8:00 AM",
     border: "border-l-secondary",
   },
   {
     icon: "database",
     color: "text-emerald-500",
-    label: "CRM Record Updated",
-    detail: "Lead Status: Qualified",
+    label: "Parts Order Placed — Counter Notified",
+    detail: "Kenworth T680 Brake Kit ×2 • Will-Call",
     border: "border-l-emerald-500",
   },
   {
-    icon: "notifications_active",
+    icon: "calendar_today",
     color: "text-amber-500",
-    label: "Slack Notification Sent",
-    detail: "Channel: #sales-alerts",
+    label: "Service Bay Booked — Google Calendar",
+    detail: "PM Service + DOT Inspection • Thu 9:00 AM",
     border: "border-l-amber-500",
   },
 ];
@@ -33,10 +33,11 @@ export function LiveDemoSection() {
       <div className="mx-auto max-w-container-max">
         <div className="mb-unit-xl text-center">
           <h2 className="text-headline-lg text-headline-lg mb-unit-sm">
-            The Real-Time Edge
+            Dispatch, Parts &amp; Service — Handled in Real Time
           </h2>
           <p className="text-body-md text-body-md text-on-surface-variant">
-            Watch Omni book a meeting while syncing with a live CRM.
+            Watch Omni book a load, take a parts order, and schedule a service
+            bay &mdash; while syncing everything to your systems live.
           </p>
         </div>
         <div className="space-y-unit-lg">

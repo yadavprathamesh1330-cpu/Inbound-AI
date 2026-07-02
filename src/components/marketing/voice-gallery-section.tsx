@@ -5,8 +5,8 @@ import { Icon } from "@/components/ui-custom/icon";
 import { cn } from "@/lib/utils";
 
 const voices = [
-  { name: "Aria", meta: "Female • American English • Professional" },
-  { name: "Julian", meta: "Male • British English • Authoritative" },
+  { name: "Aria", meta: "Female • American English • Dispatch-Ready" },
+  { name: "Julian", meta: "Male • American English • Parts Counter" },
   { name: "Priya", meta: "Female • Indian English • Friendly" },
 ];
 
@@ -21,8 +21,9 @@ export function VoiceGallerySection() {
             Human-Grade Voices
           </h2>
           <p className="text-body-md text-body-md text-outline-variant">
-            Preview our ultra-realistic neural voice engines &mdash; choose
-            Indian, American, or British accents per agent.
+            Ultra-realistic neural voices your drivers, brokers, and customers
+            will trust &mdash; choose the accent and style per line: dispatch,
+            parts counter, or service desk.
           </p>
         </div>
         <div className="grid grid-cols-1 gap-unit-lg md:grid-cols-3">
@@ -31,20 +32,25 @@ export function VoiceGallerySection() {
             return (
               <div
                 key={voice.name}
-                className="group rounded-2xl border border-outline-variant/20 bg-surface/5 p-unit-lg transition-all hover:bg-surface/10"
+                className={cn(
+                  "group rounded-2xl border p-unit-lg transition-all",
+                  isPlaying
+                    ? "border-secondary/60 bg-surface/[0.09] shadow-[0_0_0_1px_rgba(49,107,243,0.35)]"
+                    : "border-surface/15 bg-surface/[0.06] hover:border-surface/30 hover:bg-surface/10",
+                )}
               >
                 <div className="mb-unit-lg flex items-start justify-between">
                   <div>
-                    <h4 className="text-headline-md text-headline-md">
+                    <h4 className="text-headline-md text-surface">
                       &ldquo;{voice.name}&rdquo;
                     </h4>
-                    <p className="text-label-md opacity-70">{voice.meta}</p>
+                    <p className="text-label-md text-surface/70">{voice.meta}</p>
                   </div>
                   <button
                     onClick={() =>
                       setPlaying(isPlaying ? null : voice.name)
                     }
-                    className="flex size-12 items-center justify-center rounded-full bg-secondary text-white transition-transform hover:scale-110"
+                    className="flex size-12 shrink-0 items-center justify-center rounded-full bg-secondary-container text-white shadow-lg shadow-secondary/30 transition-transform hover:scale-110 active:scale-95"
                     aria-label={`Preview ${voice.name}`}
                   >
                     <Icon name={isPlaying ? "call_end" : "play_arrow"} className="size-5" />
@@ -55,8 +61,10 @@ export function VoiceGallerySection() {
                     <div
                       key={i}
                       className={cn(
-                        "w-full rounded-full bg-secondary/40",
-                        isPlaying && "animate-pulse",
+                        "w-full rounded-full transition-colors",
+                        isPlaying
+                          ? "animate-pulse bg-secondary-container"
+                          : "bg-surface/25",
                       )}
                       style={{
                         height: isPlaying ? `${8 + i * 4}px` : "4px",

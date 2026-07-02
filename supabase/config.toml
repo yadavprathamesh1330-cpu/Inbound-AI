@@ -1,0 +1,9 @@
+# Supabase project config (used by the Supabase CLI).
+#
+# The platform validates a JWT on every Edge Function request by default.
+# Keep verify_jwt = true for functions using auth: "user"; set it to false
+# only for functions whose withSupabase auth mode is "publishable", "secret",
+# or "none" (those requests don't carry a user JWT).
+
+[functions.api]
+verify_jwt = true

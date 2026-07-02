@@ -98,7 +98,7 @@ export default function OnboardingPage() {
             <Label htmlFor="orgName">Business Name</Label>
             <Input
               id="orgName"
-              placeholder="Summit Realty Group"
+              placeholder="Summit Freight Lines"
               className="h-12"
               {...register("orgName")}
             />

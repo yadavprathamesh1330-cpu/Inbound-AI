@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { generateAgentReply } from "@/lib/services/openai";
-import { buildTwimlResponse } from "@/lib/services/twilio";
+import { buildTwimlResponse } from "@/lib/services/telephony";
 import { MissingCredentialError } from "@/lib/services/errors";
 import type { TranscriptTurn } from "@/lib/services/openai";
 import type { Prisma } from "@/generated/prisma/client";
@@ -138,10 +138,11 @@ export async function POST(request: NextRequest) {
     data: { transcript: existingTranscript as unknown as Prisma.InputJsonValue },
   });
 
-  // NOTE: `buildTwimlResponse` uses `<Say>` (Twilio's built-in TTS) rather
-  // than ElevenLabs today — see the doc comment on that function in
-  // `src/lib/services/twilio.ts` for why (no audio hosting wired up yet)
-  // and what the upgrade path looks like.
+  // NOTE: `buildTwimlResponse` (via the telephony facade) uses `<Say>` —
+  // the provider's built-in TTS — rather than ElevenLabs today. See the doc
+  // comment on that function in `src/lib/services/twilio.ts` /
+  // `signalwire.ts` for why (no audio hosting wired up yet) and the upgrade
+  // path.
   const twiml = buildTwimlResponse(agentReply, true);
   return new NextResponse(twiml, {
     status: 200,

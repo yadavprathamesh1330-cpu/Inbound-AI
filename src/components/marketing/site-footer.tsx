@@ -25,7 +25,7 @@ export function SiteFooter() {
           ))}
         </div>
         <div className="text-body-md text-on-surface-variant opacity-60">
-          &copy; {new Date().getFullYear()} Omni AI. Engineered for Performance.
+          &copy; {new Date().getFullYear()} Omni AI. Built for Trucking.
         </div>
       </div>
     </footer>

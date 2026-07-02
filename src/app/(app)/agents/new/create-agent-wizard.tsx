@@ -23,6 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { AGENT_PRESETS } from "@/lib/agent-presets";
 import type { Integration } from "@/generated/prisma/client";
 
 const TIMEZONES = [
@@ -175,6 +176,7 @@ export function CreateAgentWizard({ integrations }: { integrations: Integration[
   const [selectedIntegrationIds, setSelectedIntegrationIds] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [direction, setDirection] = useState(1);
+  const [presetId, setPresetId] = useState<string | null>(null);
 
   const {
     register,
@@ -235,6 +237,25 @@ export function CreateAgentWizard({ integrations }: { integrations: Integration[
       setDirection(-1);
       setStep((s) => s - 1);
     }
+  }
+
+  function applyPreset(id: string) {
+    const preset = AGENT_PRESETS.find((p) => p.id === id);
+    if (!preset) return;
+    setPresetId(id);
+    // Pre-fill; every field stays editable in later steps.
+    const v = preset.values;
+    setValue("name", v.name, { shouldValidate: true });
+    setValue("industry", v.industry);
+    setValue("voiceGender", v.voiceGender);
+    setValue("voiceAccent", v.voiceAccent);
+    setValue("voiceStyle", v.voiceStyle);
+    setValue("systemPrompt", v.systemPrompt);
+    setValue("greeting", v.greeting);
+    setValue("fallbackResponses", v.fallbackResponses);
+    setValue("transferRules", v.transferRules);
+    setValue("businessRules", v.businessRules);
+    setValue("objectives", v.objectives, { shouldValidate: true });
   }
 
   function toggleObjective(objective: string) {
@@ -365,6 +386,46 @@ export function CreateAgentWizard({ integrations }: { integrations: Integration[
               </div>
 
               {step === 1 && (
+                <div className="mb-unit-lg">
+                  <Label className="mb-2 block text-label-sm uppercase tracking-wider text-on-surface-variant">
+                    Start from a trucking template (optional)
+                  </Label>
+                  <div className="grid grid-cols-1 gap-gutter md:grid-cols-3">
+                    {AGENT_PRESETS.map((preset) => {
+                      const selected = presetId === preset.id;
+                      return (
+                        <button
+                          key={preset.id}
+                          type="button"
+                          onClick={() => applyPreset(preset.id)}
+                          className={cn(
+                            "glass-card flex flex-col items-start gap-2 rounded-2xl p-unit-md text-left transition-all hover:scale-[1.01] active:scale-[0.99]",
+                            selected
+                              ? "border-2 border-primary shadow-md"
+                              : "border border-outline-variant/40",
+                          )}
+                        >
+                          <Icon
+                            name={preset.icon}
+                            className={cn("size-7", selected ? "text-primary" : "text-secondary")}
+                          />
+                          <span className="text-label-md font-bold text-on-surface">
+                            {preset.label}
+                          </span>
+                          <span className="text-label-sm text-on-surface-variant">
+                            {preset.tagline}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <p className="mt-2 text-label-sm text-on-surface-variant">
+                    Templates pre-fill the prompt, voice, and objectives — you can edit everything in the next steps.
+                  </p>
+                </div>
+              )}
+
+              {step === 1 && (
                 <div className="grid grid-cols-1 gap-gutter md:grid-cols-2">
                   <div className="flex flex-col gap-1.5">
                     <Label className="text-label-sm uppercase tracking-wider text-on-surface-variant">
@@ -379,7 +440,7 @@ export function CreateAgentWizard({ integrations }: { integrations: Integration[
                     <Label className="text-label-sm uppercase tracking-wider text-on-surface-variant">
                       Business Name
                     </Label>
-                    <Input placeholder="e.g. Summit Realty Group" {...register("businessName")} />
+                    <Input placeholder="e.g. Summit Freight Lines" {...register("businessName")} />
                     {errors.businessName && (
                       <p className="text-xs text-destructive">{errors.businessName.message}</p>
                     )}
@@ -388,13 +449,13 @@ export function CreateAgentWizard({ integrations }: { integrations: Integration[
                     <Label className="text-label-sm uppercase tracking-wider text-on-surface-variant">
                       Industry
                     </Label>
-                    <Input placeholder="e.g. Real Estate" {...register("industry")} />
+                    <Input placeholder="e.g. Truck Dispatch, Parts Sales, Repair Shop" {...register("industry")} />
                   </div>
                   <div className="flex flex-col gap-1.5">
                     <Label className="text-label-sm uppercase tracking-wider text-on-surface-variant">
                       Website
                     </Label>
-                    <Input placeholder="e.g. summitrealtygroup.com" {...register("website")} />
+                    <Input placeholder="e.g. summitfreightlines.com" {...register("website")} />
                   </div>
                   <div className="flex flex-col gap-1.5 md:col-span-2">
                     <Label className="text-label-sm uppercase tracking-wider text-on-surface-variant">

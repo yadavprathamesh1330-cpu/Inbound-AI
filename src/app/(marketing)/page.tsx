@@ -22,22 +22,22 @@ export default function LandingPage() {
         <section className="px-margin-mobile py-unit-2xl text-center md:px-margin-desktop">
           <div className="mx-auto max-w-3xl rounded-3xl bg-gradient-to-br from-primary/10 to-transparent p-unit-xl glass-card">
             <h2 className="text-display-xl-mobile text-on-background mb-unit-md md:text-display-xl">
-              Ready to scale your voice operations?
+              Ready to keep every truck moving?
             </h2>
-            <p className="text-body-lg text-body-lg text-on-surface-variant mb-unit-lg">
-              Join 500+ businesses who&rsquo;ve automated their reception with
-              Omni AI.
+            <p className="text-body-lg text-on-surface-variant mb-unit-lg">
+              Join 500+ trucking companies, parts dealers, and repair shops
+              who never miss a call with Omni AI.
             </p>
             <div className="flex flex-col justify-center gap-unit-md sm:flex-row">
               <Link
                 href="/signup"
-                className="rounded-xl bg-primary px-12 py-5 text-headline-md text-headline-md font-bold text-primary-foreground transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                className="rounded-xl bg-primary px-8 py-4 text-headline-md font-bold text-primary-foreground transition-transform hover:scale-[1.02] active:scale-[0.98] md:px-12 md:py-5"
               >
                 Get Started Free
               </Link>
               <a
                 href="mailto:sales@omni-ai.example.com"
-                className="rounded-xl bg-on-background px-12 py-5 text-headline-md text-headline-md font-bold text-surface transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                className="rounded-xl bg-secondary px-8 py-4 text-headline-md font-bold text-secondary-foreground transition-transform hover:scale-[1.02] active:scale-[0.98] md:px-12 md:py-5"
               >
                 Schedule Demo
               </a>

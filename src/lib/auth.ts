@@ -2,6 +2,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { prisma } from "@/lib/prisma";
+import { isSuperAdmin } from "@/lib/admin";
 import type { CurrentUser } from "@/lib/types";
 
 /**
@@ -49,6 +50,7 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
       avatarUrl: devUser.avatarUrl,
       orgId: devUser.organizationId,
       orgName: devUser.organization.name,
+      isSuperAdmin: isSuperAdmin(devUser.email),
     };
   }
 
@@ -69,5 +71,6 @@ export async function getCurrentUser(): Promise<CurrentUser | null> {
     avatarUrl: user.avatarUrl,
     orgId: user.organizationId,
     orgName: user.organization.name,
+    isSuperAdmin: isSuperAdmin(user.email),
   };
 }

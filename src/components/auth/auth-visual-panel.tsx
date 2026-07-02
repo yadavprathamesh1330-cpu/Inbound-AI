@@ -41,18 +41,18 @@ export function AuthVisualPanel() {
             Omni AI
           </span>
           <h1 className="mb-unit-md text-display-xl-mobile leading-tight text-white md:text-display-xl">
-            The Intelligence Engine for Modern Enterprises.
+            The AI Voice Platform Built for Trucking.
           </h1>
           <p className="max-w-md text-body-lg text-body-lg text-white/70">
-            High-performance AI voice workflows. Secure, scalable, and
-            beautifully engineered.
+            Dispatch calls, parts orders, and service bookings &mdash;
+            answered 24/7, synced to your systems in real time.
           </p>
         </div>
         <div className="grid grid-cols-2 gap-gutter">
           <div className="glass-card rounded-xl border-white/10 bg-white/10 p-unit-md">
-            <Icon name="bolt" className="mb-unit-sm size-7 text-secondary-fixed-dim" />
+            <Icon name="local_shipping" className="mb-unit-sm size-7 text-secondary-fixed-dim" />
             <p className="text-label-md text-label-md text-white">
-              Latency-Optimized
+              24/7 Dispatch Line
             </p>
           </div>
           <div className="glass-card rounded-xl border-white/10 bg-white/10 p-unit-md">

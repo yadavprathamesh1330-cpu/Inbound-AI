@@ -47,7 +47,7 @@ export function SignupForm() {
       password: values.password,
       options: {
         data: { name: values.name },
-        emailRedirectTo: `${window.location.origin}/onboarding`,
+        emailRedirectTo: `${window.location.origin}/auth/callback?next=/onboarding`,
       },
     });
     setLoading(false);
@@ -71,7 +71,9 @@ export function SignupForm() {
     const supabase = createClient();
     await supabase.auth.signInWithOAuth({
       provider,
-      options: { redirectTo: `${window.location.origin}/onboarding` },
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?next=/onboarding`,
+      },
     });
   }
 

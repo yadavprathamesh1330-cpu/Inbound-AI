@@ -11,10 +11,12 @@ export function Sidebar({
   collapsed,
   onToggleCollapse,
   className,
+  isSuperAdmin = false,
 }: {
   collapsed: boolean;
   onToggleCollapse: () => void;
   className?: string;
+  isSuperAdmin?: boolean;
 }) {
   const pathname = usePathname();
 
@@ -37,7 +39,7 @@ export function Sidebar({
               Omni AI
             </h1>
             <p className="mt-1 text-xs text-on-surface-variant">
-              Enterprise Voice
+              Trucking Voice AI
             </p>
           </div>
         )}
@@ -67,6 +69,25 @@ export function Sidebar({
             </Link>
           );
         })}
+
+        {isSuperAdmin && (
+          <Link
+            href="/admin"
+            title={collapsed ? "Platform Admin" : undefined}
+            className={cn(
+              "mt-1 flex items-center gap-3 rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 text-primary transition-all duration-200 hover:bg-primary/10",
+              pathname?.startsWith("/admin") &&
+                "border-r-4 border-primary bg-primary/10 font-bold",
+            )}
+          >
+            <Icon name="shield" className="size-5 shrink-0" />
+            {!collapsed && (
+              <span className="truncate text-body-md text-body-md">
+                Platform Admin
+              </span>
+            )}
+          </Link>
+        )}
       </nav>
 
       <div className="mt-auto space-y-1 border-t border-outline-variant/30 pt-4">

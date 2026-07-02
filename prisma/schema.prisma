@@ -23,6 +23,15 @@ model Organization {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  // BYO telephony — each org connects its own Twilio / SignalWire account.
+  // provider: "twilio" | "signalwire". accountSid = Twilio Account SID or
+  // SignalWire Project ID (identifier, not secret). authToken is stored
+  // ENCRYPTED (see src/lib/crypto.ts). spaceUrl is SignalWire-only.
+  telephonyProvider   String?
+  telephonyAccountSid String?
+  telephonyAuthToken  String?
+  telephonySpaceUrl   String?
+
   users         User[]
   agents        Agent[]
   calls         Call[]

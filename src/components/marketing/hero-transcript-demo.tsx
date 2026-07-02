@@ -5,10 +5,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 const TRANSCRIPT = [
-  { speaker: "Customer", text: "Hi, I'd like to book an appointment for next Tuesday afternoon." },
-  { speaker: "Omni AI", text: "Certainly! I have openings at 2:00 PM and 4:30 PM on Tuesday. Which works best for you?" },
-  { speaker: "Customer", text: "Let's do 4:30 PM. Does that work for Sarah?" },
-  { speaker: "Omni AI", text: "Checking Sarah's calendar... Yes, she's available! You're booked for 4:30 PM. Confirmation sent." },
+  { speaker: "Broker", text: "Hey, I've got a dry van load out of Dallas to Atlanta, picks up Friday morning. You got a truck?" },
+  { speaker: "Omni AI", text: "We do — I have a 53' dry van deadheading near Dallas Thursday night. What's the rate and weight?" },
+  { speaker: "Broker", text: "42,000 lbs, paying $2,850 all-in. Pickup's at 8 AM in Garland." },
+  { speaker: "Omni AI", text: "That works. I've logged the load, notified dispatch, and sent you the carrier packet. Rate con to this number?" },
 ];
 
 export function HeroTranscriptDemo() {

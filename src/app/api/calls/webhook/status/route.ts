@@ -5,9 +5,9 @@ import { processCompletedCall } from "@/lib/call-processing";
 export const runtime = "nodejs";
 
 /**
- * Twilio call status callback webhook (`statusCallback` on the
- * `<Number>`/incoming phone number config in `twilio.ts`'s
- * `buyPhoneNumber`). Twilio POSTs here on call lifecycle events; we only
+ * Twilio call status callback webhook (`statusCallback` on the incoming
+ * phone number config in `twilio.ts`'s `buyPhoneNumber`). Twilio POSTs here
+ * on call lifecycle events; we only
  * care about the terminal ones (`completed`, and treating `busy`/`failed`/
  * `no-answer` as terminal-but-not-completed) to close out the Call row and
  * kick off post-call processing.

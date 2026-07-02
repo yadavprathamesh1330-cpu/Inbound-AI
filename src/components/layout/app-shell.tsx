@@ -17,7 +17,11 @@ export function AppShell({
 
   return (
     <div className="min-h-screen bg-background">
-      <Sidebar collapsed={collapsed} onToggleCollapse={() => setCollapsed((c) => !c)} />
+      <Sidebar
+        collapsed={collapsed}
+        onToggleCollapse={() => setCollapsed((c) => !c)}
+        isSuperAdmin={user.isSuperAdmin}
+      />
       <Topbar collapsed={collapsed} user={user} />
       <main
         className={cn(

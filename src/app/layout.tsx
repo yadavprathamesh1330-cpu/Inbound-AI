@@ -16,9 +16,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Omni AI | The AI Voice Agent Platform for Business",
+  title: "Omni AI | The AI Voice Platform for Trucking",
   description:
-    "Deploy an AI employee that never misses a call. Omni AI answers, qualifies, and books appointments for your business 24/7.",
+    "The AI dispatcher that never misses a call. Omni AI answers dispatch calls, takes truck-parts orders, and books service appointments for trucking companies 24/7.",
 };
 
 export default function RootLayout({

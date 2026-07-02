@@ -10,7 +10,7 @@ export function HeroSection() {
   const router = useRouter();
 
   return (
-    <section className="relative flex min-h-[900px] items-center overflow-hidden px-margin-mobile py-unit-2xl md:px-margin-desktop">
+    <section className="relative flex min-h-[620px] items-center overflow-hidden px-margin-mobile py-unit-2xl md:min-h-[860px] md:px-margin-desktop">
       <div className="mesh-gradient absolute inset-0 -z-10" />
       <div className="mx-auto grid w-full max-w-container-max grid-cols-1 items-center gap-unit-xl lg:grid-cols-12">
         <motion.div
@@ -24,26 +24,27 @@ export function HeroSection() {
               <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-75" />
               <span className="relative inline-flex size-2 rounded-full bg-primary" />
             </span>
-            Voice Agents v4.2 Now Live
+            Built for Trucking &amp; Logistics
           </div>
-          <h1 className="text-display-hero-mobile text-display-hero-mobile leading-tight text-on-background md:text-display-hero">
-            Deploy an AI Employee That{" "}
-            <span className="text-secondary">Never Misses a Call.</span>
+          <h1 className="text-display-hero-mobile leading-tight text-on-background md:text-display-hero">
+            The AI Dispatcher That{" "}
+            <span className="text-secondary">Never Misses a Load.</span>
           </h1>
-          <p className="max-w-xl text-body-lg text-body-lg text-on-surface-variant">
-            The world&rsquo;s most human-like AI voice receptionist. Answer
-            calls, qualify leads, book appointments, and sync every detail
-            to your CRM &mdash; all in real time.
+          <p className="max-w-xl text-body-lg text-on-surface-variant">
+            Omni AI answers every call to your trucking company &mdash;
+            dispatch requests, truck-parts orders, breakdown calls, and
+            service bookings &mdash; 24/7, and syncs every detail to your
+            TMS, sheets, and calendar in real time.
           </p>
           <div className="flex flex-col gap-unit-md pt-unit-sm sm:flex-row">
             <MagneticButton
-              className="px-8 py-4 text-headline-md text-headline-md"
+              className="px-8 py-4 text-headline-md"
               onClick={() => router.push("/signup")}
             >
               Start Free
             </MagneticButton>
             <button
-              className="glass-card flex items-center justify-center gap-2 rounded-xl px-8 py-4 text-headline-md text-headline-md font-bold transition-colors hover:bg-surface-container-high"
+              className="glass-card flex items-center justify-center gap-2 rounded-xl px-8 py-4 text-headline-md font-bold text-on-surface transition-colors hover:bg-surface-container-high"
               onClick={() =>
                 document
                   .getElementById("platform")
@@ -65,8 +66,8 @@ export function HeroSection() {
                 </div>
               ))}
             </div>
-            <p className="text-label-md text-label-md text-on-surface-variant">
-              Trusted by 5,000+ scaling companies
+            <p className="text-label-md text-on-surface-variant">
+              Trusted by 500+ fleets, parts dealers &amp; repair shops
             </p>
           </div>
         </motion.div>
