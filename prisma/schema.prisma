@@ -43,6 +43,7 @@ model Organization {
   calls         Call[]
   leads         Lead[]
   loads         Load[]
+  contacts      Contact[]
   phoneNumbers  PhoneNumber[]
   knowledgeDocs KnowledgeDocument[]
   integrations  Integration[]
@@ -53,6 +54,37 @@ model Organization {
   invoices      Invoice[]
 
   @@map("organizations")
+}
+
+/// Contacts CRM — brokers, carriers, drivers, and shippers an org works with.
+enum ContactType {
+  BROKER
+  CARRIER
+  DRIVER
+  SHIPPER
+  OTHER
+}
+
+model Contact {
+  id        String      @id @default(cuid())
+  type      ContactType @default(BROKER)
+  name      String
+  company   String?
+  phone     String?
+  email     String?
+  mcNumber  String? // brokers / carriers
+  dotNumber String?
+  city      String?
+  state     String?
+  notes     String?     @db.Text
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@map("contacts")
 }
 
 /// Freight loads — the dispatch board. A load can be created manually or
