@@ -34,6 +34,9 @@ export default async function DashboardPage() {
     agents,
     recentCalls,
     completedCallsWithScore,
+    loadCounts,
+    recentLoads,
+    orgCredit,
   ] = await Promise.all([
     prisma.call.count({
       where: { organizationId, startedAt: { gte: startOfToday } },
@@ -71,7 +74,53 @@ export default async function DashboardPage() {
       where: { organizationId, leadScore: { not: null } },
       select: { leadScore: true },
     }),
+    prisma.load.groupBy({
+      by: ["status"],
+      where: { organizationId },
+      _count: { _all: true },
+    }),
+    prisma.load.findMany({
+      where: { organizationId },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      select: {
+        id: true,
+        status: true,
+        originCity: true,
+        originState: true,
+        destCity: true,
+        destState: true,
+        rateCents: true,
+      },
+    }),
+    prisma.organization.findUnique({
+      where: { id: organizationId },
+      select: { creditCents: true },
+    }),
   ]);
+
+  const loadCountMap: Record<string, number> = {
+    NEW: 0,
+    BOOKED: 0,
+    IN_TRANSIT: 0,
+    DELIVERED: 0,
+    CANCELLED: 0,
+  };
+  for (const r of loadCounts) loadCountMap[r.status] = r._count._all;
+  const activeLoads =
+    loadCountMap.NEW + loadCountMap.BOOKED + loadCountMap.IN_TRANSIT;
+
+  const lane = (l: {
+    originCity: string | null;
+    originState: string | null;
+    destCity: string | null;
+    destState: string | null;
+  }) => {
+    const from = [l.originCity, l.originState].filter(Boolean).join(", ");
+    const to = [l.destCity, l.destState].filter(Boolean).join(", ");
+    if (!from && !to) return "Lane TBD";
+    return `${from || "?"} → ${to || "?"}`;
+  };
 
   const callsTrendPct =
     callsYesterday > 0
@@ -140,6 +189,17 @@ export default async function DashboardPage() {
         included: subscription?.minutesIncluded ?? 0,
         periodEnd: subscription?.currentPeriodEnd ?? null,
       }}
+      dispatch={{
+        counts: loadCountMap,
+        activeCount: activeLoads,
+        recent: recentLoads.map((l) => ({
+          id: l.id,
+          lane: lane(l),
+          rateCents: l.rateCents,
+          status: l.status,
+        })),
+      }}
+      creditCents={orgCredit?.creditCents ?? 0}
       agents={agents.map((agent) => ({
         id: agent.id,
         name: agent.name,

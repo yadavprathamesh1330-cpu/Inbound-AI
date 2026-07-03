@@ -57,6 +57,17 @@ interface DashboardClientProps {
     included: number;
     periodEnd: Date | null;
   };
+  dispatch: {
+    counts: Record<string, number>;
+    activeCount: number;
+    recent: {
+      id: string;
+      lane: string;
+      rateCents: number | null;
+      status: string;
+    }[];
+  };
+  creditCents: number;
   agents: AgentSummary[];
   calls: CallSummary[];
 }
@@ -107,6 +118,37 @@ function scoreClasses(score: number | null) {
   return "bg-red-50 text-red-700";
 }
 
+const LOAD_STATUS_META: {
+  key: string;
+  label: string;
+  cls: string;
+  dot: string;
+}[] = [
+  { key: "NEW", label: "New", cls: "text-slate-600", dot: "bg-slate-400" },
+  { key: "BOOKED", label: "Booked", cls: "text-secondary", dot: "bg-secondary" },
+  {
+    key: "IN_TRANSIT",
+    label: "In Transit",
+    cls: "text-amber-600",
+    dot: "bg-amber-500",
+  },
+  {
+    key: "DELIVERED",
+    label: "Delivered",
+    cls: "text-emerald-600",
+    dot: "bg-emerald-500",
+  },
+];
+
+function usdShort(cents: number | null): string {
+  if (cents == null) return "—";
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  }).format(cents / 100);
+}
+
 const statusConfig: Record<
   string,
   { label: string; dot: string; pill: string }
@@ -146,6 +188,8 @@ export function DashboardClient({
   revenue,
   aiSuccessRate,
   minutes,
+  dispatch,
+  creditCents,
   agents,
   calls,
 }: DashboardClientProps) {
@@ -236,6 +280,103 @@ export function DashboardClient({
           />
         </motion.div>
       </motion.div>
+
+      {/* Dispatch snapshot + credit balance */}
+      <div className="mb-unit-xl grid grid-cols-1 gap-gutter lg:grid-cols-3">
+        <GlassCard className="p-unit-lg lg:col-span-2">
+          <div className="mb-unit-md flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Icon name="local_shipping" className="size-5 text-secondary" />
+              <h3 className="text-headline-md font-bold text-on-surface">
+                Dispatch Board
+              </h3>
+              <span className="rounded-full bg-surface-container-high px-2 py-0.5 text-label-sm font-semibold text-on-surface-variant">
+                {dispatch.activeCount} active
+              </span>
+            </div>
+            <Link
+              href="/loads"
+              className="text-label-md font-semibold text-secondary hover:underline"
+            >
+              View all →
+            </Link>
+          </div>
+
+          <div className="mb-unit-md grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {LOAD_STATUS_META.map((s) => (
+              <div
+                key={s.key}
+                className="rounded-xl border border-outline-variant/50 p-unit-sm"
+              >
+                <div className="flex items-center gap-1.5">
+                  <span className={cn("size-2 rounded-full", s.dot)} />
+                  <span className="text-label-sm text-on-surface-variant">
+                    {s.label}
+                  </span>
+                </div>
+                <p className={cn("mt-1 text-2xl font-bold", s.cls)}>
+                  {dispatch.counts[s.key] ?? 0}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {dispatch.recent.length === 0 ? (
+            <EmptyState
+              icon="local_shipping"
+              title="No loads yet"
+              description="Loads booked by your dispatch agent will appear here."
+              className="py-unit-md"
+            />
+          ) : (
+            <ul className="divide-y divide-outline-variant/40">
+              {dispatch.recent.map((l) => (
+                <li
+                  key={l.id}
+                  className="flex items-center justify-between gap-2 py-2.5"
+                >
+                  <span className="truncate text-body-md font-medium text-on-surface">
+                    {l.lane}
+                  </span>
+                  <span className="shrink-0 text-label-md font-bold text-emerald-600">
+                    {usdShort(l.rateCents)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </GlassCard>
+
+        {/* Credit balance */}
+        <GlassCard className="flex flex-col justify-between p-unit-lg">
+          <div>
+            <div className="mb-2 flex items-center gap-2">
+              <Icon name="payments" className="size-5 text-secondary" />
+              <h3 className="text-label-md font-semibold text-on-surface-variant">
+                Credit Balance
+              </h3>
+            </div>
+            <p
+              className={cn(
+                "text-display-xl-mobile font-bold",
+                creditCents <= 0 ? "text-red-600" : "text-on-surface",
+              )}
+            >
+              {usdShort(creditCents)}
+            </p>
+            <p className="mt-1 text-label-sm text-on-surface-variant">
+              ≈ {Math.round(creditCents / 100 / 0.1)} call-minutes left
+            </p>
+          </div>
+          <Link
+            href="/billing"
+            className="mt-unit-md flex items-center justify-center gap-2 rounded-xl border border-outline-variant py-2.5 text-label-md font-semibold text-on-surface transition-colors hover:bg-surface-container-high"
+          >
+            <Icon name="payments" className="size-4" />
+            Manage billing
+          </Link>
+        </GlassCard>
+      </div>
 
       <div className="grid grid-cols-12 gap-gutter">
         <div className="col-span-12 grid grid-cols-1 gap-gutter md:grid-cols-3">
