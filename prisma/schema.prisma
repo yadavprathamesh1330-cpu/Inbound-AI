@@ -32,10 +32,17 @@ model Organization {
   telephonyAuthToken  String?
   telephonySpaceUrl   String?
 
-  users         User[]
+  // Billing / platform controls (managed by super admins in /admin).
+  creditCents Int    @default(0) // prepaid balance in USD cents
+  status      String @default("ACTIVE") // ACTIVE | SUSPENDED
+  plan        String @default("trial") // trial | owner_operator | fleet | enterprise
+
+  users              User[]
+  creditTransactions CreditTransaction[]
   agents        Agent[]
   calls         Call[]
   leads         Lead[]
+  loads         Load[]
   phoneNumbers  PhoneNumber[]
   knowledgeDocs KnowledgeDocument[]
   integrations  Integration[]
@@ -46,6 +53,77 @@ model Organization {
   invoices      Invoice[]
 
   @@map("organizations")
+}
+
+/// Freight loads — the dispatch board. A load can be created manually or
+/// auto-captured from a dispatch call (sourceCallId references that Call).
+enum LoadStatus {
+  NEW
+  BOOKED
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+}
+
+model Load {
+  id        String     @id @default(cuid())
+  status    LoadStatus @default(NEW)
+  reference String? // customer / load number
+
+  // Lane
+  originCity  String?
+  originState String?
+  destCity    String?
+  destState   String?
+
+  // Freight
+  equipment    String? // dry van, reefer, flatbed, step deck, power only
+  weightLbs    Int?
+  commodity    String?
+  rateCents    Int? // all-in rate in USD cents
+  pickupDate   DateTime?
+  deliveryDate DateTime?
+
+  // Broker / shipper
+  brokerName  String?
+  brokerMc    String?
+  brokerPhone String?
+
+  rateConUrl String? // link to the uploaded rate confirmation
+  notes      String? @db.Text
+
+  // The dispatch call this load was captured from, if any (soft reference).
+  sourceCallId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  agentId String?
+  agent   Agent?  @relation(fields: [agentId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId])
+  @@map("loads")
+}
+
+/// Append-only ledger of super-admin credit adjustments to an org's balance.
+/// amountCents is signed (+ add, - deduct); balanceAfter snapshots the running
+/// balance so history is auditable even if the reason/rate model changes.
+model CreditTransaction {
+  id             String   @id @default(cuid())
+  amountCents    Int
+  balanceAfter   Int
+  reason         String?
+  createdBy      String // email of the super admin who made the change
+  createdAt      DateTime @default(now())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@map("credit_transactions")
 }
 
 enum UserRole {
@@ -148,6 +226,7 @@ model Agent {
   phoneNumbers  PhoneNumber[]
   calls         Call[]
   leads         Lead[]
+  loads         Load[]
   knowledgeDocs KnowledgeDocument[]
   integrations  AgentIntegration[]
 

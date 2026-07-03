@@ -8,6 +8,7 @@ export const primaryNavItems: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: "dashboard" },
   { label: "AI Agents", href: "/agents", icon: "smart_toy" },
   { label: "Calls", href: "/calls", icon: "call" },
+  { label: "Loads", href: "/loads", icon: "local_shipping" },
   { label: "Phone Numbers", href: "/phone-numbers", icon: "smartphone" },
   { label: "Leads", href: "/leads", icon: "group" },
   { label: "Knowledge Base", href: "/knowledge-base", icon: "database" },

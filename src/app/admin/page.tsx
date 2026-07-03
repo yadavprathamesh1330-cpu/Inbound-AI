@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Icon } from "@/components/ui-custom/icon";
+import { OrgTable } from "./org-table";
 
 // Rough blended cost per call-minute (telephony + STT + LLM + TTS) used only
 // to give the platform owner an at-a-glance spend estimate. Not billing-grade.
@@ -45,7 +46,14 @@ async function getPlatformStats() {
     prisma.lead.count(),
     prisma.organization.findMany({
       orderBy: { createdAt: "desc" },
-      select: { id: true, name: true, createdAt: true },
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+        creditCents: true,
+        status: true,
+        plan: true,
+      },
     }),
     prisma.call.groupBy({
       by: ["organizationId"],
@@ -86,15 +94,20 @@ async function getPlatformStats() {
     return {
       id: o.id,
       name: o.name,
-      createdAt: o.createdAt,
+      createdAt: o.createdAt.toISOString(),
       users: userMap.get(o.id) ?? 0,
       agents: agentMap.get(o.id) ?? 0,
       leads: leadMap.get(o.id) ?? 0,
       calls: c.calls,
       minutes,
       cost: minutes * BLENDED_COST_PER_MINUTE,
+      creditCents: o.creditCents,
+      status: o.status,
+      plan: o.plan,
     };
   });
+
+  const totalCreditCents = orgs.reduce((sum, o) => sum + o.creditCents, 0);
 
   return {
     totals: {
@@ -107,6 +120,7 @@ async function getPlatformStats() {
       totalMinutes,
       totalCost,
       leadCount,
+      totalCredits: totalCreditCents / 100,
     },
     perOrg,
   };
@@ -121,7 +135,8 @@ const STAT_CARDS: {
     | "totalMinutes"
     | "totalCost"
     | "leadCount"
-    | "phoneCount";
+    | "phoneCount"
+    | "totalCredits";
   label: string;
   icon: string;
   fmt: "num" | "usd";
@@ -133,7 +148,7 @@ const STAT_CARDS: {
   { key: "callCount", label: "Total Calls", icon: "podcasts", fmt: "num" },
   { key: "totalMinutes", label: "Call Minutes", icon: "timer", fmt: "num" },
   { key: "leadCount", label: "Leads Captured", icon: "person_add", fmt: "num" },
-  { key: "totalCost", label: "Est. Spend", icon: "payments", fmt: "usd" },
+  { key: "totalCredits", label: "Credits Outstanding", icon: "payments", fmt: "usd" },
 ];
 
 export default async function AdminPage() {
@@ -171,69 +186,8 @@ export default async function AdminPage() {
         })}
       </div>
 
-      {/* Per-org table */}
-      <div className="glass-card overflow-hidden rounded-2xl">
-        <div className="border-b border-outline-variant px-unit-lg py-unit-md">
-          <h2 className="text-headline-md text-headline-md text-on-surface">
-            Organizations
-          </h2>
-          <p className="text-label-sm text-on-surface-variant">
-            {fmt(totals.orgCount)} total · est. spend uses a blended{" "}
-            {usd(BLENDED_COST_PER_MINUTE)}/min rate
-          </p>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[720px] text-left">
-            <thead>
-              <tr className="border-b border-outline-variant text-label-sm uppercase tracking-wider text-on-surface-variant">
-                <th className="px-unit-lg py-unit-sm font-semibold">Organization</th>
-                <th className="px-unit-md py-unit-sm text-right font-semibold">Users</th>
-                <th className="px-unit-md py-unit-sm text-right font-semibold">Agents</th>
-                <th className="px-unit-md py-unit-sm text-right font-semibold">Calls</th>
-                <th className="px-unit-md py-unit-sm text-right font-semibold">Minutes</th>
-                <th className="px-unit-md py-unit-sm text-right font-semibold">Leads</th>
-                <th className="px-unit-md py-unit-sm text-right font-semibold">Est. Cost</th>
-                <th className="px-unit-lg py-unit-sm text-right font-semibold">Joined</th>
-              </tr>
-            </thead>
-            <tbody>
-              {perOrg.length === 0 && (
-                <tr>
-                  <td
-                    colSpan={8}
-                    className="px-unit-lg py-unit-xl text-center text-body-md text-on-surface-variant"
-                  >
-                    No organizations yet.
-                  </td>
-                </tr>
-              )}
-              {perOrg.map((o) => (
-                <tr
-                  key={o.id}
-                  className="border-b border-outline-variant/50 text-body-md text-on-surface transition-colors hover:bg-surface-container-low"
-                >
-                  <td className="px-unit-lg py-unit-md font-medium">{o.name}</td>
-                  <td className="px-unit-md py-unit-md text-right">{fmt(o.users)}</td>
-                  <td className="px-unit-md py-unit-md text-right">{fmt(o.agents)}</td>
-                  <td className="px-unit-md py-unit-md text-right">{fmt(o.calls)}</td>
-                  <td className="px-unit-md py-unit-md text-right">{fmt(o.minutes)}</td>
-                  <td className="px-unit-md py-unit-md text-right">{fmt(o.leads)}</td>
-                  <td className="px-unit-md py-unit-md text-right font-medium">
-                    {usd(o.cost)}
-                  </td>
-                  <td className="px-unit-lg py-unit-md text-right text-on-surface-variant">
-                    {o.createdAt.toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      {/* Per-org table (searchable, links to detail) */}
+      <OrgTable rows={perOrg} />
     </div>
   );
 }
