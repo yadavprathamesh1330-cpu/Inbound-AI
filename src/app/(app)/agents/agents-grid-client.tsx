@@ -264,8 +264,19 @@ export function AgentsGridClient({ initialAgents }: { initialAgents: Agent[] }) 
               <span className="font-bold text-on-surface">
                 {deleteTarget?.name}
               </span>{" "}
-              and all of its associated calls, leads, and knowledge documents.
-              This action cannot be undone.
+              and its call history. This action cannot be undone.
+              <br />
+              <br />
+              Any connected phone number, leads, and knowledge documents will{" "}
+              <span className="font-semibold text-on-surface">
+                not be deleted
+              </span>{" "}
+              — they&rsquo;ll just become unassigned, and the phone number can
+              be reconnected to another agent from{" "}
+              <span className="font-semibold text-on-surface">
+                Phone Numbers
+              </span>
+              .
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
