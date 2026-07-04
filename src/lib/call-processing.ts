@@ -8,6 +8,7 @@ import {
   type TranscriptTurn,
 } from "@/lib/services/openai";
 import { MissingCredentialError } from "@/lib/services/errors";
+import { deductCallUsage } from "@/lib/billing";
 import type { Sentiment, LeadStage } from "@/generated/prisma/enums";
 
 function deriveSentiment(score: number): Sentiment {
@@ -174,6 +175,7 @@ export async function processCompletedCall(callId: string): Promise<void> {
   }
 
   await maybeCreateLoadFromCall(updatedCall, loadDetails);
+  await deductCallUsage(updatedCall);
 }
 
 function parseIsoDate(value: string | undefined): Date | undefined {

@@ -148,11 +148,15 @@ model CreditTransaction {
   amountCents    Int
   balanceAfter   Int
   reason         String?
-  createdBy      String // email of the super admin who made the change
+  createdBy      String // super admin's email, or "system" for automatic usage deductions
   createdAt      DateTime @default(now())
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  // Set only for automatic per-call usage deductions — also enforces that a
+  // given call is only ever billed once, even if the status webhook retries.
+  callId String? @unique
 
   @@index([organizationId])
   @@map("credit_transactions")

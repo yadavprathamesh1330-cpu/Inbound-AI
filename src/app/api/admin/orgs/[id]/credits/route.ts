@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { requireSuperAdmin } from "@/lib/admin-guard";
-import { prisma } from "@/lib/prisma";
+import { applyCreditDelta } from "@/lib/billing";
 
 export const runtime = "nodejs";
 
@@ -14,10 +14,9 @@ const schema = z.object({
 /**
  * POST /api/admin/orgs/[id]/credits — super-admin credit adjustment.
  *
- * Applies a signed delta to the org's balance and writes an append-only
- * CreditTransaction (with the post-change balance) atomically. Deductions are
- * clamped so the balance never goes negative; the ledger records the actual
- * amount applied.
+ * Thin wrapper around the shared `applyCreditDelta` (src/lib/billing.ts),
+ * which also backs automatic per-call usage deduction — one source of truth
+ * for how an org's credit balance changes and how the ledger is written.
  */
 export async function POST(
   request: NextRequest,
@@ -42,36 +41,17 @@ export async function POST(
   const signed = mode === "deduct" ? -requested : requested;
 
   try {
-    const result = await prisma.$transaction(async (tx) => {
-      const org = await tx.organization.findUnique({
-        where: { id },
-        select: { creditCents: true },
-      });
-      if (!org) return null;
-
-      const newBalance = Math.max(0, org.creditCents + signed);
-      const applied = newBalance - org.creditCents;
-
-      await tx.organization.update({
-        where: { id },
-        data: { creditCents: newBalance },
-      });
-      await tx.creditTransaction.create({
-        data: {
-          organizationId: id,
-          amountCents: applied,
-          balanceAfter: newBalance,
-          reason: reason ?? null,
-          createdBy: admin.email,
-        },
-      });
-      return { newBalance, applied };
+    const result = await applyCreditDelta({
+      organizationId: id,
+      amountCents: signed,
+      reason,
+      createdBy: admin.email,
     });
 
     if (!result) {
       return NextResponse.json({ error: "Organization not found" }, { status: 404 });
     }
-    return NextResponse.json({ ok: true, balanceCents: result.newBalance });
+    return NextResponse.json({ ok: true, balanceCents: result.balanceCents });
   } catch (err) {
     console.error("[admin/credits] failed:", err);
     return NextResponse.json({ error: "Failed to adjust credits" }, { status: 500 });
