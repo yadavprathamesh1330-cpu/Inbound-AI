@@ -1,6 +1,7 @@
 import "server-only";
 import { prisma } from "@/lib/prisma";
 import {
+  extractAppointmentDetails,
   extractLeadFields,
   extractLoadDetails,
   generateCallSummary,
@@ -87,6 +88,9 @@ export async function processCompletedCall(callId: string): Promise<void> {
   let loadDetails: Awaited<ReturnType<typeof extractLoadDetails>> = {
     isLoadOffer: false,
   };
+  let appointmentDetails: Awaited<ReturnType<typeof extractAppointmentDetails>> = {
+    isAppointment: false,
+  };
 
   if (transcript.length === 0) {
     console.warn(
@@ -116,6 +120,15 @@ export async function processCompletedCall(callId: string): Promise<void> {
     } catch (err) {
       logStepSkipped("extractLoadDetails", err);
     }
+
+    try {
+      appointmentDetails = await extractAppointmentDetails(
+        transcript,
+        call.startedAt,
+      );
+    } catch (err) {
+      logStepSkipped("extractAppointmentDetails", err);
+    }
   }
 
   const sentiment =
@@ -144,8 +157,9 @@ export async function processCompletedCall(callId: string): Promise<void> {
   });
 
   // Upsert a Lead linked to this call if one doesn't already exist.
+  let leadId: string;
   if (!call.lead) {
-    await prisma.lead.create({
+    const createdLead = await prisma.lead.create({
       data: {
         organizationId: updatedCall.organizationId,
         agentId: updatedCall.agentId,
@@ -159,6 +173,7 @@ export async function processCompletedCall(callId: string): Promise<void> {
         stage: extracted.suggestedStage ?? "NEW",
       },
     });
+    leadId = createdLead.id;
   } else {
     await prisma.lead.update({
       where: { id: call.lead.id },
@@ -172,9 +187,11 @@ export async function processCompletedCall(callId: string): Promise<void> {
         stage: nextLeadStage(call.lead.stage, extracted.suggestedStage),
       },
     });
+    leadId = call.lead.id;
   }
 
   await maybeCreateLoadFromCall(updatedCall, loadDetails);
+  await maybeCreateAppointmentFromCall(updatedCall, appointmentDetails, leadId);
   await deductCallUsage(updatedCall);
 }
 
@@ -234,6 +251,55 @@ async function maybeCreateLoadFromCall(
       notes: "Auto-created from a dispatch call transcript.",
     },
   });
+}
+
+/**
+ * Auto-creates an Appointment when the call ended with a real confirmed
+ * date+time (service booking, inspection slot, callback, etc.), so a
+ * booking made over the phone shows up on the dashboard without manual
+ * re-entry. Idempotent — Appointment.callId is unique, so a second
+ * invocation for the same call (e.g. a retried status webhook) is a no-op.
+ */
+async function maybeCreateAppointmentFromCall(
+  call: { id: string; organizationId: string },
+  details: Awaited<ReturnType<typeof extractAppointmentDetails>>,
+  leadId: string,
+): Promise<void> {
+  if (!details.isAppointment || !details.startsAtIso) return;
+
+  const existing = await prisma.appointment.findUnique({
+    where: { callId: call.id },
+    select: { id: true },
+  });
+  if (existing) return;
+
+  const startsAt = new Date(details.startsAtIso);
+  const durationMinutes = details.durationMinutes ?? 30;
+  const endsAt = new Date(startsAt.getTime() + durationMinutes * 60_000);
+
+  try {
+    await prisma.appointment.create({
+      data: {
+        organizationId: call.organizationId,
+        callId: call.id,
+        leadId,
+        title: details.title ?? "Appointment",
+        startsAt,
+        endsAt,
+        location: details.location,
+        notes: details.notes ?? "Auto-created from a call transcript.",
+      },
+    });
+  } catch (err) {
+    // Appointment.leadId is also unique — if this lead already has a
+    // different appointment (e.g. a repeat call for the same booking),
+    // the create can conflict. Log and move on rather than crash
+    // call-completion processing over a scheduling edge case.
+    console.error(
+      `[call-processing] maybeCreateAppointmentFromCall failed for call ${call.id}:`,
+      err,
+    );
+  }
 }
 
 function logStepSkipped(stepName: string, err: unknown): void {

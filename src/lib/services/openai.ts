@@ -288,6 +288,93 @@ export async function extractLoadDetails(
   }
 }
 
+export interface ExtractedAppointment {
+  isAppointment: boolean;
+  title?: string;
+  /** ISO 8601 datetime (date + time), only when a specific time was agreed. */
+  startsAtIso?: string;
+  durationMinutes?: number;
+  location?: string;
+  notes?: string;
+}
+
+/**
+ * Detects whether a call resulted in an actual confirmed appointment (a
+ * service bay booking, PM/DOT inspection slot, on-site visit, callback at a
+ * specific time, etc.) with a real date AND time — as opposed to vague
+ * interest ("we'll figure out a time later"). Used by processCompletedCall
+ * to auto-create an Appointment row so a booking made over the phone shows
+ * up without manual re-entry, the same way extractLoadDetails does for
+ * loads.
+ */
+export async function extractAppointmentDetails(
+  transcript: TranscriptTurn[],
+  callStartedAt: Date,
+): Promise<ExtractedAppointment> {
+  const client = getClient();
+  const completion = await client.chat.completions.create({
+    model: CHAT_MODEL,
+    temperature: 0,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "You analyze phone call transcripts for an AI voice receptionist. " +
+          "Decide: did this call end with an ACTUAL CONFIRMED APPOINTMENT — a " +
+          "specific date AND time both parties agreed to (a service booking, " +
+          "inspection slot, on-site visit, or callback at a set time)? Vague " +
+          'interest ("we\'ll schedule something") without an agreed date+time ' +
+          "does NOT count. Respond with strict JSON: " +
+          '{"isAppointment": boolean, "title": string|null, ' +
+          '"startsAtIso": string|null, "durationMinutes": number|null, ' +
+          '"location": string|null, "notes": string|null}. ' +
+          `The call took place on ${callStartedAt.toISOString()} — resolve ` +
+          "relative dates mentioned (\"tomorrow\", \"Friday\") against that " +
+          "date. startsAtIso must be a full ISO 8601 datetime including the " +
+          "agreed time (not just a date) — if no specific time was agreed, " +
+          'set isAppointment to false. "title" is a short label (e.g. "PM ' +
+          'Service", "DOT Inspection", "Callback"). durationMinutes defaults ' +
+          "to 30 if unstated. Do not fabricate values not supported by the " +
+          "transcript.",
+      },
+      {
+        role: "user",
+        content: `Transcript:\n${transcriptToText(transcript)}`,
+      },
+    ],
+  });
+
+  const raw = completion.choices[0]?.message?.content ?? "{}";
+  try {
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    if (parsed.isAppointment !== true) return { isAppointment: false };
+
+    const str = (v: unknown): string | undefined =>
+      typeof v === "string" && v.trim().length > 0 ? v.trim() : undefined;
+
+    const startsAtIso = str(parsed.startsAtIso);
+    if (!startsAtIso || isNaN(new Date(startsAtIso).getTime())) {
+      return { isAppointment: false };
+    }
+
+    const durationRaw = Number(parsed.durationMinutes);
+    const durationMinutes =
+      Number.isFinite(durationRaw) && durationRaw > 0 ? durationRaw : 30;
+
+    return {
+      isAppointment: true,
+      title: str(parsed.title) ?? "Appointment",
+      startsAtIso,
+      durationMinutes,
+      location: str(parsed.location),
+      notes: str(parsed.notes),
+    };
+  } catch {
+    return { isAppointment: false };
+  }
+}
+
 export interface GeneratedAgentScript {
   systemPrompt: string;
   greeting: string;

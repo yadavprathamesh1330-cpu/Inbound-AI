@@ -68,6 +68,13 @@ interface DashboardClientProps {
     }[];
   };
   creditCents: number;
+  upcomingAppointments: {
+    id: string;
+    title: string;
+    startsAt: string;
+    location: string | null;
+    leadName: string | null;
+  }[];
   agents: AgentSummary[];
   calls: CallSummary[];
 }
@@ -190,6 +197,7 @@ export function DashboardClient({
   minutes,
   dispatch,
   creditCents,
+  upcomingAppointments,
   agents,
   calls,
 }: DashboardClientProps) {
@@ -377,6 +385,54 @@ export function DashboardClient({
           </Link>
         </GlassCard>
       </div>
+
+      {/* Upcoming appointments — auto-created when a call confirms a real
+          date+time (service booking, inspection slot, callback). */}
+      <GlassCard className="mb-unit-xl p-unit-lg">
+        <div className="mb-unit-md flex items-center gap-2">
+          <Icon name="calendar_month" className="size-5 text-secondary" />
+          <h3 className="text-headline-md font-bold text-on-surface">
+            Upcoming Appointments
+          </h3>
+          <span className="rounded-full bg-surface-container-high px-2 py-0.5 text-label-sm font-semibold text-on-surface-variant">
+            {upcomingAppointments.length}
+          </span>
+        </div>
+        {upcomingAppointments.length === 0 ? (
+          <EmptyState
+            icon="calendar_month"
+            title="No upcoming appointments"
+            description="Bookings confirmed during a call — a service slot, inspection, or callback — will appear here automatically."
+            className="py-unit-md"
+          />
+        ) : (
+          <ul className="divide-y divide-outline-variant/40">
+            {upcomingAppointments.map((appt) => (
+              <li key={appt.id} className="flex items-center justify-between gap-3 py-2.5">
+                <div className="min-w-0">
+                  <p className="truncate text-body-md font-medium text-on-surface">
+                    {appt.title}
+                    {appt.leadName ? ` — ${appt.leadName}` : ""}
+                  </p>
+                  {appt.location && (
+                    <p className="truncate text-label-sm text-on-surface-variant">
+                      {appt.location}
+                    </p>
+                  )}
+                </div>
+                <span className="shrink-0 text-label-md font-semibold text-secondary">
+                  {new Date(appt.startsAt).toLocaleString("en-US", {
+                    month: "short",
+                    day: "numeric",
+                    hour: "numeric",
+                    minute: "2-digit",
+                  })}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </GlassCard>
 
       <div className="grid grid-cols-12 gap-gutter">
         <div className="col-span-12 grid grid-cols-1 gap-gutter md:grid-cols-3">

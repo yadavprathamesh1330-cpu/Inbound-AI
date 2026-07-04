@@ -37,6 +37,7 @@ export default async function DashboardPage() {
     loadCounts,
     recentLoads,
     orgCredit,
+    upcomingAppointmentsList,
   ] = await Promise.all([
     prisma.call.count({
       where: { organizationId, startedAt: { gte: startOfToday } },
@@ -96,6 +97,18 @@ export default async function DashboardPage() {
     prisma.organization.findUnique({
       where: { id: organizationId },
       select: { creditCents: true },
+    }),
+    prisma.appointment.findMany({
+      where: { organizationId, startsAt: { gte: now } },
+      orderBy: { startsAt: "asc" },
+      take: 5,
+      select: {
+        id: true,
+        title: true,
+        startsAt: true,
+        location: true,
+        lead: { select: { name: true, phone: true } },
+      },
     }),
   ]);
 
@@ -200,6 +213,13 @@ export default async function DashboardPage() {
         })),
       }}
       creditCents={orgCredit?.creditCents ?? 0}
+      upcomingAppointments={upcomingAppointmentsList.map((a) => ({
+        id: a.id,
+        title: a.title,
+        startsAt: a.startsAt.toISOString(),
+        location: a.location,
+        leadName: a.lead?.name ?? a.lead?.phone ?? null,
+      }))}
       agents={agents.map((agent) => ({
         id: agent.id,
         name: agent.name,
