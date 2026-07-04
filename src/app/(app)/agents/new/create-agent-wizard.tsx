@@ -140,6 +140,7 @@ const wizardSchema = z.object({
   phoneMode: z.enum(["buy", "existing"]),
   phoneNumber: z.string().optional(),
   workingHours: z.string().optional(),
+  onCallPhone: z.string().optional(),
   voicemailEnabled: z.boolean(),
 
   // Agent name (used across steps)
@@ -214,6 +215,7 @@ export function CreateAgentWizard({ integrations }: { integrations: Integration[
       phoneMode: "existing",
       phoneNumber: "",
       workingHours: "9:00 AM - 6:00 PM",
+      onCallPhone: "",
       voicemailEnabled: true,
     },
   });
@@ -339,6 +341,7 @@ export function CreateAgentWizard({ integrations }: { integrations: Integration[
           businessRules: data.businessRules || undefined,
           customInstructions: data.customInstructions || undefined,
           objectives: data.objectives,
+          onCallPhone: data.onCallPhone?.trim() || undefined,
           phoneNumber:
             data.phoneMode === "existing" && data.phoneNumber?.trim()
               ? {
@@ -882,6 +885,17 @@ export function CreateAgentWizard({ integrations }: { integrations: Integration[
                       Working Hours
                     </Label>
                     <Input placeholder="e.g. 9:00 AM - 6:00 PM" {...register("workingHours")} />
+                  </div>
+
+                  <div className="flex flex-col gap-1.5">
+                    <Label className="text-label-sm uppercase tracking-wider text-on-surface-variant">
+                      On-Call Escalation Number
+                    </Label>
+                    <Input placeholder="+15551234567" {...register("onCallPhone")} />
+                    <p className="text-label-sm text-on-surface-variant">
+                      If a caller reports a breakdown or emergency, we&rsquo;ll
+                      text this number immediately.
+                    </p>
                   </div>
 
                   <div className="flex items-center justify-between rounded-xl border border-outline-variant p-4">

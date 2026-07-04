@@ -9,6 +9,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { AgentDetailActions } from "./agent-detail-actions";
 import { TestAgentPanel } from "./test-agent-panel";
+import { OnCallPanel } from "./on-call-panel";
 
 function objectiveLabel(objective: string) {
   return objective
@@ -177,6 +178,8 @@ export default async function AgentDetailPage({
             systemPrompt={agent.systemPrompt}
             hasPhoneNumber={agent.phoneNumbers.length > 0}
           />
+
+          <OnCallPanel agentId={agent.id} initialOnCallPhone={agent.onCallPhone} />
         </div>
       </PageTransition>
     </div>

@@ -42,6 +42,7 @@ interface CreateAgentBody {
   businessRules?: string;
   customInstructions?: string;
   objectives?: AgentObjective[];
+  onCallPhone?: string;
   phoneNumber?: {
     mode: "buy" | "existing";
     e164?: string;
@@ -98,6 +99,7 @@ export async function POST(req: NextRequest) {
           businessRules: body.businessRules || null,
           customInstructions: body.customInstructions || null,
           objectives,
+          onCallPhone: body.onCallPhone || null,
           organizationId: user.orgId,
         },
       });

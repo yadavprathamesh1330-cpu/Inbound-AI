@@ -5,6 +5,7 @@ import { buildTwimlResponse } from "@/lib/services/telephony";
 import { MissingCredentialError } from "@/lib/services/errors";
 import { resolvePollyVoice } from "@/lib/voice-map";
 import { hasCreditsRemaining } from "@/lib/billing";
+import { maybeEscalateBreakdown } from "@/lib/escalation";
 import type { Agent, Prisma } from "@/generated/prisma/client";
 
 export interface CallTurnParams {
@@ -101,6 +102,18 @@ export async function handleCallTurn(params: CallTurnParams): Promise<string> {
       content: turn.text,
     }));
 
+    // Runs concurrently with the LLM reply — independent concerns, no need
+    // to serialize them and add their latencies together.
+    const escalationPromise = maybeEscalateBreakdown({
+      callId: call.id,
+      organizationId,
+      callerPhone,
+      phoneNumberId: call.phoneNumberId,
+      onCallPhone: agent.onCallPhone,
+      alreadyEscalated: call.escalatedAt !== null,
+      speechText: speechResult,
+    });
+
     try {
       agentReply = await generateAgentReply(systemPrompt, conversationHistory);
     } catch (err) {
@@ -113,6 +126,8 @@ export async function handleCallTurn(params: CallTurnParams): Promise<string> {
         agentReply = "Sorry, I ran into an issue. Could you say that again?";
       }
     }
+
+    await escalationPromise;
   }
 
   existingTranscript.push({ speaker: "agent", text: agentReply });

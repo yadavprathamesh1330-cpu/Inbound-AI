@@ -248,6 +248,11 @@ model Agent {
   // Step 5: Objectives
   objectives AgentObjective[] @default([])
 
+  // Step 6: Phone / routing — escalation contact for urgent calls (e.g. a
+  // driver reporting a breakdown). SMS'd when the call transcript trips a
+  // breakdown/emergency keyword match.
+  onCallPhone String?
+
   // Metrics (denormalized for fast dashboard reads; source of truth is Call[])
   totalCalls  Int   @default(0)
   successRate Float @default(0)
@@ -369,6 +374,11 @@ model Call {
   sentiment    Sentiment?
   leadScore    Int?
   recordingUrl String?
+
+  // Set the moment a breakdown/emergency keyword is detected mid-call and an
+  // SMS is sent to the agent's on-call number — guards against re-sending on
+  // every subsequent turn of the same call.
+  escalatedAt DateTime?
 
   extractedName              String?
   extractedEmail             String?

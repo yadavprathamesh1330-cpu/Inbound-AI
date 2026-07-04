@@ -58,6 +58,8 @@ export async function PATCH(
   if (typeof body.customInstructions === "string" || body.customInstructions === null)
     data.customInstructions = body.customInstructions;
   if (Array.isArray(body.objectives)) data.objectives = body.objectives;
+  if (typeof body.onCallPhone === "string" || body.onCallPhone === null)
+    data.onCallPhone = body.onCallPhone;
 
   if (Object.keys(data).length === 0) {
     return NextResponse.json(
