@@ -170,6 +170,84 @@ export async function extractLeadFields(
   }
 }
 
+export interface GeneratedAgentScript {
+  systemPrompt: string;
+  greeting: string;
+}
+
+/**
+ * Writes a ready-to-use system prompt + spoken greeting for a voice agent
+ * from the business details the user has entered. This powers the "Write with
+ * AI" helper so owners who don't know how to write a prompt still get a
+ * professional, industry-specific one.
+ */
+export async function generateAgentScript(input: {
+  businessName?: string;
+  industry?: string;
+  businessDescription?: string;
+  objectives?: string[];
+  instruction?: string;
+}): Promise<GeneratedAgentScript> {
+  const client = getClient();
+
+  const context =
+    [
+      input.businessName && `Business name: ${input.businessName}`,
+      input.industry && `Industry: ${input.industry}`,
+      input.businessDescription &&
+        `About the business: ${input.businessDescription}`,
+      input.objectives?.length &&
+        `Primary objectives: ${input.objectives.join(", ")}`,
+      input.instruction &&
+        `Extra instructions from the owner: ${input.instruction}`,
+    ]
+      .filter(Boolean)
+      .join("\n") || "A small business phone receptionist.";
+
+  const completion = await client.chat.completions.create({
+    model: CHAT_MODEL,
+    temperature: 0.5,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "You write system prompts and greetings for AI phone voice agents " +
+          "(receptionists, dispatchers, parts counters, service desks). Given " +
+          "a business's details, produce a clear, professional system prompt " +
+          "that: states who the agent is and the business it represents; lists " +
+          "exactly what information to collect from callers (use short bullet " +
+          "lines starting with '- '); gives rules (never invent prices, never " +
+          "commit to things it can't, warm-transfer to a human for complex " +
+          "cases, keep replies short because it's a phone call). Tailor it to " +
+          "the industry and objectives. Also write a single warm one-sentence " +
+          "spoken greeting. Return STRICT JSON: " +
+          '{"systemPrompt": string, "greeting": string}. No markdown headers, ' +
+          "no backticks.",
+      },
+      { role: "user", content: context },
+    ],
+  });
+
+  const raw = completion.choices[0]?.message?.content ?? "{}";
+  try {
+    const parsed = JSON.parse(raw) as {
+      systemPrompt?: unknown;
+      greeting?: unknown;
+    };
+    return {
+      systemPrompt:
+        typeof parsed.systemPrompt === "string"
+          ? parsed.systemPrompt.trim()
+          : "",
+      greeting:
+        typeof parsed.greeting === "string" ? parsed.greeting.trim() : "",
+    };
+  } catch {
+    return { systemPrompt: "", greeting: "" };
+  }
+}
+
 /**
  * Generates the AI voice agent's next reply during a live call, given the
  * agent's configured system prompt and the conversation so far. Used by

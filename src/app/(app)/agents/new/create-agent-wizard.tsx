@@ -177,6 +177,8 @@ export function CreateAgentWizard({ integrations }: { integrations: Integration[
   const [submitting, setSubmitting] = useState(false);
   const [direction, setDirection] = useState(1);
   const [presetId, setPresetId] = useState<string | null>(null);
+  const [aiInstruction, setAiInstruction] = useState("");
+  const [generatingPrompt, setGeneratingPrompt] = useState(false);
 
   const {
     register,
@@ -256,6 +258,38 @@ export function CreateAgentWizard({ integrations }: { integrations: Integration[
     setValue("transferRules", v.transferRules);
     setValue("businessRules", v.businessRules);
     setValue("objectives", v.objectives, { shouldValidate: true });
+  }
+
+  async function generateWithAI() {
+    setGeneratingPrompt(true);
+    try {
+      const res = await fetch("/api/agents/generate-prompt", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          businessName: values.businessName,
+          industry: values.industry,
+          businessDescription: values.businessDescription,
+          objectives: values.objectives,
+          instruction: aiInstruction || undefined,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.error ?? "Couldn't generate the prompt.");
+        return;
+      }
+      setValue("systemPrompt", data.systemPrompt, { shouldValidate: true });
+      // Only fill the greeting if the user hasn't written one yet.
+      if (data.greeting && !values.greeting) {
+        setValue("greeting", data.greeting);
+      }
+      toast.success("AI wrote your prompt — tweak it however you like.");
+    } catch {
+      toast.error("Network error — please try again.");
+    } finally {
+      setGeneratingPrompt(false);
+    }
   }
 
   function toggleObjective(objective: string) {
@@ -677,12 +711,47 @@ export function CreateAgentWizard({ integrations }: { integrations: Integration[
 
               {step === 4 && (
                 <div className="grid grid-cols-1 gap-gutter md:grid-cols-2">
+                  {/* Write with AI */}
+                  <div className="rounded-2xl border border-primary/20 bg-primary/5 p-unit-md md:col-span-2">
+                    <div className="mb-1.5 flex items-center gap-2">
+                      <Icon name="stars" className="size-5 text-primary" />
+                      <p className="text-label-md font-bold text-on-surface">
+                        Write with AI
+                      </p>
+                    </div>
+                    <p className="mb-3 text-label-sm text-on-surface-variant">
+                      Not sure what to write? Describe what this agent should do
+                      and AI will draft a professional prompt from your business
+                      info. You can edit it afterwards.
+                    </p>
+                    <div className="flex flex-col gap-2 sm:flex-row">
+                      <Input
+                        value={aiInstruction}
+                        onChange={(e) => setAiInstruction(e.target.value)}
+                        placeholder="e.g. Answer dispatch calls, take load details, transfer breakdowns"
+                        className="flex-1"
+                      />
+                      <button
+                        type="button"
+                        onClick={generateWithAI}
+                        disabled={generatingPrompt}
+                        className="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-label-md font-semibold text-primary-foreground transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-60"
+                      >
+                        <Icon
+                          name={generatingPrompt ? "hourglass_empty" : "stars"}
+                          className={cn("size-4", generatingPrompt && "animate-spin")}
+                        />
+                        {generatingPrompt ? "Writing…" : "Generate"}
+                      </button>
+                    </div>
+                  </div>
+
                   <div className="flex flex-col gap-1.5 md:col-span-2">
                     <Label className="text-label-sm uppercase tracking-wider text-on-surface-variant">
                       System Prompt
                     </Label>
                     <Textarea
-                      rows={4}
+                      rows={6}
                       placeholder="You are the voice agent for..."
                       {...register("systemPrompt")}
                     />
