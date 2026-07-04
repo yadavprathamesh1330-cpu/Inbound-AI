@@ -72,6 +72,24 @@ declare module "@signalwire/compatibility-api" {
     }): Promise<IncomingPhoneNumber>;
   }
 
+  interface CallInstance {
+    sid: string;
+  }
+
+  interface CallCreateOpts {
+    to: string;
+    from: string;
+    url: string;
+    method?: string;
+    statusCallback?: string;
+    statusCallbackMethod?: string;
+    statusCallbackEvent?: string[];
+  }
+
+  interface Calls {
+    create(opts: CallCreateOpts): Promise<CallInstance>;
+  }
+
   interface RestClientInstance {
     availablePhoneNumbers(country: string): {
       local: {
@@ -82,6 +100,7 @@ declare module "@signalwire/compatibility-api" {
       };
     };
     incomingPhoneNumbers: IncomingPhoneNumbers;
+    calls: Calls;
   }
 
   interface RestClientOptions {

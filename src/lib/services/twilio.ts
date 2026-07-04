@@ -95,6 +95,7 @@ export async function buyPhoneNumber(areaCode?: string) {
 export function buildTwimlResponse(
   spokenText: string,
   gatherNext: boolean,
+  actionUrl: string = "/api/calls/webhook",
 ): string {
   const VoiceResponse = twilio.twiml.VoiceResponse;
   const response = new VoiceResponse();
@@ -102,7 +103,7 @@ export function buildTwimlResponse(
   if (gatherNext) {
     const gather = response.gather({
       input: ["speech"],
-      action: "/api/calls/webhook",
+      action: actionUrl,
       method: "POST",
       speechTimeout: "auto",
     });

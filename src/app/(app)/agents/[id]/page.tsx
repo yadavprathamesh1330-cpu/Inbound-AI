@@ -172,8 +172,10 @@ export default async function AgentDetailPage({
           </div>
 
           <TestAgentPanel
+            agentId={agent.id}
             greeting={agent.greeting}
             systemPrompt={agent.systemPrompt}
+            hasPhoneNumber={agent.phoneNumbers.length > 0}
           />
         </div>
       </PageTransition>

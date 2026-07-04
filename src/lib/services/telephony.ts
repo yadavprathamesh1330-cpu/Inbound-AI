@@ -32,8 +32,9 @@ function activeService() {
 export function buildTwimlResponse(
   spokenText: string,
   gatherNext: boolean,
+  actionUrl?: string,
 ): string {
-  return activeService().buildTwimlResponse(spokenText, gatherNext);
+  return activeService().buildTwimlResponse(spokenText, gatherNext, actionUrl);
 }
 
 /** Lists purchasable US local numbers from the active provider. */
