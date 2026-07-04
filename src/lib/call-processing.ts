@@ -8,12 +8,41 @@ import {
   type TranscriptTurn,
 } from "@/lib/services/openai";
 import { MissingCredentialError } from "@/lib/services/errors";
-import type { Sentiment } from "@/generated/prisma/enums";
+import type { Sentiment, LeadStage } from "@/generated/prisma/enums";
 
 function deriveSentiment(score: number): Sentiment {
   if (score >= 70) return "POSITIVE";
   if (score >= 40) return "NEUTRAL";
   return "NEGATIVE";
+}
+
+// Progression rank used to decide whether an AI-suggested stage should move
+// an existing lead forward. NEW and LOST both rank 0 ("not yet advanced") so
+// a re-engaged LOST lead can still progress on a later positive call; WON
+// ranks highest and is never set or overwritten by this automation — only a
+// human closes a deal.
+const STAGE_RANK: Record<LeadStage, number> = {
+  NEW: 0,
+  LOST: 0,
+  QUALIFIED: 1,
+  APPOINTMENT: 2,
+  WON: 3,
+};
+
+/**
+ * Applies an AI-suggested stage to a lead's pipeline position without ever
+ * regressing progress a human (or an earlier call) already made, and without
+ * ever touching a lead a human has marked WON.
+ */
+function nextLeadStage(
+  currentStage: LeadStage,
+  suggestedStage: LeadStage | undefined,
+): LeadStage {
+  if (currentStage === "WON") return "WON";
+  if (!suggestedStage) return currentStage;
+  return STAGE_RANK[suggestedStage] >= STAGE_RANK[currentStage]
+    ? suggestedStage
+    : currentStage;
 }
 
 function parseTranscript(transcriptJson: unknown): TranscriptTurn[] {
@@ -126,7 +155,7 @@ export async function processCompletedCall(callId: string): Promise<void> {
         budget: extracted.budget,
         interestedService: extracted.interestedService,
         score: leadScore,
-        stage: "NEW",
+        stage: extracted.suggestedStage ?? "NEW",
       },
     });
   } else {
@@ -139,6 +168,7 @@ export async function processCompletedCall(callId: string): Promise<void> {
         interestedService:
           extracted.interestedService ?? call.lead.interestedService ?? undefined,
         score: leadScore ?? call.lead.score ?? undefined,
+        stage: nextLeadStage(call.lead.stage, extracted.suggestedStage),
       },
     });
   }

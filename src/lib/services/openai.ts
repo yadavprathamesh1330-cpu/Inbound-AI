@@ -10,12 +10,15 @@ export interface TranscriptTurn {
   text: string;
 }
 
+export type SuggestedLeadStage = "NEW" | "QUALIFIED" | "APPOINTMENT" | "LOST";
+
 export interface ExtractedLeadFields {
   name?: string;
   email?: string;
   budget?: string;
   interestedService?: string;
   nextAction?: string;
+  suggestedStage?: SuggestedLeadStage;
 }
 
 /**
@@ -140,11 +143,19 @@ export async function extractLeadFields(
           'set it to null, if the transcript does not mention it): ' +
           '{"name": string | null, "email": string | null, ' +
           '"budget": string | null, "interestedService": string | null, ' +
-          '"nextAction": string | null}. "nextAction" should be a short ' +
-          'phrase describing the agreed follow-up (e.g. "Schedule a ' +
-          'callback", "Send pricing via email", "Book on-site visit ' +
-          'Tuesday 3pm"). Do not fabricate values not supported by the ' +
-          "transcript.",
+          '"nextAction": string | null, "suggestedStage": ' +
+          '"NEW" | "QUALIFIED" | "APPOINTMENT" | "LOST"}. "nextAction" ' +
+          'should be a short phrase describing the agreed follow-up (e.g. ' +
+          '"Schedule a callback", "Send pricing via email", "Book ' +
+          'on-site visit Tuesday 3pm"). For "suggestedStage": use ' +
+          '"APPOINTMENT" only if a specific appointment/booking/pickup ' +
+          'was actually confirmed in this call; "QUALIFIED" if the ' +
+          "caller showed genuine, specific interest (gave real details " +
+          "like budget, a concrete need, or asked to be followed up) but " +
+          'nothing was booked yet; "LOST" only if the caller explicitly ' +
+          "declined, said they're not interested, or it's clearly a " +
+          'wrong number/spam call; otherwise "NEW". Do not fabricate ' +
+          "values not supported by the transcript.",
       },
       {
         role: "user",
@@ -158,12 +169,24 @@ export async function extractLeadFields(
     const parsed = JSON.parse(raw) as Record<string, unknown>;
     const clean = (v: unknown): string | undefined =>
       typeof v === "string" && v.trim().length > 0 ? v.trim() : undefined;
+    const validStages: SuggestedLeadStage[] = [
+      "NEW",
+      "QUALIFIED",
+      "APPOINTMENT",
+      "LOST",
+    ];
+    const suggestedStage = validStages.includes(
+      parsed.suggestedStage as SuggestedLeadStage,
+    )
+      ? (parsed.suggestedStage as SuggestedLeadStage)
+      : undefined;
     return {
       name: clean(parsed.name),
       email: clean(parsed.email),
       budget: clean(parsed.budget),
       interestedService: clean(parsed.interestedService),
       nextAction: clean(parsed.nextAction),
+      suggestedStage,
     };
   } catch {
     return {};
