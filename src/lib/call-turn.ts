@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { generateAgentReply, type TranscriptTurn } from "@/lib/services/openai";
 import { buildTwimlResponse } from "@/lib/services/telephony";
 import { MissingCredentialError } from "@/lib/services/errors";
+import { resolvePollyVoice } from "@/lib/voice-map";
 import type { Agent, Prisma } from "@/generated/prisma/client";
 
 export interface CallTurnParams {
@@ -106,5 +107,6 @@ export async function handleCallTurn(params: CallTurnParams): Promise<string> {
     data: { transcript: existingTranscript as unknown as Prisma.InputJsonValue },
   });
 
-  return buildTwimlResponse(agentReply, true, actionUrl);
+  const voice = resolvePollyVoice(agent.voiceGender, agent.voiceAccent);
+  return buildTwimlResponse(agentReply, true, actionUrl, voice);
 }

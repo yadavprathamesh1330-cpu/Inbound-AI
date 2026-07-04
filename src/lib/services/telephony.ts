@@ -33,8 +33,14 @@ export function buildTwimlResponse(
   spokenText: string,
   gatherNext: boolean,
   actionUrl?: string,
+  voice?: string,
 ): string {
-  return activeService().buildTwimlResponse(spokenText, gatherNext, actionUrl);
+  return activeService().buildTwimlResponse(
+    spokenText,
+    gatherNext,
+    actionUrl,
+    voice,
+  );
 }
 
 /** Lists purchasable US local numbers from the active provider. */

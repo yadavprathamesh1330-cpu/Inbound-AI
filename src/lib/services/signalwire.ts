@@ -96,10 +96,10 @@ export function buildTwimlResponse(
   spokenText: string,
   gatherNext: boolean,
   actionUrl: string = "/api/calls/webhook",
+  voice: string = "Polly.Joanna",
 ): string {
   const VoiceResponse = RestClient.LaML.VoiceResponse;
   const response = new VoiceResponse();
-  const VOICE = "Polly.Joanna";
 
   if (gatherNext) {
     const gather = response.gather({
@@ -108,14 +108,11 @@ export function buildTwimlResponse(
       method: "POST",
       speechTimeout: "auto",
     });
-    gather.say({ voice: VOICE }, spokenText);
-    response.say(
-      { voice: VOICE },
-      "I didn't catch that. Thanks for calling, goodbye.",
-    );
+    gather.say({ voice }, spokenText);
+    response.say({ voice }, "I didn't catch that. Thanks for calling, goodbye.");
     response.hangup();
   } else {
-    response.say({ voice: VOICE }, spokenText);
+    response.say({ voice }, spokenText);
     response.hangup();
   }
 

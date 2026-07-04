@@ -2,6 +2,13 @@ import "server-only";
 import twilio from "twilio";
 import { requireEnv } from "@/lib/services/errors";
 
+// The exact set of Polly voice names src/lib/voice-map.ts ever produces.
+// Declared locally (rather than importing Twilio's giant SayVoice union type
+// from its internal module path, which isn't a stable public import) —
+// each of these is confirmed present in that union, so this narrower type
+// is safely assignable wherever Twilio expects a SayVoice.
+type SayVoice = "Polly.Joanna" | "Polly.Matthew" | "Polly.Amy" | "Polly.Brian" | "Polly.Aditi";
+
 let cachedClient: ReturnType<typeof twilio> | null = null;
 
 function getClient() {
@@ -96,6 +103,7 @@ export function buildTwimlResponse(
   spokenText: string,
   gatherNext: boolean,
   actionUrl: string = "/api/calls/webhook",
+  voice: string = "Polly.Joanna",
 ): string {
   const VoiceResponse = twilio.twiml.VoiceResponse;
   const response = new VoiceResponse();
@@ -107,16 +115,16 @@ export function buildTwimlResponse(
       method: "POST",
       speechTimeout: "auto",
     });
-    gather.say({ voice: "Polly.Joanna" }, spokenText);
+    gather.say({ voice: voice as SayVoice }, spokenText);
     // If the caller says nothing, Twilio falls through here — repeat/end
     // the call gracefully instead of hanging silently.
     response.say(
-      { voice: "Polly.Joanna" },
+      { voice: voice as SayVoice },
       "I didn't catch that. Thanks for calling, goodbye.",
     );
     response.hangup();
   } else {
-    response.say({ voice: "Polly.Joanna" }, spokenText);
+    response.say({ voice: voice as SayVoice }, spokenText);
     response.hangup();
   }
 
