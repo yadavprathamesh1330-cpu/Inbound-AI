@@ -4,6 +4,7 @@ import { generateAgentReply, type TranscriptTurn } from "@/lib/services/openai";
 import { buildTwimlResponse } from "@/lib/services/telephony";
 import { MissingCredentialError } from "@/lib/services/errors";
 import { resolvePollyVoice } from "@/lib/voice-map";
+import { hasCreditsRemaining } from "@/lib/billing";
 import type { Agent, Prisma } from "@/generated/prisma/client";
 
 export interface CallTurnParams {
@@ -45,6 +46,20 @@ export async function handleCallTurn(params: CallTurnParams): Promise<string> {
 
   let call = await prisma.call.findUnique({ where: { twilioCallSid: callSid } });
   if (!call) {
+    // Gate only brand-new calls — never cut off a conversation already in
+    // progress because of this. An org at exactly 0 credits can't start
+    // another billable call; the caller hears a graceful decline instead of
+    // an internal "insufficient balance" detail.
+    if (!(await hasCreditsRemaining(organizationId))) {
+      const voice = resolvePollyVoice(agent.voiceGender, agent.voiceAccent);
+      return buildTwimlResponse(
+        "We're sorry, this service is temporarily unavailable. Please try again later.",
+        false,
+        undefined,
+        voice,
+      );
+    }
+
     call = await prisma.call.create({
       data: {
         twilioCallSid: callSid,

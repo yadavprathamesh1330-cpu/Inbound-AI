@@ -56,15 +56,28 @@ export async function applyCreditDelta(opts: {
 }
 
 /**
+ * Whether an org has any credit left to spend. Used to gate new calls from
+ * starting (see call-turn.ts and the test-call route) — an org at exactly 0
+ * cannot start another billable call, but a call already in progress is
+ * never cut off mid-conversation because of this (deduction only happens
+ * once, at completion).
+ */
+export async function hasCreditsRemaining(
+  organizationId: string,
+): Promise<boolean> {
+  const org = await prisma.organization.findUnique({
+    where: { id: organizationId },
+    select: { creditCents: true },
+  });
+  return (org?.creditCents ?? 0) > 0;
+}
+
+/**
  * Deducts the blended usage cost for a completed call from its org's
  * balance. Idempotent — a unique constraint on CreditTransaction.callId
  * means calling this twice for the same call (e.g. a retried status
  * webhook) is a harmless no-op on the second call, caught here before
  * hitting the DB constraint.
- *
- * Intentionally does NOT block or warn when a balance runs out — usage
- * enforcement (pausing agents, blocking new calls) is a business-policy
- * decision for later, not something to impose silently here.
  */
 export async function deductCallUsage(call: {
   id: string;

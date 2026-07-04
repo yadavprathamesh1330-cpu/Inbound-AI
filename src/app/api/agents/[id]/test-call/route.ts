@@ -6,6 +6,7 @@ import {
   placeOutboundCall,
   TelephonyNotConnectedError,
 } from "@/lib/services/test-call";
+import { hasCreditsRemaining } from "@/lib/billing";
 
 export const runtime = "nodejs";
 
@@ -77,6 +78,19 @@ export async function POST(
   });
   if (!organization) {
     return NextResponse.json({ error: "Organization not found" }, { status: 404 });
+  }
+
+  // Check upfront rather than placing the call and having the callee hear a
+  // decline message — no point spending real telephony minutes on a call
+  // that's going to be rejected anyway.
+  if (!(await hasCreditsRemaining(user.orgId))) {
+    return NextResponse.json(
+      {
+        error:
+          "Your organization has no credits remaining. Add credits on the Billing page before testing.",
+      },
+      { status: 402 },
+    );
   }
 
   const appUrl =
