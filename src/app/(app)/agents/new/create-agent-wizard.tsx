@@ -352,12 +352,16 @@ export function CreateAgentWizard({ integrations }: { integrations: Integration[
         }),
       });
 
-      if (!res.ok) throw new Error("Failed to create agent");
-      const agent = await res.json();
+      const payload = await res.json().catch(() => null);
+      if (!res.ok) {
+        toast.error(payload?.error ?? "Could not create agent. Please try again.");
+        setSubmitting(false);
+        return;
+      }
       toast.success("Agent created");
-      router.push(`/agents/${agent.id}`);
+      router.push(`/agents/${payload.id}`);
     } catch {
-      toast.error("Could not create agent. Please try again.");
+      toast.error("Network error — please try again.");
       setSubmitting(false);
     }
   }

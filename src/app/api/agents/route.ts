@@ -51,6 +51,10 @@ interface CreateAgentBody {
   integrationIds?: string[];
 }
 
+/** Thrown inside the create transaction when the chosen number belongs to
+ * another organization — rolls back the agent and surfaces a 409. */
+class PhoneTakenError extends Error {}
+
 export async function POST(req: NextRequest) {
   const user = await getCurrentUser();
   if (!user) {
@@ -99,10 +103,27 @@ export async function POST(req: NextRequest) {
       });
 
       if (body.phoneNumber?.mode === "existing" && body.phoneNumber.e164?.trim()) {
-        await tx.phoneNumber.create({
-          data: {
-            e164: body.phoneNumber.e164.trim(),
+        const e164 = body.phoneNumber.e164.trim();
+        // The number may already exist (e.g. connected via /phone-numbers or
+        // on a previous agent). If it's ours, reassign it to this new agent;
+        // if it belongs to another org, reject. Otherwise create it.
+        const existingPn = await tx.phoneNumber.findUnique({
+          where: { e164 },
+          select: { organizationId: true },
+        });
+        if (existingPn && existingPn.organizationId !== user.orgId) {
+          throw new PhoneTakenError();
+        }
+        await tx.phoneNumber.upsert({
+          where: { e164 },
+          create: {
+            e164,
             organizationId: user.orgId,
+            agentId: created.id,
+            workingHours: body.phoneNumber.workingHours ?? undefined,
+            voicemailEnabled: body.phoneNumber.voicemailEnabled ?? true,
+          },
+          update: {
             agentId: created.id,
             workingHours: body.phoneNumber.workingHours ?? undefined,
             voicemailEnabled: body.phoneNumber.voicemailEnabled ?? true,
@@ -134,6 +155,15 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(agent, { status: 201 });
   } catch (error) {
+    if (error instanceof PhoneTakenError) {
+      return NextResponse.json(
+        {
+          error:
+            "That phone number is already connected to a different workspace.",
+        },
+        { status: 409 },
+      );
+    }
     console.error("Failed to create agent", error);
     return NextResponse.json(
       { error: "Failed to create agent" },
