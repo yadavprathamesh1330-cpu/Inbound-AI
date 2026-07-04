@@ -170,6 +170,101 @@ export async function extractLeadFields(
   }
 }
 
+export interface ExtractedLoadDetails {
+  isLoadOffer: boolean;
+  originCity?: string;
+  originState?: string;
+  destCity?: string;
+  destState?: string;
+  equipment?: string;
+  weightLbs?: number;
+  commodity?: string;
+  rateDollars?: number;
+  pickupDate?: string;
+  deliveryDate?: string;
+  brokerName?: string;
+  brokerMc?: string;
+  brokerPhone?: string;
+}
+
+/**
+ * Detects whether a call transcript was a broker/shipper offering a freight
+ * load (vs. a driver check-in, parts order, or unrelated call) and, if so,
+ * extracts the structured load fields mentioned. Used by
+ * `processCompletedCall` to auto-create a `Load` row on the dispatch board
+ * so a dispatcher doesn't have to re-type what the AI already collected.
+ */
+export async function extractLoadDetails(
+  transcript: TranscriptTurn[],
+): Promise<ExtractedLoadDetails> {
+  const client = getClient();
+  const completion = await client.chat.completions.create({
+    model: CHAT_MODEL,
+    temperature: 0,
+    response_format: { type: "json_object" },
+    messages: [
+      {
+        role: "system",
+        content:
+          "You analyze phone call transcripts for a trucking dispatch " +
+          "AI agent. First decide: is the caller a broker or shipper " +
+          "OFFERING A FREIGHT LOAD (a specific lane to haul)? This is " +
+          "different from a driver check-in, a parts order, or an " +
+          "unrelated call. Respond with strict JSON: " +
+          '{"isLoadOffer": boolean, "originCity": string|null, ' +
+          '"originState": string|null, "destCity": string|null, ' +
+          '"destState": string|null, "equipment": string|null, ' +
+          '"weightLbs": number|null, "commodity": string|null, ' +
+          '"rateDollars": number|null, "pickupDate": string|null, ' +
+          '"deliveryDate": string|null, "brokerName": string|null, ' +
+          '"brokerMc": string|null, "brokerPhone": string|null}. ' +
+          "Dates should be ISO 8601 (YYYY-MM-DD) if a specific date is " +
+          "mentioned, else null (do not guess a year for vague terms like " +
+          '"Friday" unless a date is stated). rateDollars is the numeric ' +
+          "all-in rate only (no currency symbols). If isLoadOffer is " +
+          "false, all other fields should be null. Do not fabricate " +
+          "values not supported by the transcript.",
+      },
+      {
+        role: "user",
+        content: `Transcript:\n${transcriptToText(transcript)}`,
+      },
+    ],
+  });
+
+  const raw = completion.choices[0]?.message?.content ?? "{}";
+  try {
+    const parsed = JSON.parse(raw) as Record<string, unknown>;
+    if (parsed.isLoadOffer !== true) return { isLoadOffer: false };
+
+    const str = (v: unknown): string | undefined =>
+      typeof v === "string" && v.trim().length > 0 ? v.trim() : undefined;
+    const num = (v: unknown): number | undefined => {
+      const n = Number(v);
+      return Number.isFinite(n) && n > 0 ? n : undefined;
+    };
+
+    return {
+      isLoadOffer: true,
+      originCity: str(parsed.originCity),
+      originState: str(parsed.originState),
+      destCity: str(parsed.destCity),
+      destState: str(parsed.destState),
+      equipment: str(parsed.equipment),
+      weightLbs: num(parsed.weightLbs),
+      commodity: str(parsed.commodity),
+      rateDollars: num(parsed.rateDollars),
+      pickupDate: str(parsed.pickupDate),
+      deliveryDate: str(parsed.deliveryDate),
+      brokerName: str(parsed.brokerName),
+      brokerMc: str(parsed.brokerMc),
+      brokerPhone: str(parsed.brokerPhone),
+    };
+  } catch {
+    return { isLoadOffer: false };
+  }
+}
+
 export interface GeneratedAgentScript {
   systemPrompt: string;
   greeting: string;

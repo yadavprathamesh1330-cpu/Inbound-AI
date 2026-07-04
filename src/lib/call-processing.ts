@@ -2,6 +2,7 @@ import "server-only";
 import { prisma } from "@/lib/prisma";
 import {
   extractLeadFields,
+  extractLoadDetails,
   generateCallSummary,
   scoreLeadFromTranscript,
   type TranscriptTurn,
@@ -53,6 +54,9 @@ export async function processCompletedCall(callId: string): Promise<void> {
   let summary: string | undefined;
   let leadScore: number | undefined;
   let extracted: Awaited<ReturnType<typeof extractLeadFields>> = {};
+  let loadDetails: Awaited<ReturnType<typeof extractLoadDetails>> = {
+    isLoadOffer: false,
+  };
 
   if (transcript.length === 0) {
     console.warn(
@@ -75,6 +79,12 @@ export async function processCompletedCall(callId: string): Promise<void> {
       extracted = await extractLeadFields(transcript);
     } catch (err) {
       logStepSkipped("extractLeadFields", err);
+    }
+
+    try {
+      loadDetails = await extractLoadDetails(transcript);
+    } catch (err) {
+      logStepSkipped("extractLoadDetails", err);
     }
   }
 
@@ -132,6 +142,66 @@ export async function processCompletedCall(callId: string): Promise<void> {
       },
     });
   }
+
+  await maybeCreateLoadFromCall(updatedCall, loadDetails);
+}
+
+function parseIsoDate(value: string | undefined): Date | undefined {
+  if (!value) return undefined;
+  const d = new Date(value);
+  return isNaN(d.getTime()) ? undefined : d;
+}
+
+/**
+ * Auto-creates a dispatch-board Load when the call was a broker/shipper
+ * offering freight, so a dispatcher doesn't have to re-type what the AI
+ * already collected. Requires at least a lane or broker name (not just a
+ * lone "isLoadOffer: true" with nothing else) and is idempotent — skips if
+ * a Load already references this call.
+ */
+async function maybeCreateLoadFromCall(
+  call: { id: string; organizationId: string; agentId: string },
+  details: Awaited<ReturnType<typeof extractLoadDetails>>,
+): Promise<void> {
+  if (!details.isLoadOffer) return;
+
+  const hasMeaningfulData =
+    details.originCity ||
+    details.destCity ||
+    details.brokerName ||
+    details.rateDollars;
+  if (!hasMeaningfulData) return;
+
+  const existing = await prisma.load.findFirst({
+    where: { sourceCallId: call.id },
+    select: { id: true },
+  });
+  if (existing) return;
+
+  await prisma.load.create({
+    data: {
+      organizationId: call.organizationId,
+      agentId: call.agentId,
+      sourceCallId: call.id,
+      status: "NEW",
+      originCity: details.originCity,
+      originState: details.originState,
+      destCity: details.destCity,
+      destState: details.destState,
+      equipment: details.equipment,
+      weightLbs: details.weightLbs,
+      commodity: details.commodity,
+      rateCents: details.rateDollars
+        ? Math.round(details.rateDollars * 100)
+        : undefined,
+      pickupDate: parseIsoDate(details.pickupDate),
+      deliveryDate: parseIsoDate(details.deliveryDate),
+      brokerName: details.brokerName,
+      brokerMc: details.brokerMc,
+      brokerPhone: details.brokerPhone,
+      notes: "Auto-created from a dispatch call transcript.",
+    },
+  });
 }
 
 function logStepSkipped(stepName: string, err: unknown): void {
