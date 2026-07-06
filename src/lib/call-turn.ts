@@ -8,6 +8,15 @@ import { hasCreditsRemaining } from "@/lib/billing";
 import { maybeEscalateBreakdown } from "@/lib/escalation";
 import type { Agent, Prisma } from "@/generated/prisma/client";
 
+/**
+ * Hard cap on a single call's length. Deduction only happens once, at
+ * completion, based on actual duration — with no live cap, a caller who
+ * never hangs up (stuck line, confused caller, or someone deliberately
+ * running up cost) could stay connected indefinitely. This bounds the
+ * worst case regardless of how the call ends.
+ */
+const MAX_CALL_DURATION_MS = 15 * 60 * 1000;
+
 export interface CallTurnParams {
   agent: Agent;
   organizationId: string;
@@ -74,6 +83,20 @@ export async function handleCallTurn(params: CallTurnParams): Promise<string> {
         transcript: [],
       },
     });
+  }
+
+  // Enforce the max length on an existing call before doing any more work
+  // (including skipping the LLM call we'd otherwise make) — never applies
+  // to a call we just created above, since it can't have exceeded anything
+  // yet.
+  if (Date.now() - call.startedAt.getTime() > MAX_CALL_DURATION_MS) {
+    const voice = resolvePollyVoice(agent.voiceGender, agent.voiceAccent);
+    return buildTwimlResponse(
+      "We're sorry, this call has reached its maximum length. Please call back if you need more help. Goodbye.",
+      false,
+      undefined,
+      voice,
+    );
   }
 
   const existingTranscript: TranscriptTurn[] = Array.isArray(call.transcript)

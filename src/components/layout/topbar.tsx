@@ -20,9 +20,11 @@ import type { CurrentUser } from "@/lib/types";
 export function Topbar({
   collapsed,
   user,
+  unreadNotificationCount = 0,
 }: {
   collapsed: boolean;
   user: CurrentUser;
+  unreadNotificationCount?: number;
 }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -66,10 +68,22 @@ export function Topbar({
 
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-4">
-          <button className="relative text-on-surface-variant transition-colors hover:text-primary">
+          <Link
+            href="/settings?tab=notifications"
+            className="relative text-on-surface-variant transition-colors hover:text-primary"
+            title={
+              unreadNotificationCount > 0
+                ? `${unreadNotificationCount} unread notification${unreadNotificationCount === 1 ? "" : "s"}`
+                : "Notifications"
+            }
+          >
             <Icon name="notifications" className="size-5" />
-            <span className="absolute -right-0.5 -top-0.5 flex size-2 rounded-full bg-secondary" />
-          </button>
+            {unreadNotificationCount > 0 && (
+              <span className="absolute -right-1 -top-1 flex min-w-[16px] items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-bold leading-4 text-white">
+                {unreadNotificationCount > 9 ? "9+" : unreadNotificationCount}
+              </span>
+            )}
+          </Link>
           <div className="hidden items-center gap-2 sm:flex" title="Live system status">
             <VoicePulse size={10} />
             <span className="text-xs font-medium text-on-surface-variant">

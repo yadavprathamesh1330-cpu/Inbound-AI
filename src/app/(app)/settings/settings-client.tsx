@@ -70,17 +70,24 @@ const TABS = [
   { value: "voice", label: "Voice Settings", icon: "settings_voice" },
 ];
 
+const VALID_TABS = new Set(TABS.map((t) => t.value));
+
 export function SettingsClient({
   organization,
   initialNotifications,
   initialApiKeys,
+  initialTab,
 }: {
   organization: Organization;
   initialNotifications: Notification[];
   initialApiKeys: ApiKey[];
+  initialTab?: string;
 }) {
+  const defaultTab =
+    initialTab && VALID_TABS.has(initialTab) ? initialTab : "business";
+
   return (
-    <Tabs defaultValue="business">
+    <Tabs defaultValue={defaultTab}>
       <TabsList
         variant="line"
         className="mb-unit-lg h-auto w-full flex-wrap justify-start gap-1 border-b border-outline-variant/30 bg-transparent p-0"

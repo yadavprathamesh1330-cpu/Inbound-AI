@@ -72,5 +72,25 @@ export async function maybeEscalateBreakdown(params: {
     });
   } catch (err) {
     console.error(`[escalation] failed for call ${callId}:`, err);
+    // A silently-swallowed error here would mean nobody ever finds out a
+    // breakdown alert didn't go out — this is the one place that must not
+    // happen for a safety-critical feature. escalatedAt is deliberately
+    // NOT set on failure, so a later matching turn in the same call will
+    // retry rather than give up after one attempt.
+    const reason = err instanceof Error ? err.message : "Unknown error";
+    try {
+      await prisma.notification.create({
+        data: {
+          organizationId,
+          title: "Breakdown alert couldn't be sent",
+          body: `A caller (${callerPhone}) reported an emergency, but the SMS to your on-call number failed: ${reason}. Check your telephony connection on the Phone Numbers page.`,
+        },
+      });
+    } catch (notifyErr) {
+      console.error(
+        `[escalation] also failed to record the failure notification for call ${callId}:`,
+        notifyErr,
+      );
+    }
   }
 }

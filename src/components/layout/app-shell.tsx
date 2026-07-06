@@ -9,9 +9,11 @@ import type { CurrentUser } from "@/lib/types";
 export function AppShell({
   children,
   user,
+  unreadNotificationCount = 0,
 }: {
   children: React.ReactNode;
   user: CurrentUser;
+  unreadNotificationCount?: number;
 }) {
   const [collapsed, setCollapsed] = useState(false);
 
@@ -22,7 +24,11 @@ export function AppShell({
         onToggleCollapse={() => setCollapsed((c) => !c)}
         isSuperAdmin={user.isSuperAdmin}
       />
-      <Topbar collapsed={collapsed} user={user} />
+      <Topbar
+        collapsed={collapsed}
+        user={user}
+        unreadNotificationCount={unreadNotificationCount}
+      />
       <main
         className={cn(
           "min-h-screen pb-unit-2xl pt-24 transition-[margin] duration-300",
